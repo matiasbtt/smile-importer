@@ -1,0 +1,657 @@
+/* ═══════════════════════════════════════════════════════════
+   SMILE IMPORTER · Premium Bio-Tech (Dark)
+   Paleta del sistema digital — NO mezclar con la paleta física
+   de marca (#366956 / #F5F5F7). Regla de marca no negociable.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Superficies */
+  --ink: #0a0a0a; /* neutral / canvas */
+  --forest: #0f2e23; /* primary */
+  --emerald: #27604f; /* secondary */
+  --mist: #c4c7c5; /* tertiary */
+  --white: #ffffff;
+  --clinical: #f5f5f7; /* excepción: interior de tarjeta de producto */
+
+  /* Derivados */
+  --surface: #0d100f;
+  --surface-2: #111514;
+  --line: rgba(196, 199, 197, 0.12);
+  --line-strong: rgba(196, 199, 197, 0.24);
+  --text: #e8ebe9;
+  --text-dim: #8b938f;
+
+  /* Tipografía */
+  --sans: 'Manrope', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* Ritmo (base 8px) */
+  --gutter: clamp(20px, 5vw, 72px);
+  --radius: 10px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--sans);
+  font-weight: 300;
+  color: var(--text);
+  background: var(--ink);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--emerald);
+  color: var(--white);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ── Tipografía ───────────────────────────────────────────── */
+
+.mono {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.display {
+  font-weight: 200;
+  font-size: clamp(2.5rem, 7.5vw, 6.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.h2 {
+  font-weight: 200;
+  font-size: clamp(1.75rem, 4vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.lead {
+  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  font-weight: 300;
+  color: var(--text-dim);
+  max-width: 46ch;
+}
+
+/* Logo de archivo. El espacio libre mínimo (alto de la S) lo dan los paddings
+   del header y del footer; no reducirlos. */
+.logo {
+  display: block;
+  width: auto;
+  height: 34px;
+}
+
+.wordmark {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 0.9375rem;
+}
+.wordmark span {
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  font-size: 0.625rem;
+  display: block;
+  margin-top: 2px;
+  color: var(--text-dim);
+}
+
+/* ── Layout ───────────────────────────────────────────────── */
+
+.shell {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+section {
+  position: relative;
+}
+
+.pad {
+  padding-block: clamp(88px, 14vh, 200px);
+}
+
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+}
+
+/* ── Navegación ───────────────────────────────────────────── */
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px var(--gutter);
+  transition: background 400ms var(--ease), border-color 400ms var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav[data-solid='true'] {
+  background: rgba(10, 10, 10, 0.72);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--line);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.nav-links a.mono:hover {
+  color: var(--text);
+}
+
+/* ── Botones ──────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: transform 180ms var(--ease), background 220ms var(--ease),
+    border-color 220ms var(--ease), color 220ms var(--ease);
+  will-change: transform;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn-primary {
+  background: #25D366;
+  color: var(--white);
+}
+.btn-primary:hover {
+  background: #1ebe5b;
+}
+.btn-ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+}
+.btn-ghost:hover {
+  border-color: var(--mist);
+  background: rgba(196, 199, 197, 0.05);
+}
+.btn svg {
+  flex: none;
+}
+
+/* ── Escena cinemática (dientes → sonrisa) ────────────────── */
+
+.scene {
+  height: 420vh; /* recorrido de scroll del plano secuencia */
+  position: relative;
+}
+.scene-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--ink);
+}
+.scene-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform-origin: 41% 69%;
+}
+.scene-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.scene-layer svg {
+  width: min(1100px, 128vw);
+  height: auto;
+  display: block;
+}
+.scene-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 46%,
+    transparent 34%,
+    rgba(10, 10, 10, 0.55) 72%,
+    var(--ink) 100%
+  );
+}
+/* Scrim inferior: garantiza contraste del texto sobre el esmalte blanco */
+.scene-scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 58vh;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 10, 0.94) 0%,
+    rgba(10, 10, 10, 0.74) 34%,
+    rgba(10, 10, 10, 0.32) 68%,
+    transparent 100%
+  );
+}
+
+.scene-copy {
+  position: absolute;
+  inset: auto var(--gutter) clamp(56px, 9vh, 104px) var(--gutter);
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.scene-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+.scene-hint-line {
+  width: 1px;
+  height: 46px;
+  margin: 10px auto 0;
+  background: linear-gradient(to bottom, var(--line-strong), transparent);
+}
+
+/* ── Clínica / retrato ────────────────────────────────────── */
+
+.portrait {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: linear-gradient(155deg, #0f1413 0%, var(--forest) 100%);
+  aspect-ratio: 4 / 5;
+}
+.portrait img,
+.portrait svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.portrait-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 16px 18px;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.82), transparent);
+}
+.split {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(32px, 6vw, 96px);
+  align-items: center;
+}
+
+/* ── Estantería de catálogo ───────────────────────────────── */
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 8px 15px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: color 200ms var(--ease), border-color 200ms var(--ease),
+    background 200ms var(--ease);
+}
+.chip:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+.chip[data-on='true'] {
+  color: var(--white);
+  background: var(--forest);
+  border-color: var(--emerald);
+}
+
+/* Estantería: cada fila del grid apoya sobre una línea (el estante),
+   las columnas se separan con divisiones de 1px. */
+.shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(236px, 1fr));
+  border-top: 1px solid var(--line-strong);
+  border-left: 1px solid var(--line);
+}
+
+.item {
+  position: relative;
+  padding: 28px 24px 26px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line-strong);
+  display: flex;
+  flex-direction: column;
+  transition: background 260ms var(--ease);
+}
+.item:hover {
+  background: rgba(39, 96, 79, 0.07);
+}
+
+.item-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 8px;
+  background: var(--clinical);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+}
+.item-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 600ms var(--ease);
+}
+.item:hover .item-frame img {
+  transform: scale(1.03);
+}
+.item-frame::after {
+  /* sombra de contacto suave, según manual de fotografía */
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 34%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(15, 46, 35, 0.14),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+.item-pending {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9aa19d;
+}
+.item-frame svg {
+  display: block;
+  margin: 0 auto 10px;
+  opacity: 0.5;
+}
+
+.item-name {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: var(--text);
+}
+.item-detail {
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.item-meta {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.item-price {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--white);
+  letter-spacing: 0;
+}
+.item-price small {
+  font-size: 0.625rem;
+  color: var(--text-dim);
+  margin-right: 4px;
+}
+.item-ref {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+/* Precio por caja cerrada — solo en las referencias que lo tienen */
+.item-caja {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: var(--mist);
+}
+.item-caja span {
+  color: var(--text-dim);
+}
+
+.item-ask {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 260ms var(--ease), transform 260ms var(--ease),
+    color 200ms var(--ease);
+}
+.item:hover .item-ask,
+.item:focus-within .item-ask {
+  opacity: 1;
+  transform: none;
+}
+.item-ask:hover {
+  color: var(--white);
+}
+
+.tag-out {
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mist);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+/* ── Cierre / CTA ─────────────────────────────────────────── */
+
+.close {
+  background: linear-gradient(180deg, var(--ink) 0%, var(--forest) 100%);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.close .lead {
+  margin-inline: auto;
+}
+
+.footer {
+  border-top: 1px solid var(--line);
+  /* el extra abajo evita que el botón flotante tape el texto */
+  padding: 32px var(--gutter) 104px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--forest);
+}
+
+.footer-link {
+  transition: color 200ms var(--ease);
+}
+.footer-link:hover {
+  color: var(--white);
+}
+
+/* ── Botón flotante de WhatsApp ───────────────────────────── */
+
+.float {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 70;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  background: #25D366;
+  color: var(--white);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.float:hover {
+  background: #1ebe5b;
+}
+
+/* ── Utilidades ───────────────────────────────────────────── */
+
+.stack-sm > * + * {
+  margin-top: 12px;
+}
+.stack > * + * {
+  margin-top: 24px;
+}
+.stack-lg > * + * {
+  margin-top: 44px;
+}
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.between {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  border-top: 1px solid var(--line);
+}
+.spec {
+  padding: 24px 0 24px 0;
+  border-bottom: 1px solid var(--line);
+  padding-right: 24px;
+}
+.spec-value {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+
+@media (max-width: 860px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+  .nav-links a.mono {
+    display: none;
+  }
+  .scene {
+    height: 320vh;
+  }
+  .scene-copy {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  /* en móvil el indicador de scroll choca con el titular */
+  .scene-hint {
+    display: none;
+  }
+  .shelf-grid {
+    border-left: none;
+  }
+  .item {
+    border-right: none;
+  }
+  /* Sin hover en táctil: el CTA de cada producto queda siempre visible */
+  .item-ask {
+    opacity: 1;
+    transform: none;
+  }
+  .float span {
+    display: none;
+  }
+  .float {
+    padding: 15px;
+    border-radius: 50%;
+  }
+}
+
+/* ── Accesibilidad ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .scene {
+    height: 100vh;
+  }
+}

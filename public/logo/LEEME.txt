@@ -1,0 +1,17 @@
+Guardá acá los 4 archivos del logo, con estos nombres exactos:
+
+  logo-white.png   Versión blanca. La usa el header y el footer del sitio
+                   (fondo oscuro). Es la única imprescindible.
+                   Antes de subirla, verificá sobre fondo negro que tenga
+                   contenido: la exportación en blanco salió vacía una vez.
+
+  logo-icon.png    Ícono S solo. Se usa como favicon y como ícono de app.
+                   Cuadrado, fondo transparente, mínimo 512x512.
+
+  logo-color.png   SMILE verde #366956 + IMPORTER negro. Para piezas sobre
+                   fondo claro. No la usa el sitio hoy.
+
+  logo-black.png   Negro sólido, para fondos claros. No la usa el sitio hoy.
+
+Mientras logo-white.png no exista, el header cae automáticamente al wordmark
+tipografiado. No hay que tocar código: alcanza con dejar el archivo acá.
