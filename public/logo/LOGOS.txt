@@ -1,0 +1,19 @@
+VERSIONES DE LOGOS
+==================
+
+GMAIL:
+  • gmail.png (original) - Blanco con símbolo negro, invisible en GitHub
+  • gmail-dark.svg (RECOMENDADO) - Fondo oscuro (#0F2E23), símbolo blanco, visible en cualquier fondo
+
+WHATSAPP:
+  • whatsapp.png (original) - Blanco con símbolo negro, invisible en GitHub
+  • whatsapp-dark.svg (RECOMENDADO para fondo claro/blanco) - Fondo oscuro, símbolo blanco
+  • whatsapp-white.png/svg - Símbolo blanco, para usar sobre fondos oscuros
+
+RECOMENDACIÓN:
+  Usar las versiones -dark.svg en README de GitHub y documentación web.
+  Las versiones SVG son escalables y se ven bien en cualquier resolución.
+
+ACTUALIZACIONES:
+  - icons.jsx ahora usa las versiones SVG oscuras por defecto
+  - Los logos oscuros son más visibles en GitHub y README.md

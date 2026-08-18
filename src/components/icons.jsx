@@ -1,7 +1,9 @@
+// Logos with dark backgrounds for visibility on light backgrounds (GitHub, etc)
+// SVG versions are preferred for scalability; PNG versions available as fallback
 export function WhatsAppMark({ size = 17, white = false }) {
   return (
     <img
-      src={white ? '/logo/whatsapp-white.png' : '/logo/whatsapp.png'}
+      src={white ? '/logo/whatsapp-white.png' : '/logo/whatsapp-dark.svg'}
       alt="WhatsApp"
       width={size}
       height={size}
@@ -13,7 +15,7 @@ export function WhatsAppMark({ size = 17, white = false }) {
 export function GmailMark({ size = 17 }) {
   return (
     <img
-      src="/logo/gmail.png"
+      src="/logo/gmail-dark.svg"
       alt="Gmail"
       width={size}
       height={size}
