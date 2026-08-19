@@ -214,7 +214,7 @@ section {
 /* ── Escena cinemática (dientes → sonrisa) ────────────────── */
 
 .scene {
-  height: 420vh; /* recorrido de scroll del plano secuencia */
+  height: 280vh; /* recorrido de scroll del plano secuencia */
   position: relative;
 }
 .scene-stage {
