@@ -430,7 +430,7 @@ function Cierre() {
               <WhatsAppMark /> Abrir WhatsApp
             </a>
             <a className="btn btn-ghost" href={`mailto:${CONTACTO.email}`}>
-              <GmailMark /> {CONTACTO.email}
+              <GmailMark white /> {CONTACTO.email}
             </a>
           </div>
         </Reveal>

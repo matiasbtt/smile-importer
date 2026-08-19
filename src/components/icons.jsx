@@ -10,10 +10,10 @@ export function WhatsAppMark({ size = 17, white = false }) {
   );
 }
 
-export function GmailMark({ size = 17 }) {
+export function GmailMark({ size = 17, white = false }) {
   return (
     <img
-      src="/logo/gmail.png"
+      src={white ? '/logo/gmail-dark.svg' : '/logo/gmail.png'}
       alt="Gmail"
       width={size}
       height={size}
