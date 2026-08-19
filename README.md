@@ -37,24 +37,22 @@ rendimiento en móvil sin mejorar el resultado.
 
 ## Qué falta cargar
 
-Todo lo que hay que reemplazar está en un solo archivo: `src/data/site.js`,
-marcado con `// ⇦ REEMPLAZAR`.
+1. **Fotos opcionales del hero** — `public/media/smile.jpg` y `public/media/clinician.jpg`
+   aún no están subidas; el sitio cae automáticamente al vector (fallback en `HeroLayer`).
+   Subirlas mejora visual + performance — ver plan de performance en
+   `docs/superpowers/plans/2026-08-18-fixes-criticos-y-rendimiento.md`.
 
-1. **Número de WhatsApp** — `CONTACTO.whatsapp`, formato internacional, solo
-   dígitos. Hoy tiene un placeholder (`595000000000`) que no lleva a ningún lado.
-2. **Email de ventas** — `CONTACTO.email`.
-3. **Los 4 archivos del logo** — van en `public/logo/`, con los nombres que
-   detalla `public/logo/LEEME.txt`. El header y el footer usan
-   `logo-white.png`; el favicon usa `logo-icon.png`. Mientras no estén, el
-   header cae al wordmark tipografiado sin romper nada.
-4. **Catálogo real** — nombres, referencias, precios, materiales y stock. Los 12
-   productos actuales son plausibles pero inventados: sirven para ver el diseño,
-   no para publicar.
-5. **Fotos de producto** — van en `public/productos/` y se referencian en el
-   campo `imagen` de cada producto (`'productos/archivo.webp'`). Mientras el
-   campo esté en `null`, la tarjeta muestra el marco vacío con la etiqueta
-   "fotografía pendiente". Formato según el manual: vertical 4:5, fondo
-   `#F5F5F7`, instrumento al 55-65% del encuadre.
+2. **Fotos de producto** — van en `public/productos/` y se referencian en
+   `src/data/site.js`. E-05 y E-02 tienen texto agregado por IA grabado sobre
+   el instrumento (viola regla de marca), requieren refotografiar. E-08 sin foto.
+   Formato: vertical 4:5, fondo `#F5F5F7`, instrumento 55-65% del encuadre.
+
+3. **Logo icon oficial** — `public/logo/logo-icon.png` hoy es placeholder
+   (copia de smile_logo_white.png). Reemplazar cuando llegue ícono S solo,
+   máximo 2 colores, sin rasgos faciales.
+
+4. **Imagen de preview** — `public/media/og-cover.jpg` (1200×630) para Open Graph.
+   Hoy es placeholder (logo copiado). Reemplazar con foto real del hero o producto.
 
 ## Imágenes opcionales que mejoran el resultado
 
