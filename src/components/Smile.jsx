@@ -193,18 +193,17 @@ export default function Smile() {
 
       {/* Piel: modelado por luz suave, no por línea. Se revela en el zoom-out. */}
       <g id="smile-skin">
-        <ellipse cx="600" cy="150" rx="330" ry="150" fill="url(#skinLight)" filter="url(#soft)" />
-        <ellipse cx="245" cy="360" rx="215" ry="255" fill="url(#skinLight)" filter="url(#soft)" opacity="0.85" />
-        <ellipse cx="955" cy="360" rx="215" ry="255" fill="url(#skinLight)" filter="url(#soft)" opacity="0.85" />
-        <ellipse cx="600" cy="600" rx="270" ry="150" fill="url(#skinLight)" filter="url(#soft)" opacity="0.7" />
+        <ellipse cx="600" cy="150" rx="410" ry="190" fill="url(#skinLight)" />
+        <ellipse cx="245" cy="360" rx="270" ry="320" fill="url(#skinLight)" opacity="0.85" />
+        <ellipse cx="955" cy="360" rx="270" ry="320" fill="url(#skinLight)" opacity="0.85" />
+        <ellipse cx="600" cy="600" rx="340" ry="190" fill="url(#skinLight)" opacity="0.7" />
         {/* filtrum */}
         <path
           d="M575 60 Q600 130 625 60"
           stroke="#8a6f65"
-          strokeOpacity="0.28"
+          strokeOpacity="0.14"
           strokeWidth="14"
           fill="none"
-          filter="url(#soft2)"
         />
       </g>
 
@@ -256,7 +255,6 @@ export default function Smile() {
                 ry={t.h * 0.22}
                 fill="#ffffff"
                 opacity={0.3 - t.depth * 0.18}
-                filter="url(#soft2)"
               />
             </g>
           );
