@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMILE IMPORTER · CRM (demo)</title>
+<meta name="description" content="Vista previa del CRM interno de SMILE IMPORTER — datos de ejemplo, no clientes reales.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root { --mono: "Cascadia Mono", "JetBrains Mono", Consolas, ui-monospace, monospace; }
+  html, body { margin: 0; padding: 0; }
+  #demoAviso {
+    background: var(--accent-dim); border-bottom: 1px solid var(--accent);
+    color: var(--accent); font-family: var(--mono); font-size: 10px;
+    letter-spacing: 1px; padding: 7px 18px; text-align: center;
+  }
+  #app { height: calc(100vh - 30px); }
+  .pasos { counter-reset: paso; display: flex; flex-direction: column; gap: 18px; }
+  .paso { display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start; }
+  .paso .n {
+    counter-increment: paso; font-family: var(--mono); font-size: 11px;
+    color: var(--accent); border: 1px solid var(--accent-dim);
+    background: var(--accent-dim); border-radius: var(--r);
+    width: 30px; height: 26px; display: flex; align-items: center; justify-content: center;
+  }
+  .paso .n::before { content: counter(paso, decimal-leading-zero); }
+  .paso h3 { margin: 3px 0 6px; font-size: 13px; font-weight: 600; }
+  .paso p  { margin: 0 0 6px; font-size: 12.5px; color: var(--ink2); line-height: 1.55; max-width: 62ch; }
+  .paso code, .clave {
+    font-family: var(--mono); font-size: 11.5px; background: var(--bg3);
+    border: 1px solid var(--line); border-radius: 3px; padding: 1px 5px; color: var(--ink);
+  }
+  .paso b { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+
+<div id="cargando">CARGANDO DATOS…</div>
+
+<div id="app">
+
+  <aside id="lateral">
+    <div id="marca">
+      <div class="nombre">SMILE IMPORTER</div>
+      <div class="sub">CRM · INVENTARIO</div>
+    </div>
+    <nav id="nav">
+      <button data-v="panel"      class="on"><span class="glifo">▤</span> Panel</button>
+      <button data-v="pipeline"><span class="glifo">◧</span> Pipeline <span class="pill" id="pillPipe">0</span></button>
+      <button data-v="inventario"><span class="glifo">▦</span> Inventario <span class="pill" id="pillInv">0</span></button>
+      <button data-v="contactos"><span class="glifo">☏</span> Contactos <span class="pill" id="pillCon">0</span></button>
+      <button data-v="agenda"><span class="glifo">◷</span> Agenda <span class="pill" id="pillAge">0</span></button>
+      <button data-v="metricas"><span class="glifo">◈</span> Métricas</button>
+      <button data-v="ajustes"><span class="glifo">⚙</span> Ajustes</button>
+    </nav>
+    <div id="pieLateral">
+      <div id="pieMoneda">BS · BOLIVIA</div>
+      <div id="pieSync">—</div>
+    </div>
+  </aside>
+
+  <div id="principal">
+    <header>
+      <h1 id="titulo">Panel</h1>
+      <span class="crumb" id="subtitulo"></span>
+      <div class="der">
+        <button class="mini" id="btnResumen" title="Enviarme por correo el resumen de seguimientos y stock">Resumen por correo</button>
+        <button class="mini" id="btnRecargar">Recargar</button>
+      </div>
+    </header>
+    <main id="vista"></main>
+  </div>
+
+</div>
+
+<div id="velo"><div class="modal">
+  <div class="cab"><h2 id="modalTitulo">—</h2><button onclick="cerrarModal()">✕</button></div>
+  <div class="cuerpo" id="modalCuerpo"></div>
+</div></div>
+
+<div id="brindis"></div>
+
+<script>
+window.google = { script: { run: (function () {
+  var D = {"config":{"moneda":"Bs","negocio":"SMILE IMPORTER","whatsapp":"59157703748","whatsappAlterno":"59171777847","instagram":"","facebook":"https://www.facebook.com/profile.php?id=61593579992274","waCloudActivo":false,"plantillas":{"seguimiento":"Hola {cliente}, le escribo de {negocio}. Quedamos en conversar por {producto} (REF {cod}). Sigue interesado/a?","cotizacion":"Hola {cliente}, le paso la cotizacion de {negocio}: {producto} (REF {cod}) a {precio}.","cierre":"Hola {cliente}, confirmamos su {producto} (REF {cod}) por {precio}. Le coordino la entrega?"}},"catalogos":{"estados":["Pregunta","En desarrollo","En proceso","Vendido"],"estadosAbiertos":["Pregunta","En desarrollo","En proceso"],"canales":["WhatsApp","Messenger","Ambos"],"categorias":["Rotatorios","Diagnostico","Operatoria","Cirugia","Protesis"],"tiposMov":["Ingreso","Salida","Ajuste"]},"productos":[{"cod":"E-01","nombre":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","precio":1500,"precioCaja":0,"unidadesCaja":0,"costo":1270,"stockMinimo":1,"activo":true,"stock":-3,"notas":""},{"cod":"E-02","nombre":"Motor de endodoncia de consola","categoria":"Rotatorios","precio":6000,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-03","nombre":"Colorimetro dental - escala 16 tonos","categoria":"Diagnostico","precio":250,"precioCaja":0,"unidadesCaja":0,"costo":190,"stockMinimo":1,"activo":true,"stock":2,"notas":""},{"cod":"E-04","nombre":"Espejos intraorales de rodio","categoria":"Diagnostico","precio":35,"precioCaja":300,"unidadesCaja":10,"costo":30,"stockMinimo":1,"activo":true,"stock":10,"notas":""},{"cod":"E-05","nombre":"Calentador de resina compuesta","categoria":"Operatoria","precio":1500,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-06","nombre":"Turbina de alta velocidad angulada","categoria":"Rotatorios","precio":650,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-07","nombre":"Set de espatulas de resina - 6 piezas","categoria":"Operatoria","precio":370,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-08","nombre":"Set de pinceles de resina","categoria":"Operatoria","precio":70,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-09","nombre":"Set de elevadores atraumaticos - 7 pzs","categoria":"Cirugia","precio":850,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-10","nombre":"Camara intraoral WiFi HD","categoria":"Diagnostico","precio":760,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-11","nombre":"Lupas de magnificacion 3.5x","categoria":"Diagnostico","precio":1450,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-12","nombre":"Elevadores de seno - 4 piezas","categoria":"Cirugia","precio":750,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-13","nombre":"Cubetas de impresion perforadas","categoria":"Protesis","precio":90,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""}],"oportunidades":[{"id":"OP-0001","fecha":"2026-08-24","cliente":"Cliente A","telefono":"59160000001","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1490,"total":1490,"estado":"Vendido","canal":"WhatsApp","ciudad":"La Paz","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0002","fecha":"2026-08-24","cliente":"Cliente B","telefono":"59160000002","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":2,"precio":1400,"total":2800,"estado":"Vendido","canal":"Messenger","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0003","fecha":"2026-08-24","cliente":"Cliente C","telefono":"59160000003","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Pregunta","canal":"Ambos","ciudad":"","proximo":"2026-08-27","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0004","fecha":"2026-08-24","cliente":"Cliente D","telefono":"59160000004","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Vendido","canal":"WhatsApp","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0005","fecha":"2026-08-24","cliente":"Cliente E","telefono":"59160000005","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"En proceso","canal":"Messenger","ciudad":"Trópico","proximo":"2026-08-27","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0006","fecha":"2026-08-24","cliente":"Cliente F","telefono":"59160000006","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Pregunta","canal":"Ambos","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0007","fecha":"2026-08-24","cliente":"Cliente G","telefono":"59160000007","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Vendido","canal":"WhatsApp","ciudad":"La Paz","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0008","fecha":"2026-08-24","cliente":"Cliente H","telefono":"59160000008","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"En desarrollo","canal":"Messenger","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0009","fecha":"2026-08-24","cliente":"Cliente I","telefono":"59160000009","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Vendido","canal":"Ambos","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0010","fecha":"2026-08-24","cliente":"Cliente J","telefono":"59160000010","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Pregunta","canal":"WhatsApp","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."}],"movimientos":[{"id":"MV-0001","fecha":"2026-08-24","cod":"E-01","tipo":"Ingreso","cantidad":3,"costo":1270,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0002","fecha":"2026-08-24","cod":"E-03","tipo":"Ingreso","cantidad":2,"costo":190,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0003","fecha":"2026-08-24","cod":"E-04","tipo":"Ingreso","cantidad":10,"costo":30,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0004","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente A","ref":"OP-0001"},{"id":"MV-0005","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":2,"costo":0,"motivo":"Venta a Cliente B","ref":"OP-0002"},{"id":"MV-0006","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente D","ref":"OP-0004"},{"id":"MV-0007","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente G","ref":"OP-0007"},{"id":"MV-0008","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente I","ref":"OP-0009"}],"contactos":[{"id":"CT-0001","nombre":"Cliente A","telefono":"59160000001","canal":"WhatsApp","ciudad":"La Paz","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0002","nombre":"Cliente B","telefono":"59160000002","canal":"Messenger","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0003","nombre":"Cliente C","telefono":"59160000003","canal":"Ambos","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0004","nombre":"Cliente D","telefono":"59160000004","canal":"WhatsApp","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0005","nombre":"Cliente E","telefono":"59160000005","canal":"Messenger","ciudad":"Trópico","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0006","nombre":"Cliente F","telefono":"59160000006","canal":"Ambos","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0007","nombre":"Cliente G","telefono":"59160000007","canal":"WhatsApp","ciudad":"La Paz","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0008","nombre":"Cliente H","telefono":"59160000008","canal":"Messenger","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0009","nombre":"Cliente I","telefono":"59160000009","canal":"Ambos","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0010","nombre":"Cliente J","telefono":"59160000010","canal":"WhatsApp","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."}],"agenda":[{"id":"AG-0001","cuando":"2026-08-24 09:00","cliente":"Cliente C","telefono":"59160000003","ref":"OP-0003","asunto":"Seguimiento E-01 — Cliente C","canal":"WhatsApp","estado":"Pendiente","evento":"abc@google.com"},{"id":"AG-0002","cuando":"2026-08-26 15:30","cliente":"Cliente E","telefono":"59160000005","ref":"OP-0005","asunto":"Enviar cotización a Trópico","canal":"Ambos","estado":"Pendiente","evento":""}],"hoy":"2026-08-24"};
+  var ok = null, err = null;
+  var api = {
+    withSuccessHandler: function (f) { ok = f; return api; },
+    withFailureHandler: function (f) { err = f; return api; },
+    apiCargar: function () { setTimeout(function () { ok(D); }, 90); },
+    apiMensaje: function (id, tipo) {
+      var o = D.oportunidades.filter(function (x) { return x.id === id; })[0];
+      var t = D.config.plantillas[tipo || 'seguimiento']
+        .replace(/\{cliente\}/g, o.cliente.split(' ')[0])
+        .replace(/\{producto\}/g, o.producto).replace(/\{cod\}/g, o.cod)
+        .replace(/\{precio\}/g, 'Bs ' + o.precio).replace(/\{negocio\}/g, 'SMILE IMPORTER');
+      setTimeout(function () { ok({ texto: t, telefono: o.telefono, waCloudActivo: false,
+        whatsapp: 'https://wa.me/' + o.telefono + '?text=' + encodeURIComponent(t),
+        messenger: 'https://m.me/61593579992274' }); }, 60);
+    },
+    apiMetricasMeta: function () { setTimeout(function () { ok({ disponible: false, motivo: 'Falta wa_cloud_token en la pestana Config.' }); }, 60); },
+    apiResumenAhora: function () { setTimeout(function () { ok({ ok: true }); }, 60); }
+  };
+  ['apiGuardarOportunidad','apiCambiarEstado','apiEliminarOportunidad','apiGuardarContacto',
+   'apiEliminarContacto','apiMovimiento','apiGuardarProducto','apiGuardarConfig','apiAgendar',
+   'apiCerrarRecordatorio','apiEnviarWhatsApp','apiEnviarCorreo'].forEach(function (n) {
+    api[n] = function () { setTimeout(function () { ok({ ok: true, id: 'DEMO-0001', nuevo: true, calendario: true, enviado: true }); }, 60); };
+  });
+  return api;
+})(), host: { close: function () {} } } };
+</script>
+<script>
+/* =====================================================================
+   SMILE IMPORTER · CRM — lógica de interfaz
+   Un solo estado (`D`) que llega del servidor, y funciones que lo pintan.
+   ===================================================================== */
+
+var D = null;                 // datos del servidor
+var VISTA = 'panel';
+var F = { cat: '', estado: '', canal: '', q: '' };   // filtros del pipeline
+
+/* ── Utilidades ─────────────────────────────────────────────────── */
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function bs(n) {
+  var v = Number(n || 0);
+  return (D ? D.config.moneda : 'Bs') + ' ' + v.toLocaleString('es-BO', { maximumFractionDigits: 0 });
+}
+function num(n) { return Number(n || 0).toLocaleString('es-BO', { maximumFractionDigits: 0 }); }
+function tel(t) { return t ? '+' + t : '—'; }
+function claseEstado(e) { return String(e || '').toLowerCase().replace(/\s+/g, ''); }
+
+function brindis(txt, malo) {
+  var b = document.getElementById('brindis');
+  b.textContent = txt;
+  b.className = 'on' + (malo ? ' malo' : '');
+  clearTimeout(b._t);
+  b._t = setTimeout(function () { b.className = ''; }, malo ? 6500 : 3000);
+}
+
+function abrirModal(titulo, html) {
+  document.getElementById('modalTitulo').textContent = titulo;
+  document.getElementById('modalCuerpo').innerHTML = html;
+  document.getElementById('velo').classList.add('on');
+}
+function cerrarModal() { document.getElementById('velo').classList.remove('on'); }
+document.getElementById('velo').addEventListener('click', function (e) {
+  if (e.target.id === 'velo') cerrarModal();
+});
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarModal(); });
+
+function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+/** Envuelve google.script.run en promesa, para no anidar callbacks. */
+function srv(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function (ok, err) {
+    google.script.run.withSuccessHandler(ok).withFailureHandler(err)[fn].apply(null, args);
+  });
+}
+
+
+/* ── Carga ──────────────────────────────────────────────────────── */
+function cargar(silencioso) {
+  if (!silencioso) document.getElementById('cargando').classList.remove('off');
+  return srv('apiCargar').then(function (d) {
+    D = d;
+    document.getElementById('cargando').classList.add('off');
+    document.getElementById('pieMoneda').textContent = D.config.moneda.toUpperCase() + ' · BOLIVIA';
+    document.getElementById('pieSync').textContent = 'AL ' + D.hoy;
+    contadores();
+    render();
+  }).catch(function (e) {
+    document.getElementById('cargando').innerHTML =
+      '<div style="text-align:center;max-width:520px">' +
+      '<div class="err" style="margin-bottom:10px">NO PUDE LEER LA PLANILLA</div>' +
+      '<div class="tenue" style="font-family:var(--ui);font-size:12px">' + esc(e.message || e) +
+      '<br><br>Si dice que falta una pestaña, cerrá esta ventana y corré<br>' +
+      '<b>SMILE CRM → Configuración inicial / migrar datos</b>.</div></div>';
+  });
+}
+
+function contadores() {
+  var abiertas = D.oportunidades.filter(function (o) {
+    return D.catalogos.estadosAbiertos.indexOf(o.estado) >= 0;
+  }).length;
+  var bajos = D.productos.filter(function (p) { return p.activo && p.stock <= p.stockMinimo; }).length;
+  var pend = D.agenda.filter(function (a) { return a.estado !== 'Hecho'; }).length;
+  document.getElementById('pillPipe').textContent = abiertas;
+  document.getElementById('pillInv').textContent = bajos;
+  document.getElementById('pillCon').textContent = D.contactos.length;
+  document.getElementById('pillAge').textContent = pend;
+}
+
+
+/* ── Navegación ─────────────────────────────────────────────────── */
+var TITULOS = {
+  panel: ['Panel', 'RESUMEN DEL NEGOCIO'],
+  pipeline: ['Pipeline', 'OPORTUNIDADES POR TIPO DE EQUIPO'],
+  inventario: ['Inventario', 'STOCK Y MOVIMIENTOS'],
+  contactos: ['Contactos', 'AGENDA DE NUMEROS'],
+  agenda: ['Agenda', 'RECORDATORIOS Y CALENDARIO'],
+  metricas: ['Métricas', 'INSTAGRAM · FACEBOOK · META'],
+  ajustes: ['Ajustes', 'CONFIGURACION DE LA MACRO']
+};
+
+document.getElementById('nav').addEventListener('click', function (e) {
+  var b = e.target.closest('button[data-v]');
+  if (!b) return;
+  VISTA = b.dataset.v;
+  Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) {
+    x.classList.toggle('on', x.dataset.v === VISTA);
+  });
+  render();
+});
+
+document.getElementById('btnRecargar').onclick = function () { cargar(); };
+document.getElementById('btnResumen').onclick = function () {
+  this.disabled = true;
+  var b = this;
+  srv('apiResumenAhora').then(function () {
+    brindis('Resumen enviado por correo.'); b.disabled = false;
+  }).catch(function (e) { brindis(e.message || e, true); b.disabled = false; });
+};
+
+function render() {
+  document.getElementById('titulo').textContent = TITULOS[VISTA][0];
+  document.getElementById('subtitulo').textContent = TITULOS[VISTA][1];
+  var m = document.getElementById('vista');
+  m.scrollTop = 0;
+  m.innerHTML = ({
+    panel: vPanel, pipeline: vPipeline, inventario: vInventario,
+    contactos: vContactos, agenda: vAgenda, metricas: vMetricas, ajustes: vAjustes
+  })[VISTA]();
+}
+
+
+/* ── Vista: Panel ───────────────────────────────────────────────── */
+function vPanel() {
+  var ops = D.oportunidades;
+  var vendidas = ops.filter(function (o) { return o.estado === 'Vendido'; });
+  var abiertas = ops.filter(function (o) { return D.catalogos.estadosAbiertos.indexOf(o.estado) >= 0; });
+  var ingreso = vendidas.reduce(function (a, o) { return a + o.total; }, 0);
+  var unidades = vendidas.reduce(function (a, o) { return a + o.cantidad; }, 0);
+  var pipeline = abiertas.reduce(function (a, o) { return a + o.total; }, 0);
+  var conversion = ops.length ? Math.round(vendidas.length / ops.length * 100) : 0;
+  var bajos = D.productos.filter(function (p) { return p.activo && p.stock <= p.stockMinimo; });
+  var negativos = D.productos.filter(function (p) { return p.stock < 0; });
+  var vencidos = abiertas.filter(function (o) { return o.proximo && o.proximo <= D.hoy; });
+
+  var h = '';
+
+  h += '<div class="kpis">' +
+    kpi('Vendido', bs(ingreso), vendidas.length + ' operaciones · ' + unidades + ' unidades', 'acento') +
+    kpi('Pipeline abierto', bs(pipeline), abiertas.length + ' oportunidades vivas', '') +
+    kpi('Conversión', conversion + '%', vendidas.length + ' de ' + ops.length + ' consultas', '') +
+    kpi('Seguimientos vencidos', String(vencidos.length), vencidos.length ? 'hay que escribirles hoy' : 'al día', vencidos.length ? 'aviso' : '') +
+    kpi('Stock bajo mínimo', String(bajos.length), bajos.length ? 'referencias para reponer' : 'todo cubierto', bajos.length ? 'aviso' : '') +
+    '</div>';
+
+  if (negativos.length) {
+    h += '<div class="aviso malo"><b>Stock negativo en ' + negativos.length + ' referencia(s).</b> ' +
+      'Se vendieron más unidades de las que hay registradas como compradas: ' +
+      negativos.map(function (p) { return esc(p.cod) + ' (' + p.stock + ')'; }).join(', ') +
+      '. Cargá las compras que faltan en <b>Inventario → Registrar movimiento</b> y el número se corrige solo.</div>';
+  }
+
+  /* Por tipo de equipo — la lectura que pidió el negocio. */
+  h += '<div class="panel"><div class="cab"><h2>Por tipo de equipo</h2></div><div class="cuerpo">';
+  var porCat = {};
+  ops.forEach(function (o) {
+    var c = o.categoria || 'Sin categoría';
+    porCat[c] = porCat[c] || { vend: 0, abierto: 0, ops: 0, unid: 0 };
+    porCat[c].ops++;
+    if (o.estado === 'Vendido') { porCat[c].vend += o.total; porCat[c].unid += o.cantidad; }
+    else porCat[c].abierto += o.total;
+  });
+  var cats = Object.keys(porCat).sort(function (a, b) { return porCat[b].vend - porCat[a].vend; });
+  var tope = Math.max.apply(null, cats.map(function (c) { return porCat[c].vend + porCat[c].abierto; }).concat([1]));
+  if (!cats.length) h += '<div class="vacio">TODAVIA NO HAY OPORTUNIDADES CARGADAS</div>';
+  h += '<div class="barras">';
+  cats.forEach(function (c) {
+    var d = porCat[c];
+    h += '<div class="barra">' +
+      '<div class="top"><span>' + esc(c) + ' <span class="tenue">· ' + d.ops + ' oportunidades · ' + d.unid + ' u. vendidas</span></span>' +
+      '<span class="v">' + bs(d.vend) + (d.abierto ? ' <span class="warn">+' + bs(d.abierto) + '</span>' : '') + '</span></div>' +
+      '<div class="riel">' +
+        '<div class="relleno" style="width:' + (d.vend / tope * 100) + '%;display:inline-block"></div>' +
+        '<div class="relleno abierto" style="width:' + (d.abierto / tope * 100) + '%;display:inline-block"></div>' +
+      '</div></div>';
+  });
+  h += '</div></div></div>';
+
+  /* Embudo por estado */
+  h += '<div class="panel"><div class="cab"><h2>Embudo</h2></div><div class="cuerpo"><div class="kpis" style="margin:0">';
+  D.catalogos.estados.forEach(function (e) {
+    var f = ops.filter(function (o) { return o.estado === e; });
+    var v = f.reduce(function (a, o) { return a + o.total; }, 0);
+    h += kpi(e, String(f.length), bs(v), e === 'Vendido' ? 'acento' : '');
+  });
+  h += '</div></div></div>';
+
+  /* Qué hacer hoy */
+  if (vencidos.length) {
+    h += '<div class="panel"><div class="cab"><h2>Para escribir hoy</h2>' +
+      '<div class="der"><button class="mini" onclick="irA(\'pipeline\')">Ver pipeline</button></div></div>' +
+      '<div class="tabla-wrap"><table><thead><tr>' +
+      '<th>Cliente</th><th>Equipo</th><th>Estado</th><th class="num">Valor</th><th>Vencía</th><th></th>' +
+      '</tr></thead><tbody>';
+    vencidos.slice(0, 12).forEach(function (o) {
+      h += '<tr><td>' + esc(o.cliente) + '<div class="mono tenue" style="font-size:11px">' + tel(o.telefono) + '</div></td>' +
+        '<td>' + esc(o.producto) + ' <span class="mono tenue">' + esc(o.cod) + '</span></td>' +
+        '<td>' + tagEstado(o.estado) + '</td>' +
+        '<td class="num">' + bs(o.total) + '</td>' +
+        '<td class="mono tenue">' + esc(o.proximo) + '</td>' +
+        '<td class="acc"><button class="mini" onclick="mensaje(\'' + o.id + '\')">Mensaje</button> ' +
+        '<button class="mini" onclick="agendar(\'' + o.id + '\')">Agendar</button></td></tr>';
+    });
+    h += '</tbody></table></div></div>';
+  }
+
+  return h;
+}
+
+function kpi(rotulo, cifra, nota, clase) {
+  return '<div class="kpi ' + (clase || '') + '"><span class="etiqueta">' + esc(rotulo) + '</span>' +
+    '<div class="cifra">' + esc(cifra) + '</div><div class="nota">' + esc(nota) + '</div></div>';
+}
+function irA(v) {
+  VISTA = v;
+  Array.prototype.forEach.call(document.querySelectorAll('#nav button'), function (x) {
+    x.classList.toggle('on', x.dataset.v === v);
+  });
+  render();
+}
+
+function tagEstado(e) { return '<span class="tag ' + claseEstado(e) + '">' + esc(e) + '</span>'; }
+function tagCanal(c) {
+  var k = c === 'WhatsApp' ? 'wa' : c === 'Messenger' ? 'mes' : 'amb';
+  var t = c === 'WhatsApp' ? 'WA' : c === 'Messenger' ? 'MSG' : 'WA+MSG';
+  return '<span class="tag ' + k + '">' + t + '</span>';
+}
+
+
+/* ── Vista: Pipeline ────────────────────────────────────────────── */
+function vPipeline() {
+  var h = '';
+
+  /* Chips por tipo de equipo: la separación que pidió el negocio. */
+  var cats = D.catalogos.categorias.slice();
+  D.oportunidades.forEach(function (o) {
+    if (o.categoria && cats.indexOf(o.categoria) < 0) cats.push(o.categoria);
+  });
+  h += '<div class="filtros">';
+  h += '<div class="campo busca"><span class="etiqueta">Buscar</span>' +
+    '<input id="fq" placeholder="Cliente, teléfono, código…" value="' + esc(F.q) + '" oninput="F.q=this.value;pintarTabla()"></div>';
+  h += '<div class="campo"><span class="etiqueta">Tipo de equipo</span><select id="fcat" onchange="F.cat=this.value;pintarTabla()">' +
+    opt('', 'Todos', F.cat) + cats.map(function (c) { return opt(c, c, F.cat); }).join('') + '</select></div>';
+  h += '<div class="campo"><span class="etiqueta">Estado</span><select onchange="F.estado=this.value;pintarTabla()">' +
+    opt('', 'Todos', F.estado) + D.catalogos.estados.map(function (e) { return opt(e, e, F.estado); }).join('') + '</select></div>';
+  h += '<div class="campo"><span class="etiqueta">Canal</span><select onchange="F.canal=this.value;pintarTabla()">' +
+    opt('', 'Todos', F.canal) + D.catalogos.canales.map(function (c) { return opt(c, c, F.canal); }).join('') + '</select></div>';
+  h += '<button class="primario" onclick="formOportunidad()">+ Nueva entrada</button>';
+  h += '</div>';
+
+  h += '<div id="tablaPipe"></div>';
+  setTimeout(pintarTabla, 0);
+  return h;
+}
+
+function opt(v, t, sel) {
+  return '<option value="' + esc(v) + '"' + (String(sel) === String(v) ? ' selected' : '') + '>' + esc(t) + '</option>';
+}
+
+function filtradas() {
+  var q = F.q.toLowerCase();
+  return D.oportunidades.filter(function (o) {
+    if (F.cat && o.categoria !== F.cat) return false;
+    if (F.estado && o.estado !== F.estado) return false;
+    if (F.canal && o.canal !== F.canal) return false;
+    if (q && (o.cliente + ' ' + o.telefono + ' ' + o.cod + ' ' + o.producto + ' ' + o.ciudad)
+      .toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+}
+
+function pintarTabla() {
+  var cont = document.getElementById('tablaPipe');
+  if (!cont) return;
+  var ops = filtradas();
+
+  if (!ops.length) {
+    cont.innerHTML = '<div class="panel"><div class="vacio">NINGUNA OPORTUNIDAD CON ESOS FILTROS</div></div>';
+    return;
+  }
+
+  /* Agrupado por tipo de equipo, con subtotales por grupo. */
+  var grupos = {};
+  ops.forEach(function (o) {
+    var c = o.categoria || 'Sin categoría';
+    (grupos[c] = grupos[c] || []).push(o);
+  });
+
+  var h = '';
+  Object.keys(grupos).sort().forEach(function (cat) {
+    var g = grupos[cat];
+    var vend = g.filter(function (o) { return o.estado === 'Vendido'; });
+    var subtotal = vend.reduce(function (a, o) { return a + o.total; }, 0);
+    var abierto = g.filter(function (o) { return D.catalogos.estadosAbiertos.indexOf(o.estado) >= 0; })
+      .reduce(function (a, o) { return a + o.total; }, 0);
+
+    h += '<div class="panel"><div class="cab"><h2>' + esc(cat) + '</h2>' +
+      '<span class="crumb">' + g.length + ' OPORTUNIDADES</span>' +
+      '<div class="der"><span class="mono tenue" style="font-size:11px">' +
+      'vendido ' + bs(subtotal) + ' · abierto ' + bs(abierto) + '</span></div></div>' +
+      '<div class="tabla-wrap"><table><thead><tr>' +
+      '<th>Cliente</th><th>Equipo</th><th class="num">Cant.</th><th class="num">Precio u.</th>' +
+      '<th class="num">Total</th><th>Estado</th><th>Canal</th><th>Ciudad</th><th>Próximo</th><th></th>' +
+      '</tr></thead><tbody>';
+
+    g.forEach(function (o) {
+      var vencido = o.proximo && o.proximo <= D.hoy && D.catalogos.estadosAbiertos.indexOf(o.estado) >= 0;
+      h += '<tr>' +
+        '<td>' + esc(o.cliente) + '<div class="mono tenue" style="font-size:11px">' + tel(o.telefono) + '</div></td>' +
+        '<td>' + esc(o.producto) + '<div class="mono tenue" style="font-size:11px">' + esc(o.cod) + '</div></td>' +
+        '<td class="num">' + o.cantidad + '</td>' +
+        '<td class="num">' + bs(o.precio) + '</td>' +
+        '<td class="num">' + bs(o.total) + '</td>' +
+        '<td>' + tagEstado(o.estado) + '</td>' +
+        '<td>' + tagCanal(o.canal) + '</td>' +
+        '<td class="tenue">' + (esc(o.ciudad) || '—') + '</td>' +
+        '<td class="mono ' + (vencido ? 'warn' : 'tenue') + '" style="font-size:11px">' + (esc(o.proximo) || '—') + '</td>' +
+        '<td class="acc">' +
+          '<button class="mini" onclick="mensaje(\'' + o.id + '\')" title="Armar mensaje">✉</button> ' +
+          '<button class="mini" onclick="agendar(\'' + o.id + '\')" title="Agendar seguimiento">◷</button> ' +
+          '<button class="mini" onclick="formOportunidad(\'' + o.id + '\')" title="Editar">✎</button>' +
+        '</td></tr>';
+    });
+    h += '</tbody></table></div></div>';
+  });
+
+  cont.innerHTML = h;
+}
+
+
+/* ── Formulario de oportunidad (nueva entrada) ──────────────────── */
+function formOportunidad(id) {
+  var o = id ? D.oportunidades.filter(function (x) { return x.id === id; })[0] : null;
+  var prods = D.productos.filter(function (p) { return p.activo; });
+
+  var h = '<div class="campos">';
+  h += '<div class="campo ancho"><span class="etiqueta">Cliente</span>' +
+    '<input id="fCliente" value="' + esc(o ? o.cliente : '') + '" placeholder="Nombre del odontólogo o clínica"></div>';
+  h += '<div class="campo"><span class="etiqueta">Teléfono</span>' +
+    '<input id="fTel" value="' + esc(o ? o.telefono : '') + '" placeholder="71234567 o 59171234567"></div>';
+  h += '<div class="campo"><span class="etiqueta">Ciudad</span>' +
+    '<input id="fCiudad" value="' + esc(o ? o.ciudad : '') + '" placeholder="La Paz, Trópico…"></div>';
+
+  h += '<div class="campo ancho"><span class="etiqueta">Equipo</span><select id="fCod" onchange="autoPrecio()">' +
+    prods.map(function (p) {
+      return '<option value="' + esc(p.cod) + '" data-precio="' + p.precio + '"' +
+        (o && o.cod === p.cod ? ' selected' : '') + '>' + esc(p.cod + ' · ' + p.nombre) +
+        ' (stock ' + p.stock + ')</option>';
+    }).join('') + '</select></div>';
+
+  h += '<div class="campo"><span class="etiqueta">Cantidad</span>' +
+    '<input id="fCant" type="number" min="1" step="1" value="' + (o ? o.cantidad : 1) + '" oninput="calcTotal()"></div>';
+  h += '<div class="campo"><span class="etiqueta">Precio unitario</span>' +
+    '<input id="fPrecio" type="number" min="0" step="1" value="' + (o ? o.precio : '') + '" oninput="calcTotal()"></div>';
+  h += '<div class="campo"><span class="etiqueta">Total</span>' +
+    '<input id="fTotal" disabled value=""></div>';
+
+  h += '<div class="campo"><span class="etiqueta">Estado</span><select id="fEstado">' +
+    D.catalogos.estados.map(function (e) { return opt(e, e, o ? o.estado : 'Pregunta'); }).join('') + '</select></div>';
+  h += '<div class="campo"><span class="etiqueta">Contacto por</span><select id="fCanal">' +
+    D.catalogos.canales.map(function (c) { return opt(c, c, o ? o.canal : 'WhatsApp'); }).join('') + '</select></div>';
+  h += '<div class="campo"><span class="etiqueta">Próximo contacto</span>' +
+    '<input id="fProximo" type="date" value="' + esc(o ? o.proximo : '') + '"></div>';
+
+  h += '<div class="campo ancho"><span class="etiqueta">Notas</span>' +
+    '<textarea id="fNotas" placeholder="Qué pidió, qué quedó pendiente…">' + esc(o ? o.notas : '') + '</textarea></div>';
+  h += '</div>';
+
+  h += '<div class="aviso bien">Al marcar <b>Vendido</b> el CRM descuenta el stock solo, ' +
+    'y guarda el número en Contactos si todavía no estaba.</div>';
+
+  h += '<div class="acciones">' +
+    '<button class="primario" id="fGuardar">' + (o ? 'Guardar cambios' : 'Crear entrada') + '</button>' +
+    '<button onclick="cerrarModal()">Cancelar</button>';
+  if (o) h += '<button class="peligro" style="margin-left:auto" onclick="borrarOportunidad(\'' + o.id + '\')">Eliminar</button>';
+  h += '</div>';
+
+  abrirModal(o ? 'Editar ' + o.id : 'Nueva entrada', h);
+  if (!o) autoPrecio(); else calcTotal();
+
+  document.getElementById('fGuardar').onclick = function () {
+    var b = this;
+    if (!val('fCliente')) return brindis('Falta el nombre del cliente.', true);
+    b.disabled = true;
+    srv('apiGuardarOportunidad', {
+      id: o ? o.id : '', cliente: val('fCliente'), telefono: val('fTel'), ciudad: val('fCiudad'),
+      cod: val('fCod'), cantidad: val('fCant'), precio: val('fPrecio'), estado: val('fEstado'),
+      canal: val('fCanal'), proximo: val('fProximo'), notas: val('fNotas')
+    }).then(function (r) {
+      cerrarModal(); brindis('Guardado (' + r.id + ').');
+      return cargar(true);
+    }).catch(function (e) { b.disabled = false; brindis(e.message || e, true); });
+  };
+}
+
+function autoPrecio() {
+  var s = document.getElementById('fCod');
+  var p = document.getElementById('fPrecio');
+  if (s && p && !p.value) p.value = s.options[s.selectedIndex].dataset.precio || '';
+  calcTotal();
+}
+function calcTotal() {
+  var t = document.getElementById('fTotal');
+  if (!t) return;
+  t.value = bs((Number(val('fCant')) || 0) * (Number(val('fPrecio')) || 0));
+}
+
+function borrarOportunidad(id) {
+  if (!confirm('¿Eliminar la oportunidad ' + id + '? La fila desaparece de la planilla.')) return;
+  srv('apiEliminarOportunidad', id).then(function () {
+    cerrarModal(); brindis('Eliminada.'); return cargar(true);
+  }).catch(function (e) { brindis(e.message || e, true); });
+}
+
+
+/* ── Mensajes ───────────────────────────────────────────────────── */
+function mensaje(idOp) {
+  abrirModal('Mensaje', '<div class="vacio">ARMANDO EL MENSAJE…</div>');
+  srv('apiMensaje', idOp, 'seguimiento', '').then(function (m) {
+    var h = '<div class="campo"><span class="etiqueta">Plantilla</span><select id="mTipo" onchange="recargarPlantilla(\'' + idOp + '\')">' +
+      opt('seguimiento', 'Seguimiento', 'seguimiento') + opt('cotizacion', 'Cotización', '') + opt('cierre', 'Cierre', '') +
+      '</select></div>';
+    h += '<div class="campo" style="margin-top:12px"><span class="etiqueta">Texto</span>' +
+      '<textarea id="mTexto" style="min-height:110px">' + esc(m.texto) + '</textarea></div>';
+    h += '<div class="acciones">';
+    if (m.whatsapp) {
+      h += '<a href="' + esc(m.whatsapp) + '" target="_blank" rel="noopener" id="mWa">' +
+        '<button class="primario">Abrir WhatsApp</button></a>';
+    } else {
+      h += '<button disabled>Sin teléfono cargado</button>';
+    }
+    h += '<a href="' + esc(m.messenger) + '" target="_blank" rel="noopener"><button>Abrir Messenger</button></a>';
+    if (m.waCloudActivo) h += '<button id="mEnviar">Enviar por WhatsApp API</button>';
+    h += '<button onclick="cerrarModal()" style="margin-left:auto">Cerrar</button></div>';
+
+    h += '<div class="aviso" style="margin-top:14px">El botón de WhatsApp abre el chat con el texto ya escrito. ' +
+      '<b>Messenger no se puede abrir por número de teléfono</b> — Meta no lo permite — así que ese botón lleva a la bandeja de la página. ' +
+      (m.waCloudActivo ? '' : 'Para enviar sin abrir el chat, cargá el token de WhatsApp Cloud API en Ajustes.') + '</div>';
+
+    abrirModal('Mensaje para ' + esc(idOp), h);
+
+    /* El link de WhatsApp se rearma cuando el texto cambia. */
+    var ta = document.getElementById('mTexto');
+    if (ta) ta.oninput = function () {
+      var a = document.getElementById('mWa');
+      if (a && m.telefono) a.href = 'https://wa.me/' + m.telefono + '?text=' + encodeURIComponent(ta.value);
+    };
+    var be = document.getElementById('mEnviar');
+    if (be) be.onclick = function () {
+      be.disabled = true;
+      srv('apiEnviarWhatsApp', idOp, val('mTexto')).then(function (r) {
+        be.disabled = false;
+        if (r.enviado) { cerrarModal(); brindis('Mensaje enviado por WhatsApp API.'); cargar(true); }
+        else brindis('No se envió: ' + r.motivo, true);
+      }).catch(function (e) { be.disabled = false; brindis(e.message || e, true); });
+    };
+  }).catch(function (e) { brindis(e.message || e, true); cerrarModal(); });
+}
+
+function recargarPlantilla(idOp) {
+  var tipo = val('mTipo');
+  srv('apiMensaje', idOp, tipo, '').then(function (m) {
+    document.getElementById('mTexto').value = m.texto;
+    var a = document.getElementById('mWa');
+    if (a && m.whatsapp) a.href = m.whatsapp;
+  });
+}
+
+
+/* ── Agendar ────────────────────────────────────────────────────── */
+function agendar(idOp) {
+  var o = idOp ? D.oportunidades.filter(function (x) { return x.id === idOp; })[0] : null;
+  var d = new Date(); d.setDate(d.getDate() + 2); d.setHours(9, 0, 0, 0);
+  var iso = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + 'T09:00';
+
+  var h = '<div class="campos">';
+  h += '<div class="campo ancho"><span class="etiqueta">Asunto</span><input id="aAsunto" value="' +
+    esc(o ? 'Seguimiento ' + o.cod + ' — ' + o.cliente : '') + '" placeholder="Qué hay que hacer"></div>';
+  h += '<div class="campo"><span class="etiqueta">Cuándo</span><input id="aCuando" type="datetime-local" value="' + iso + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Canal</span><select id="aCanal">' +
+    D.catalogos.canales.map(function (c) { return opt(c, c, o ? o.canal : 'WhatsApp'); }).join('') + '</select></div>';
+  if (!o) {
+    h += '<div class="campo"><span class="etiqueta">Cliente</span><input id="aCliente" placeholder="Nombre"></div>';
+    h += '<div class="campo"><span class="etiqueta">Teléfono</span><input id="aTel" placeholder="71234567"></div>';
+  }
+  h += '<div class="campo ancho"><span class="etiqueta">Nota</span><textarea id="aNotas" placeholder="Detalle que quieras ver en la notificación"></textarea></div>';
+  h += '</div>';
+  h += '<div class="aviso bien">Se crea el evento en tu Google Calendar con avisos a 1 hora y 10 minutos, ' +
+    'y con el link de WhatsApp dentro de la descripción para escribir desde la notificación.</div>';
+  h += '<div class="acciones"><button class="primario" id="aGuardar">Agendar</button>' +
+    '<button onclick="cerrarModal()">Cancelar</button></div>';
+
+  abrirModal(o ? 'Agendar seguimiento · ' + esc(o.cliente) : 'Nuevo recordatorio', h);
+
+  document.getElementById('aGuardar').onclick = function () {
+    var b = this; b.disabled = true;
+    srv('apiAgendar', {
+      ref: o ? o.id : '', asunto: val('aAsunto'), cuando: val('aCuando'), canal: val('aCanal'),
+      cliente: o ? o.cliente : val('aCliente'), telefono: o ? o.telefono : val('aTel'), notas: val('aNotas')
+    }).then(function (r) {
+      cerrarModal();
+      brindis(r.calendario ? 'Agendado y anotado en Google Calendar.' : 'Agendado (Calendar no respondió).', !r.calendario);
+      return cargar(true);
+    }).catch(function (e) { b.disabled = false; brindis(e.message || e, true); });
+  };
+}
+
+
+/* ── Vista: Inventario ──────────────────────────────────────────── */
+function vInventario() {
+  var h = '';
+  var bajos = D.productos.filter(function (p) { return p.activo && p.stock <= p.stockMinimo; });
+  var valor = D.productos.reduce(function (a, p) { return a + Math.max(p.stock, 0) * (p.costo || p.precio); }, 0);
+  var unidades = D.productos.reduce(function (a, p) { return a + Math.max(p.stock, 0); }, 0);
+
+  h += '<div class="kpis">' +
+    kpi('Referencias', String(D.productos.length), D.productos.filter(function (p) { return p.activo; }).length + ' activas', '') +
+    kpi('Unidades en stock', num(unidades), 'suma de todo el catálogo', '') +
+    kpi('Valor del stock', bs(valor), 'a costo, o a precio si no hay costo', 'acento') +
+    kpi('Bajo mínimo', String(bajos.length), bajos.length ? 'reponer' : 'todo cubierto', bajos.length ? 'aviso' : '') +
+    '</div>';
+
+  h += '<div class="panel"><div class="cab"><h2>Catálogo y stock</h2><div class="der">' +
+    '<button class="mini" onclick="formMovimiento()">Registrar movimiento</button>' +
+    '<button class="mini primario" onclick="formProducto()">+ Producto</button></div></div>' +
+    '<div class="tabla-wrap"><table><thead><tr>' +
+    '<th>COD</th><th>Equipo</th><th>Tipo</th><th class="num">Precio</th><th class="num">Costo</th>' +
+    '<th class="num">Stock</th><th class="num">Mín.</th><th class="num">Vendidas</th><th></th>' +
+    '</tr></thead><tbody>';
+
+  var vendidasPorCod = {};
+  D.oportunidades.filter(function (o) { return o.estado === 'Vendido'; })
+    .forEach(function (o) { vendidasPorCod[o.cod] = (vendidasPorCod[o.cod] || 0) + o.cantidad; });
+
+  D.productos.forEach(function (p) {
+    var clase = p.stock < 0 ? 'err' : (p.stock <= p.stockMinimo ? 'warn' : '');
+    h += '<tr>' +
+      '<td class="mono">' + esc(p.cod) + '</td>' +
+      '<td>' + esc(p.nombre) + (p.activo ? '' : ' <span class="tag">INACTIVO</span>') + '</td>' +
+      '<td class="tenue">' + esc(p.categoria) + '</td>' +
+      '<td class="num">' + bs(p.precio) + '</td>' +
+      '<td class="num tenue">' + (p.costo ? bs(p.costo) : '—') + '</td>' +
+      '<td class="num ' + clase + '"><b>' + p.stock + '</b></td>' +
+      '<td class="num tenue">' + p.stockMinimo + '</td>' +
+      '<td class="num tenue">' + (vendidasPorCod[p.cod] || 0) + '</td>' +
+      '<td class="acc">' +
+        '<button class="mini" onclick="formMovimiento(\'' + p.cod + '\',\'Ingreso\')">+</button> ' +
+        '<button class="mini" onclick="formMovimiento(\'' + p.cod + '\',\'Salida\')">−</button> ' +
+        '<button class="mini" onclick="formProducto(\'' + p.cod + '\')">✎</button>' +
+      '</td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+
+  h += '<div class="panel"><div class="cab"><h2>Últimos movimientos</h2>' +
+    '<span class="crumb">' + D.movimientos.length + ' EN TOTAL</span></div><div class="tabla-wrap"><table><thead><tr>' +
+    '<th>Fecha</th><th>COD</th><th>Tipo</th><th class="num">Cant.</th><th class="num">Costo u.</th><th>Motivo</th><th>Ref</th>' +
+    '</tr></thead><tbody>';
+  if (!D.movimientos.length) h += '<tr><td colspan="7"><div class="vacio">SIN MOVIMIENTOS</div></td></tr>';
+  D.movimientos.slice(0, 40).forEach(function (m) {
+    h += '<tr><td class="mono tenue">' + esc(m.fecha) + '</td><td class="mono">' + esc(m.cod) + '</td>' +
+      '<td><span class="tag ' + (m.tipo === 'Salida' ? 'pregunta' : 'vendido') + '">' + esc(m.tipo) + '</span></td>' +
+      '<td class="num">' + (m.tipo === 'Salida' ? '−' : '+') + m.cantidad + '</td>' +
+      '<td class="num tenue">' + (m.costo ? bs(m.costo) : '—') + '</td>' +
+      '<td class="tenue">' + esc(m.motivo) + '</td>' +
+      '<td class="mono tenue">' + (esc(m.ref) || '—') + '</td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+  return h;
+}
+
+function formMovimiento(cod, tipo) {
+  var h = '<div class="campos">';
+  h += '<div class="campo ancho"><span class="etiqueta">Equipo</span><select id="mvCod">' +
+    D.productos.map(function (p) { return opt(p.cod, p.cod + ' · ' + p.nombre + ' (stock ' + p.stock + ')', cod || ''); }).join('') +
+    '</select></div>';
+  h += '<div class="campo"><span class="etiqueta">Tipo</span><select id="mvTipo">' +
+    D.catalogos.tiposMov.map(function (t) { return opt(t, t, tipo || 'Ingreso'); }).join('') + '</select></div>';
+  h += '<div class="campo"><span class="etiqueta">Cantidad</span><input id="mvCant" type="number" min="1" step="1" value="1"></div>';
+  h += '<div class="campo"><span class="etiqueta">Costo unitario (opcional)</span><input id="mvCosto" type="number" min="0" step="1" placeholder="Solo en ingresos"></div>';
+  h += '<div class="campo ancho"><span class="etiqueta">Motivo</span><input id="mvMotivo" placeholder="Compra a proveedor, ajuste de conteo, rotura…"></div>';
+  h += '</div>';
+  h += '<div class="aviso">El stock no se escribe a mano: siempre sale de sumar y restar estos movimientos. ' +
+    'Así queda el historial de dónde vino y a dónde fue cada unidad.</div>';
+  h += '<div class="acciones"><button class="primario" id="mvGuardar">Registrar</button>' +
+    '<button onclick="cerrarModal()">Cancelar</button></div>';
+
+  abrirModal('Movimiento de inventario', h);
+  document.getElementById('mvGuardar').onclick = function () {
+    var b = this; b.disabled = true;
+    srv('apiMovimiento', {
+      cod: val('mvCod'), tipo: val('mvTipo'), cantidad: val('mvCant'),
+      costo: val('mvCosto'), motivo: val('mvMotivo'), ref: ''
+    }).then(function () {
+      cerrarModal(); brindis('Movimiento registrado.'); return cargar(true);
+    }).catch(function (e) { b.disabled = false; brindis(e.message || e, true); });
+  };
+}
+
+function formProducto(cod) {
+  var p = cod ? D.productos.filter(function (x) { return x.cod === cod; })[0] : null;
+  var h = '<div class="campos">';
+  h += '<div class="campo"><span class="etiqueta">Código</span><input id="pCod" value="' + esc(p ? p.cod : '') + '"' +
+    (p ? ' disabled' : ' placeholder="E-14"') + '></div>';
+  h += '<div class="campo"><span class="etiqueta">Tipo de equipo</span><select id="pCat">' +
+    D.catalogos.categorias.map(function (c) { return opt(c, c, p ? p.categoria : ''); }).join('') + '</select></div>';
+  h += '<div class="campo ancho"><span class="etiqueta">Nombre</span><input id="pNombre" value="' + esc(p ? p.nombre : '') + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Precio unitario</span><input id="pPrecio" type="number" min="0" value="' + (p ? p.precio : '') + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Costo unitario</span><input id="pCosto" type="number" min="0" value="' + (p && p.costo ? p.costo : '') + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Precio por caja</span><input id="pCaja" type="number" min="0" value="' + (p && p.precioCaja ? p.precioCaja : '') + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Unidades por caja</span><input id="pUnid" type="number" min="0" value="' + (p && p.unidadesCaja ? p.unidadesCaja : '') + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Stock mínimo</span><input id="pMin" type="number" min="0" value="' + (p ? p.stockMinimo : 1) + '"></div>';
+  if (!p) h += '<div class="campo"><span class="etiqueta">Stock inicial</span><input id="pStock" type="number" min="0" value="0"></div>';
+  h += '<div class="campo"><span class="etiqueta">Activo</span><select id="pActivo">' +
+    opt('SI', 'Sí', p && !p.activo ? 'NO' : 'SI') + opt('NO', 'No', p && !p.activo ? 'NO' : 'SI') + '</select></div>';
+  h += '<div class="campo ancho"><span class="etiqueta">Notas</span><textarea id="pNotas">' + esc(p ? p.notas : '') + '</textarea></div>';
+  h += '</div><div class="acciones"><button class="primario" id="pGuardar">Guardar</button>' +
+    '<button onclick="cerrarModal()">Cancelar</button></div>';
+
+  abrirModal(p ? 'Editar ' + p.cod : 'Producto nuevo', h);
+  document.getElementById('pGuardar').onclick = function () {
+    var b = this; b.disabled = true;
+    srv('apiGuardarProducto', {
+      cod: p ? p.cod : val('pCod'), nombre: val('pNombre'), categoria: val('pCat'),
+      precio: val('pPrecio'), costo: val('pCosto'), precioCaja: val('pCaja'), unidadesCaja: val('pUnid'),
+      stockMinimo: val('pMin'), stockInicial: p ? 0 : val('pStock'),
+      activo: val('pActivo') !== 'NO', notas: val('pNotas')
+    }).then(function () {
+      cerrarModal(); brindis('Catálogo actualizado.'); return cargar(true);
+    }).catch(function (e) { b.disabled = false; brindis(e.message || e, true); });
+  };
+}
+
+
+/* ── Vista: Contactos ───────────────────────────────────────────── */
+function vContactos() {
+  var h = '<div class="filtros">' +
+    '<div class="campo busca"><span class="etiqueta">Buscar</span>' +
+    '<input id="cq" placeholder="Nombre, teléfono, ciudad…" oninput="pintarContactos()"></div>' +
+    '<button class="primario" onclick="formContacto()">+ Nuevo número</button></div>' +
+    '<div id="tablaCon"></div>';
+  setTimeout(pintarContactos, 0);
+  return h;
+}
+
+function pintarContactos() {
+  var q = (document.getElementById('cq') || { value: '' }).value.toLowerCase();
+  var lista = D.contactos.filter(function (c) {
+    return !q || (c.nombre + ' ' + c.telefono + ' ' + c.ciudad + ' ' + c.etiqueta).toLowerCase().indexOf(q) >= 0;
+  });
+  var ops = {};
+  D.oportunidades.forEach(function (o) { ops[o.telefono] = (ops[o.telefono] || 0) + 1; });
+
+  var h = '<div class="panel"><div class="cab"><h2>Agenda</h2>' +
+    '<span class="crumb">' + lista.length + ' DE ' + D.contactos.length + '</span></div><div class="tabla-wrap"><table><thead><tr>' +
+    '<th>Nombre</th><th>Teléfono</th><th>Canal</th><th>Ciudad</th><th>Etiqueta</th><th class="num">Oport.</th><th>Alta</th><th></th>' +
+    '</tr></thead><tbody>';
+  if (!lista.length) h += '<tr><td colspan="8"><div class="vacio">SIN CONTACTOS</div></td></tr>';
+  lista.forEach(function (c) {
+    h += '<tr><td>' + esc(c.nombre) + '</td>' +
+      '<td class="mono">' + tel(c.telefono) + '</td>' +
+      '<td>' + tagCanal(c.canal) + '</td>' +
+      '<td class="tenue">' + (esc(c.ciudad) || '—') + '</td>' +
+      '<td><span class="tag">' + esc(c.etiqueta) + '</span></td>' +
+      '<td class="num tenue">' + (ops[c.telefono] || 0) + '</td>' +
+      '<td class="mono tenue">' + esc(c.alta) + '</td>' +
+      '<td class="acc">' +
+        (c.telefono ? '<a href="https://wa.me/' + esc(c.telefono) + '" target="_blank" rel="noopener"><button class="mini">WhatsApp</button></a> ' : '') +
+        '<button class="mini" onclick="formContacto(\'' + c.id + '\')">✎</button></td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+  document.getElementById('tablaCon').innerHTML = h;
+}
+
+function formContacto(id) {
+  var c = id ? D.contactos.filter(function (x) { return x.id === id; })[0] : null;
+  var h = '<div class="campos">';
+  h += '<div class="campo ancho"><span class="etiqueta">Nombre</span><input id="ctNombre" value="' + esc(c ? c.nombre : '') + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Teléfono</span><input id="ctTel" value="' + esc(c ? c.telefono : '') + '" placeholder="71234567"></div>';
+  h += '<div class="campo"><span class="etiqueta">Contacto por</span><select id="ctCanal">' +
+    D.catalogos.canales.map(function (x) { return opt(x, x, c ? c.canal : 'WhatsApp'); }).join('') + '</select></div>';
+  h += '<div class="campo"><span class="etiqueta">Ciudad</span><input id="ctCiudad" value="' + esc(c ? c.ciudad : '') + '"></div>';
+  h += '<div class="campo"><span class="etiqueta">Etiqueta</span><select id="ctEtiqueta">' +
+    ['Prospecto', 'Cliente', 'Proveedor', 'Referido'].map(function (x) { return opt(x, x, c ? c.etiqueta : 'Prospecto'); }).join('') +
+    '</select></div>';
+  h += '<div class="campo ancho"><span class="etiqueta">Notas</span><textarea id="ctNotas">' + esc(c ? c.notas : '') + '</textarea></div>';
+  h += '</div><div class="aviso">Un número boliviano de 8 dígitos se guarda como <b>591…</b> automáticamente, ' +
+    'para que los links de WhatsApp funcionen siempre.</div>';
+  h += '<div class="acciones"><button class="primario" id="ctGuardar">Guardar</button>' +
+    '<button onclick="cerrarModal()">Cancelar</button>';
+  if (c) h += '<button class="peligro" style="margin-left:auto" onclick="borrarContacto(\'' + c.id + '\')">Eliminar</button>';
+  h += '</div>';
+
+  abrirModal(c ? 'Editar contacto' : 'Nuevo número', h);
+  document.getElementById('ctGuardar').onclick = function () {
+    var b = this; b.disabled = true;
+    srv('apiGuardarContacto', {
+      nombre: val('ctNombre'), telefono: val('ctTel'), canal: val('ctCanal'),
+      ciudad: val('ctCiudad'), etiqueta: val('ctEtiqueta'), notas: val('ctNotas')
+    }).then(function (r) {
+      cerrarModal(); brindis(r.nuevo ? 'Contacto agregado.' : 'Contacto actualizado.'); return cargar(true);
+    }).catch(function (e) { b.disabled = false; brindis(e.message || e, true); });
+  };
+}
+
+function borrarContacto(id) {
+  if (!confirm('¿Eliminar este contacto?')) return;
+  srv('apiEliminarContacto', id).then(function () {
+    cerrarModal(); brindis('Contacto eliminado.'); return cargar(true);
+  }).catch(function (e) { brindis(e.message || e, true); });
+}
+
+
+/* ── Vista: Agenda ──────────────────────────────────────────────── */
+function vAgenda() {
+  var pend = D.agenda.filter(function (a) { return a.estado !== 'Hecho'; });
+  var hechos = D.agenda.filter(function (a) { return a.estado === 'Hecho'; });
+  var hoy = D.hoy;
+
+  var h = '<div class="filtros"><button class="primario" onclick="agendar()">+ Nuevo recordatorio</button>' +
+    '<button onclick="document.getElementById(\'btnResumen\').click()">Mandarme el resumen ahora</button></div>';
+
+  h += '<div class="panel"><div class="cab"><h2>Pendientes</h2><span class="crumb">' + pend.length + '</span></div>' +
+    '<div class="tabla-wrap"><table><thead><tr>' +
+    '<th>Cuándo</th><th>Asunto</th><th>Cliente</th><th>Canal</th><th>Ref</th><th>Calendar</th><th></th>' +
+    '</tr></thead><tbody>';
+  if (!pend.length) h += '<tr><td colspan="7"><div class="vacio">NADA PENDIENTE</div></td></tr>';
+  pend.forEach(function (a) {
+    var vencido = a.cuando.slice(0, 10) <= hoy;
+    h += '<tr><td class="mono ' + (vencido ? 'warn' : '') + '">' + esc(a.cuando) + '</td>' +
+      '<td>' + esc(a.asunto) + '</td>' +
+      '<td>' + esc(a.cliente) + '<div class="mono tenue" style="font-size:11px">' + tel(a.telefono) + '</div></td>' +
+      '<td>' + tagCanal(a.canal) + '</td>' +
+      '<td class="mono tenue">' + (esc(a.ref) || '—') + '</td>' +
+      '<td>' + (a.evento ? '<span class="tag vendido">EN CALENDAR</span>' : '<span class="tag">SOLO CRM</span>') + '</td>' +
+      '<td class="acc">' +
+        (a.ref ? '<button class="mini" onclick="mensaje(\'' + a.ref + '\')">✉</button> ' : '') +
+        '<button class="mini" onclick="cerrarRecordatorio(\'' + a.id + '\')">Hecho</button></td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+
+  if (hechos.length) {
+    h += '<div class="panel"><div class="cab"><h2>Cerrados</h2><span class="crumb">' + hechos.length + '</span></div>' +
+      '<div class="tabla-wrap"><table><thead><tr><th>Cuándo</th><th>Asunto</th><th>Cliente</th></tr></thead><tbody>';
+    hechos.slice(-20).reverse().forEach(function (a) {
+      h += '<tr><td class="mono tenue">' + esc(a.cuando) + '</td><td class="tenue">' + esc(a.asunto) +
+        '</td><td class="tenue">' + esc(a.cliente) + '</td></tr>';
+    });
+    h += '</tbody></table></div></div>';
+  }
+  return h;
+}
+
+function cerrarRecordatorio(id) {
+  srv('apiCerrarRecordatorio', id).then(function () {
+    brindis('Recordatorio cerrado.'); return cargar(true);
+  }).catch(function (e) { brindis(e.message || e, true); });
+}
+
+
+/* ── Vista: Métricas ────────────────────────────────────────────── */
+function vMetricas() {
+  var c = D.config;
+  var h = '';
+
+  h += '<div class="panel"><div class="cab"><h2>Ir a las métricas</h2></div><div class="cuerpo">';
+  h += '<div class="campos">';
+  h += enlaceMetrica('Facebook', c.facebook, 'La página del negocio y sus estadísticas', !!c.facebook);
+  h += enlaceMetrica('Bandeja de Messenger', 'https://business.facebook.com/latest/inbox/all', 'Conversaciones de Messenger', true);
+  h += enlaceMetrica('Meta Business Suite', 'https://business.facebook.com/latest/insights', 'Alcance, seguidores y publicaciones de la página', true);
+  h += enlaceMetrica('WhatsApp Manager', 'https://business.facebook.com/wa/manage/home/', 'Plantillas, calidad del número y métricas de mensajes', true);
+  h += enlaceMetrica('Catálogo de Meta', 'https://business.facebook.com/commerce/catalogs/', 'Productos, cobertura y errores del catálogo', true);
+  h += enlaceMetrica('Instagram', c.instagram, 'Todavía no hay cuenta. Cuando la abras, cargá la URL en Ajustes y este botón se activa.', !!c.instagram);
+  h += '</div>';
+  h += '</div></div>';
+
+  h += '<div class="panel"><div class="cab"><h2>Datos dentro del CRM</h2>' +
+    '<div class="der"><button class="mini" onclick="traerMetricas()">Consultar Graph API</button></div></div>' +
+    '<div class="cuerpo" id="metricasApi">' +
+    '<div class="aviso">Para leer seguidores, alcance y estado del catálogo <b>acá adentro</b> hace falta una app de Meta ' +
+    'con token de acceso. Cargalo en Ajustes (<span class="mono">wa_cloud_token</span>, <span class="mono">ig_business_id</span>, ' +
+    '<span class="mono">meta_catalog_id</span>) y tocá «Consultar Graph API».<br><br>' +
+    'Sin token el CRM funciona igual: los botones de arriba te llevan a los paneles de Meta.</div>' +
+    '</div></div>';
+
+  /* Lo que el CRM sí puede medir hoy, sin depender de Meta. */
+  var porCanal = {};
+  D.oportunidades.forEach(function (o) {
+    var k = o.canal || 'Sin canal';
+    porCanal[k] = porCanal[k] || { total: 0, vend: 0, ingreso: 0 };
+    porCanal[k].total++;
+    if (o.estado === 'Vendido') { porCanal[k].vend++; porCanal[k].ingreso += o.total; }
+  });
+  h += '<div class="panel"><div class="cab"><h2>Rendimiento por canal de contacto</h2>' +
+    '<span class="crumb">DATO PROPIO, NO DE META</span></div><div class="tabla-wrap"><table><thead><tr>' +
+    '<th>Canal</th><th class="num">Consultas</th><th class="num">Ventas</th><th class="num">Conversión</th><th class="num">Ingreso</th>' +
+    '</tr></thead><tbody>';
+  Object.keys(porCanal).forEach(function (k) {
+    var d = porCanal[k];
+    h += '<tr><td>' + tagCanal(k) + ' ' + esc(k) + '</td><td class="num">' + d.total + '</td>' +
+      '<td class="num">' + d.vend + '</td>' +
+      '<td class="num">' + (d.total ? Math.round(d.vend / d.total * 100) : 0) + '%</td>' +
+      '<td class="num">' + bs(d.ingreso) + '</td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+  return h;
+}
+
+function enlaceMetrica(nombre, url, desc, configurado) {
+  var h = '<div class="kpi"><span class="etiqueta">' + esc(nombre) + '</span>' +
+    '<div style="margin:8px 0 10px;font-size:12px;color:var(--ink2)">' + esc(desc) + '</div>';
+  /* Un botón que lleva a la portada de la red no sirve de nada: si no hay
+     URL cargada, el botón queda apagado y dice por qué. */
+  h += configurado
+    ? '<a href="' + esc(url) + '" target="_blank" rel="noopener"><button>Abrir</button></a>'
+    : '<button disabled>Sin cuenta cargada</button>';
+  return h + '</div>';
+}
+
+function traerMetricas() {
+  var c = document.getElementById('metricasApi');
+  c.innerHTML = '<div class="vacio">CONSULTANDO META…</div>';
+  srv('apiMetricasMeta').then(function (r) {
+    if (!r.disponible) { c.innerHTML = '<div class="aviso malo">' + esc(r.motivo) + '</div>'; return; }
+    var h = '<div class="kpis" style="margin:0">';
+    if (r.instagram && !r.instagram.error) {
+      h += kpi('Seguidores IG', num(r.instagram.followers_count), '@' + (r.instagram.username || ''), 'acento');
+      h += kpi('Publicaciones IG', num(r.instagram.media_count), r.instagram.name || '', '');
+    }
+    if (r.catalogo && !r.catalogo.error) {
+      h += kpi('Productos en catálogo', num(r.catalogo.product_count), r.catalogo.name || '', 'acento');
+    }
+    h += '</div>';
+    var errs = (r.errores || []).slice();
+    if (r.instagram && r.instagram.error) errs.push('Instagram: ' + r.instagram.error.message);
+    if (r.catalogo && r.catalogo.error) errs.push('Catálogo: ' + r.catalogo.error.message);
+    if (errs.length) h += '<div class="aviso malo" style="margin-top:14px">' + errs.map(esc).join('<br>') + '</div>';
+    if (h === '<div class="kpis" style="margin:0"></div>')
+      h = '<div class="aviso">El token respondió pero no hay ids cargados. Completá <span class="mono">ig_business_id</span> y/o <span class="mono">meta_catalog_id</span> en Ajustes.</div>';
+    c.innerHTML = h;
+  }).catch(function (e) { c.innerHTML = '<div class="aviso malo">' + esc(e.message || e) + '</div>'; });
+}
+
+
+/* ── Vista: Ajustes ─────────────────────────────────────────────── */
+function vAjustes() {
+  var c = D.config;
+  var h = '<div class="panel"><div class="cab"><h2>Contacto y marca</h2></div><div class="cuerpo"><div class="campos">';
+  h += campoCfg('whatsapp_comercial', 'WhatsApp comercial', c.whatsapp, '59157703748');
+  h += campoCfg('whatsapp_alterno', 'WhatsApp alterno', c.whatsappAlterno, '59171777847');
+  h += campoCfg('instagram_url', 'URL de Instagram', c.instagram, 'https://www.instagram.com/…');
+  h += campoCfg('facebook_url', 'URL de Facebook', c.facebook, 'https://www.facebook.com/…');
+  h += '</div><div class="acciones"><button class="primario" onclick="guardarAjustes()">Guardar</button></div></div></div>';
+
+  h += '<div class="panel"><div class="cab"><h2>Plantillas de mensaje</h2></div><div class="cuerpo">';
+  h += '<div class="campo"><span class="etiqueta">Seguimiento</span><textarea id="cfg_plantilla_seguimiento">' +
+    esc(c.plantillas.seguimiento) + '</textarea></div>';
+  h += '<div class="campo" style="margin-top:12px"><span class="etiqueta">Cotización</span><textarea id="cfg_plantilla_cotizacion">' +
+    esc(c.plantillas.cotizacion) + '</textarea></div>';
+  h += '<div class="campo" style="margin-top:12px"><span class="etiqueta">Cierre</span><textarea id="cfg_plantilla_cierre">' +
+    esc(c.plantillas.cierre) + '</textarea></div>';
+  h += '<div class="aviso" style="margin-top:14px">Variables disponibles: <span class="mono">{cliente} {producto} {cod} {precio} {negocio}</span></div>';
+  h += '<div class="acciones"><button class="primario" onclick="guardarAjustes()">Guardar</button></div></div></div>';
+
+  h += '<div class="panel"><div class="cab"><h2>Automatización</h2></div><div class="cuerpo">' +
+    '<div class="aviso bien">La rutina diaria de las 08:00 se activa desde el menú de la planilla: ' +
+    '<b>SMILE CRM → Automatizaciones → Activar rutina diaria</b>. Manda un correo con los seguimientos vencidos, ' +
+    'la agenda del día y las referencias bajo mínimo.</div>' +
+    '<div class="aviso">Las claves de Meta (<span class="mono">wa_cloud_token</span>, <span class="mono">wa_cloud_phone_id</span>, ' +
+    '<span class="mono">ig_business_id</span>, <span class="mono">meta_catalog_id</span>) se cargan directo en la pestaña ' +
+    '<b>Config</b> de la planilla, no acá, para no dejar tokens dando vueltas en la interfaz.</div>' +
+    '<div class="mono tenue" style="font-size:11px;margin-top:12px">WHATSAPP CLOUD API: ' +
+    (c.waCloudActivo ? '<span class="ok">CONFIGURADO</span>' : 'NO CONFIGURADO — EL CRM USA LINKS wa.me') + '</div>';
+  h += '</div></div>';
+  return h;
+}
+
+function campoCfg(clave, rotulo, valor, ph) {
+  return '<div class="campo"><span class="etiqueta">' + esc(rotulo) + '</span>' +
+    '<input id="cfg_' + clave + '" value="' + esc(valor) + '" placeholder="' + esc(ph) + '"></div>';
+}
+
+function guardarAjustes() {
+  var pares = {};
+  Array.prototype.forEach.call(document.querySelectorAll('[id^="cfg_"]'), function (el) {
+    pares[el.id.replace('cfg_', '')] = el.value.trim();
+  });
+  srv('apiGuardarConfig', pares).then(function () {
+    brindis('Ajustes guardados.'); return cargar(true);
+  }).catch(function (e) { brindis(e.message || e, true); });
+}
+
+
+/* ── Arranque ───────────────────────────────────────────────────── */
+cargar();
+</script>
+
+
+<script>
+(function () {
+  var av = document.createElement('div');
+  av.id = 'demoAviso';
+  av.textContent = 'DEMO · DATOS DE EJEMPLO, NO SON CLIENTES REALES · GUARDADO SIMULADO';
+  document.body.insertBefore(av, document.getElementById('app'));
+
+  var nav = document.getElementById('nav');
+  var b = document.createElement('button');
+  b.dataset.v = 'instalar';
+  b.innerHTML = '<span class="glifo">↓</span> Instalar';
+  nav.appendChild(b);
+  TITULOS.instalar = ['Instalar', 'OCHO MINUTOS, DENTRO DE LA MISMA PLANILLA'];
+
+  function paso(t, cuerpo) {
+    return '<div class="paso"><div class="n"></div><div><h3>' + t + '</h3>' + cuerpo + '</div></div>';
+  }
+
+  function vInstalar() {
+    var h = '<div class="aviso bien">Todo pasa dentro de la hoja de cálculo que ya usás. ' +
+      '<b>La pestaña original no se toca</b>: el CRM crea pestañas nuevas y solo lee la vieja. ' +
+      'Los precios de compra y los links de AliExpress se quedan donde están.</div>';
+
+    h += '<div class="panel"><div class="cab"><h2>Instalación</h2>' +
+      '<span class="crumb">~8 MINUTOS</span></div><div class="cuerpo"><div class="pasos">';
+
+    h += paso('Abrir el editor de la macro',
+      '<p>En la hoja de cálculo: <b>Extensiones → Apps Script</b>. Se abre un proyecto vacío ' +
+      'con un <code>Código.gs</code> que solo tiene <code>function myFunction() {}</code>.</p>');
+
+    h += paso('Pegar los cuatro archivos de código',
+      '<p>El <code>Código.gs</code> que ya existe se reemplaza con <code>Codigo.gs</code>. ' +
+      'Los otros tres se crean con <b>+ → Script</b>, nombrados <code>Datos</code>, ' +
+      '<code>Api</code> y <code>Automatizaciones</code> — sin la extensión, Apps Script la agrega solo.</p>');
+
+    h += paso('Pegar los tres archivos de interfaz',
+      '<p>Igual pero con <b>+ → HTML</b>. Los nombres tienen que ser exactos, porque el código ' +
+      'los busca por nombre: <code>Index</code>, <code>Estilos</code>, <code>Cliente</code>.</p>');
+
+    h += paso('Fijar la zona horaria',
+      '<p><b>⚙ Configuración del proyecto → Zona horaria → (GMT-04:00) La Paz.</b> ' +
+      'Sin esto la rutina diaria dispara a la hora equivocada.</p>');
+
+    h += paso('Guardar, correr <code>setup</code> y autorizar',
+      '<p>Ctrl+S, elegí <code>setup</code> en el selector de función y tocá <b>Ejecutar</b>. ' +
+      'Google va a decir «no verificó esta aplicación» — es esperable, la macro es tuya y no está ' +
+      'publicada en la tienda. <b>Configuración avanzada → Ir a (proyecto) → Permitir</b>.</p>' +
+      '<p>Al terminar muestra cuántos productos, oportunidades, contactos y movimientos migró.</p>');
+
+    h += paso('Usarlo',
+      '<p>Volvé a la planilla y recargá con F5. Aparece el menú <b>SMILE CRM</b>. ' +
+      '<b>Abrir CRM</b> levanta esta misma interfaz, y ' +
+      '<b>Automatizaciones → Activar rutina diaria</b> enciende el correo de las 08:00.</p>');
+
+    h += paso('Opcional: usarlo desde el teléfono',
+      '<p><b>Implementar → Nueva implementación → ⚙ → Aplicación web</b>, ejecutar como <b>Yo</b>, ' +
+      'acceso <b>Solo yo</b>. Guardás la URL en la pantalla de inicio del celular.</p>');
+
+    h += '</div></div></div>';
+
+    h += '<div class="panel"><div class="cab"><h2>Si algo falla</h2></div>' +
+      '<div class="tabla-wrap"><table><thead><tr><th>Síntoma</th><th>Causa y arreglo</th></tr></thead><tbody>' +
+      fila('«Falta la pestaña X»', 'No corriste <code>setup</code>. Volvé al paso 05.') +
+      fila('No aparece el menú SMILE CRM', 'Recargá la planilla con F5 — el menú se arma al abrir.') +
+      fila('<code>include is not defined</code>', 'Los HTML tienen otro nombre. Tienen que ser <code>Index</code>, <code>Estilos</code>, <code>Cliente</code>, sin acentos ni espacios.') +
+      fila('No llega la rutina diaria', 'Revisá <span class="clave">email_avisos</span> en la pestaña Config y que hayas corrido «Activar rutina diaria».') +
+      fila('El evento no aparece en Calendar', 'Google pide el permiso de Calendar aparte. Corré <code>apiAgendar</code> una vez desde el editor y autorizá.') +
+      '</tbody></table></div></div>';
+
+    return h;
+  }
+
+  function fila(a, b) {
+    return '<tr><td style="width:34%">' + a + '</td><td class="tenue">' + b + '</td></tr>';
+  }
+
+  var original = render;
+  render = function () {
+    if (VISTA !== 'instalar') return original();
+    document.getElementById('titulo').textContent = TITULOS.instalar[0];
+    document.getElementById('subtitulo').textContent = TITULOS.instalar[1];
+    var m = document.getElementById('vista');
+    m.scrollTop = 0;
+    m.innerHTML = vInstalar();
+  };
+})();
+</script>
+</body>
+</html>
