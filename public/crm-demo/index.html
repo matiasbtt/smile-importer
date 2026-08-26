@@ -4,20 +4,558 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SMILE IMPORTER · CRM (demo)</title>
-<meta name="description" content="Vista previa del CRM interno de SMILE IMPORTER — datos de ejemplo, no clientes reales.">
+<style>
+/* ═════════════════════════════════════════════════════════════════
+   SMILE IMPORTER · CRM — hoja de estilo
+   Mundo visual heredado de Revela (revela/theme.py, paleta DARK):
+   superficies planas, bordes de 1px, radio 4px, versalitas
+   monoespaciadas y un solo acento verde agua.
+
+   Lo monoespaciado se reserva para lo que es medida — códigos,
+   importes, teléfonos, fechas, cantidades — y para las versalitas
+   de rótulo, que son la firma de Revela. El texto corrido va en
+   la tipografía de interfaz.
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  color-scheme: dark;
+
+  /* Superficies, de la más honda a la más alta */
+  --bg:  #161E1D;
+  --bg2: #1D2726;
+  --bg3: #243130;
+  --bg4: #2B3937;
+  --line:#2C3937;
+  --line2:#3A4B48;
+
+  /* Tinta. Tres niveles, todos por encima de 4.5:1 sobre --bg2:
+     ink 13.9:1 · ink2 7.4:1 · ink3 5.2:1 */
+  --ink: #E7EFED;
+  --ink2:#A9B8B4;
+  --ink3:#8B9A96;
+
+  /* Acento y semánticos, con su versión honda para fondos tintados */
+  --accent:     #4FD1BC;
+  --accent-dim: #173A36;
+  --accent-text:#08201D;
+  --warn:       #E0A438;
+  --warn-dim:   #35290F;
+  --error:      #E77567;
+  --error-dim:  #38201D;
+
+  --ui:   "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --mono: "Cascadia Mono", "JetBrains Mono", Consolas, "SF Mono", ui-monospace, monospace;
+
+  --r: 4px;
+  --r-pill: 999px;
+
+  /* Curvas propias: las de CSS son demasiado tibias para que una
+     transición se sienta intencional. */
+  --sal:   cubic-bezier(0.23, 1, 0.32, 1);      /* entradas, salidas */
+  --vaiven:cubic-bezier(0.77, 0, 0.175, 1);     /* movimiento en pantalla */
+
+  --sombra-modal: 0 24px 60px -12px rgba(0,0,0,.6), 0 8px 20px -8px rgba(0,0,0,.5);
+  --sombra-flota: 0 12px 32px -10px rgba(0,0,0,.55), 0 4px 10px -4px rgba(0,0,0,.4);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--ui); font-size: 13px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Las superficies que el navegador dibuja también son parte del diseño. */
+::selection { background: var(--accent-dim); color: var(--accent); }
+:root { accent-color: var(--accent); caret-color: var(--accent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+
+/* ── Sistema de iconos ──────────────────────────────────────────
+   Trazo único de 1.75 sobre malla de 24, heredando currentColor,
+   para que un icono pese lo mismo esté donde esté. */
+.ico {
+  width: 16px; height: 16px; flex: 0 0 16px;
+  fill: none; stroke: currentColor;
+  stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+  display: inline-block; vertical-align: -3px;
+}
+.ico.g  { width: 20px; height: 20px; flex-basis: 20px; }
+.ico.xl { width: 30px; height: 30px; flex-basis: 30px; stroke-width: 1.4; }
+#iconos { display: none; }
+
+
+/* ── Estructura ─────────────────────────────────────────────────── */
+#app { display: flex; height: 100vh; overflow: hidden; }
+
+#lateral {
+  width: 214px; flex: 0 0 214px;
+  background: var(--bg2); border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+}
+#marca { padding: 16px 16px 14px; border-bottom: 1px solid var(--line); }
+#marca .nombre { font-size: 13px; font-weight: 600; letter-spacing: .3px; }
+#marca .sub {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
+  color: var(--ink3); margin-top: 4px;
+}
+
+nav { padding: 10px 8px; flex: 1; overflow-y: auto; }
+nav button {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  background: transparent; border: 0; border-radius: var(--r);
+  color: var(--ink2); font-family: var(--ui); font-size: 13px;
+  padding: 8px 10px; margin-bottom: 2px; text-align: left; cursor: pointer;
+  transition: background-color 130ms ease, color 130ms ease;
+}
+nav button .ico { color: var(--ink3); transition: color 130ms ease; }
+@media (hover: hover) and (pointer: fine) {
+  nav button:hover { background: var(--bg3); color: var(--ink); }
+  nav button:hover .ico { color: var(--ink2); }
+}
+nav button:active { transform: scale(.985); }
+nav button.on { background: var(--accent-dim); color: var(--accent); font-weight: 600; }
+nav button.on .ico { color: var(--accent); }
+nav button .pill {
+  margin-left: auto; font-family: var(--mono); font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink3); background: var(--bg3); border-radius: var(--r-pill);
+  padding: 1px 7px; transition: background-color 130ms ease, color 130ms ease;
+}
+nav button.on .pill { background: var(--bg); color: var(--accent); }
+
+#pieLateral {
+  border-top: 1px solid var(--line); padding: 11px 14px;
+  font-family: var(--mono); font-size: 10px; color: var(--ink3);
+  letter-spacing: .5px;
+}
+#pieSync { margin-top: 3px; }
+
+#principal { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+header {
+  height: 54px; flex: 0 0 54px; display: flex; align-items: center;
+  gap: 11px; padding: 0 18px; border-bottom: 1px solid var(--line);
+  background: var(--bg2);
+}
+header h1 { font-size: 15px; font-weight: 600; margin: 0; letter-spacing: -.1px; }
+header .crumb {
+  font-family: var(--mono); font-size: 10px; color: var(--ink3);
+  letter-spacing: 1px; padding-top: 1px;
+}
+header .der { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+main { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px; }
+
+
+/* ── Tipografía de apoyo ────────────────────────────────────────── */
+.etiqueta {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
+  color: var(--ink3); text-transform: uppercase; display: block; margin-bottom: 6px;
+}
+.tenue { color: var(--ink2); }
+.mono  { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.err   { color: var(--error); }
+.warn  { color: var(--warn); }
+.ok    { color: var(--accent); }
+
+
+/* ── Paneles ────────────────────────────────────────────────────── */
+.panel {
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: var(--r); margin-bottom: 16px;
+}
+.panel > .cab {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-bottom: 1px solid var(--line);
+}
+.panel > .cab h2 { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: -.1px; }
+.panel > .cab .der { margin-left: auto; display: flex; gap: 8px; }
+.panel > .cuerpo { padding: 14px; }
+
+
+/* ── Tarjetas de cifras ─────────────────────────────────────────── */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(172px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi {
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 13px 14px;
+  transition: border-color 160ms ease;
+  /* Sin esto el ítem de grilla se niega a bajar de su ancho de
+     contenido y empuja la fila fuera de la pantalla. */
+  min-width: 0;
+}
+/* break-word, no anywhere: sólo parte una palabra cuando de verdad no
+   entra sola en la línea. "anywhere" partía palabras que sí cabían. */
+.kpi .etiqueta, .kpi .nota { overflow-wrap: break-word; word-break: normal; }
+.kpi .cifra {
+  font-family: var(--mono); font-size: 25px; line-height: 1.1;
+  margin-top: 7px; letter-spacing: -.5px; font-variant-numeric: tabular-nums;
+}
+.kpi .nota {
+  font-family: var(--mono); font-size: 10px; color: var(--ink3);
+  margin-top: 6px; line-height: 1.45;
+}
+.kpi.acento .cifra { color: var(--accent); }
+.kpi.acento { border-color: color-mix(in srgb, var(--accent) 30%, var(--line)); }
+/* "kpi-aviso", no "aviso": ese nombre ya lo usa el cuadro de aviso de
+   abajo (display:flex + icono en ::before) — si coincidieran, cualquier
+   tarjeta de cifra con tono amarillo heredaría ese flex y se aplastaría. */
+.kpi.kpi-aviso .cifra { color: var(--warn); }
+.kpi.kpi-aviso { border-color: color-mix(in srgb, var(--warn) 34%, var(--line)); background: linear-gradient(var(--warn-dim), var(--bg2) 62%); }
+.kpi.malo   .cifra { color: var(--error); }
+.kpi.malo   { border-color: color-mix(in srgb, var(--error) 34%, var(--line)); background: linear-gradient(var(--error-dim), var(--bg2) 62%); }
+
+
+/* ── Controles ──────────────────────────────────────────────────── */
+input, select, textarea {
+  background: var(--bg3); border: 1px solid var(--line); border-radius: var(--r);
+  color: var(--ink); font-family: var(--ui); font-size: 13px;
+  padding: 7px 9px; width: 100%; outline: none;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+input[type="number"], input[type="date"], input[type="datetime-local"] {
+  font-family: var(--mono); font-variant-numeric: tabular-nums;
+}
+@media (hover: hover) and (pointer: fine) {
+  input:hover, select:hover, textarea:hover { border-color: var(--line2); background: var(--bg4); }
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent); background: var(--bg3);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+input:disabled, select:disabled, textarea:disabled {
+  color: var(--ink3); background: var(--bg2); cursor: not-allowed;
+}
+input::placeholder, textarea::placeholder { color: var(--ink3); }
+select { cursor: pointer; }
+select option { background: var(--bg3); color: var(--ink); }
+textarea { resize: vertical; min-height: 64px; font-family: var(--ui); line-height: 1.55; }
+
+button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  background: var(--bg3); border: 1px solid var(--line); border-radius: var(--r);
+  color: var(--ink); font-family: var(--ui); font-size: 13px;
+  padding: 7px 14px; cursor: pointer; white-space: nowrap;
+  transition: background-color 140ms ease, border-color 140ms ease,
+              color 140ms ease, transform 160ms var(--sal);
+}
+@media (hover: hover) and (pointer: fine) {
+  button:hover { border-color: var(--line2); background: var(--bg4); }
+}
+/* Responder al dedo es lo que hace que la interfaz se sienta viva. */
+button:active { transform: scale(.97); }
+button:disabled { color: var(--ink3); cursor: not-allowed; border-color: var(--line); background: var(--bg2); }
+button:disabled:active { transform: none; }
+button .ico { color: currentColor; }
+
+button.primario {
+  background: var(--accent); color: var(--accent-text);
+  border-color: var(--accent); font-weight: 600; padding: 7px 18px;
+}
+@media (hover: hover) and (pointer: fine) {
+  button.primario:hover { background: #5FDCC7; border-color: #5FDCC7; }
+}
+button.primario:disabled { background: var(--bg3); color: var(--ink3); border-color: var(--line); }
+
+button.enlace { background: transparent; border: 0; color: var(--accent); padding: 4px 6px; }
+@media (hover: hover) and (pointer: fine) {
+  button.enlace:hover { background: var(--accent-dim); }
+}
+button.mini { padding: 4px 9px; font-size: 12px; gap: 5px; }
+button.mini .ico { width: 14px; height: 14px; flex-basis: 14px; }
+button.icono { padding: 5px; width: 28px; }
+@media (hover: hover) and (pointer: fine) {
+  button.peligro:hover { border-color: var(--error); color: var(--error); background: var(--error-dim); }
+}
+
+a { color: var(--accent); }
+a:has(button) { text-decoration: none; display: inline-flex; }
+
+.campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 13px; }
+.campo.ancho { grid-column: 1 / -1; }
+.acciones { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+.filtros { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 14px; }
+.filtros .campo { min-width: 150px; }
+.filtros .campo.busca { flex: 1; min-width: 220px; }
+
+
+/* ── Tablas ─────────────────────────────────────────────────────── */
+.tabla-wrap { overflow-x: auto; overscroll-behavior-x: contain; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--ink3); font-weight: 400;
+  text-align: left; padding: 9px 10px; background: var(--bg2);
+  border-bottom: 1px solid var(--line2); position: sticky; top: 0; z-index: 2;
+  white-space: nowrap;
+}
+tbody td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+tbody tr { transition: background-color 120ms ease; }
+tbody tr:last-child td { border-bottom: 0; }
+@media (hover: hover) and (pointer: fine) {
+  tbody tr:hover { background: var(--bg3); }
+}
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+td.acc { white-space: nowrap; text-align: right; }
+td.acc button { margin-left: 4px; }
+
+/* Vacío que enseña la vista en vez de anunciar la nada. */
+.vacio {
+  padding: 30px 18px; text-align: center; color: var(--ink3);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .5px;
+}
+.vacio .ico { color: var(--line2); margin-bottom: 7px; }
+.vacio .t {
+  font-family: var(--ui); font-size: 13px; font-weight: 600;
+  color: var(--ink2); letter-spacing: 0; margin: 0;
+}
+.vacio .d {
+  font-family: var(--ui); font-size: 12px; color: var(--ink3);
+  letter-spacing: 0; margin: 0; max-width: 46ch; line-height: 1.55;
+}
+.vacio .acciones { margin-top: 12px; justify-content: center; }
+
+
+/* ── Insignias ──────────────────────────────────────────────────── */
+.tag {
+  display: inline-block; font-family: var(--mono); font-size: 10px;
+  letter-spacing: .5px; padding: 2px 8px; border-radius: var(--r-pill);
+  border: 1px solid var(--line2); color: var(--ink2); background: var(--bg3);
+  white-space: nowrap;
+}
+.tag.vendido      { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
+.tag.enproceso    { color: var(--warn);   border-color: color-mix(in srgb, var(--warn) 50%, var(--line)); background: var(--warn-dim); }
+.tag.endesarrollo { color: var(--ink);    border-color: var(--line2); }
+.tag.pregunta     { color: var(--ink3); background: transparent; }
+.tag.wa  { color: #6FE0A6; border-color: #2E5E48; background: #12281E; }
+.tag.mes { color: #7FB6F5; border-color: #2C4A6B; background: #101F2E; }
+.tag.amb { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
+
+
+/* ── Barras por categoría ───────────────────────────────────────── */
+.barras { display: flex; flex-direction: column; gap: 13px; }
+.barra .top { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; margin-bottom: 6px; }
+.barra .top .v { font-family: var(--mono); color: var(--ink2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.barra .riel {
+  height: 6px; background: var(--bg3); border-radius: 3px;
+  overflow: hidden; display: flex;
+}
+.barra .relleno {
+  height: 100%; background: var(--accent);
+  /* Sólo se pinta al entrar al Panel: la barra creciendo ES el dato. */
+  transform-origin: left center;
+  animation: crecer 520ms var(--sal) both;
+}
+.barra .relleno.abierto { background: var(--warn); opacity: .55; }
+@keyframes crecer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+
+/* ── Modal ──────────────────────────────────────────────────────── */
+#velo {
+  position: fixed; inset: 0; background: rgba(8,12,12,.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 40; padding: 20px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 150ms ease, visibility 0s linear 150ms;
+}
+#velo.on {
+  opacity: 1; visibility: visible;
+  transition: opacity 200ms var(--sal), visibility 0s;
+}
+.modal {
+  background: var(--bg2); border: 1px solid var(--line2); border-radius: var(--r);
+  width: 100%; max-width: 640px; max-height: 88vh; overflow-y: auto;
+  box-shadow: var(--sombra-modal);
+  /* Nunca desde scale(0): nada en el mundo real aparece de la nada. */
+  transform: scale(.96) translateY(8px); opacity: 0;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+#velo.on .modal {
+  transform: none; opacity: 1;
+  transition: transform 220ms var(--sal), opacity 200ms var(--sal);
+}
+.modal .cab {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; background: var(--bg2); z-index: 2;
+}
+.modal .cab h2 { margin: 0; font-size: 14px; font-weight: 600; }
+.modal .cab button {
+  margin-left: auto; background: transparent; border: 0; color: var(--ink3);
+  padding: 5px; width: 28px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .modal .cab button:hover { background: var(--bg3); color: var(--ink); }
+}
+.modal .cuerpo { padding: 16px; }
+
+
+/* ── Avisos ─────────────────────────────────────────────────────
+   El icono viaja por máscara CSS para que el marcado no cambie
+   en las dos docenas de sitios que emiten un aviso. */
+.aviso {
+  display: flex; gap: 10px; align-items: flex-start;
+  border: 1px solid color-mix(in srgb, var(--warn) 30%, var(--line));
+  background: var(--warn-dim); color: var(--ink2);
+  border-radius: var(--r); padding: 11px 13px; margin-bottom: 14px;
+  font-size: 12px; line-height: 1.6;
+  --tinte: var(--warn);
+  --icono: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4 2.6 20h18.8z'/%3E%3Cpath d='M12 10.5v3.6'/%3E%3Cpath d='M12 17.2v.1'/%3E%3C/svg%3E");
+}
+.aviso::before {
+  content: ''; flex: 0 0 16px; width: 16px; height: 16px; margin-top: 1px;
+  background: var(--tinte);
+  -webkit-mask: var(--icono) center / 16px 16px no-repeat;
+  mask: var(--icono) center / 16px 16px no-repeat;
+}
+.aviso.malo {
+  border-color: color-mix(in srgb, var(--error) 30%, var(--line));
+  background: var(--error-dim); --tinte: var(--error);
+}
+.aviso.bien {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
+  background: var(--accent-dim); --tinte: var(--accent);
+  --icono: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='m8 12.2 2.8 2.8L16 9.5'/%3E%3C/svg%3E");
+}
+.aviso.dato {
+  border-color: var(--line); background: var(--bg3); --tinte: var(--ink3);
+  --icono: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11.2V16'/%3E%3Cpath d='M12 7.9v.1'/%3E%3C/svg%3E");
+}
+.aviso b { color: var(--ink); font-weight: 600; }
+.aviso .mono, .aviso code { color: var(--ink); }
+
+
+/* ── Brindis (aviso efímero) ────────────────────────────────────── */
+#brindis {
+  position: fixed; bottom: 20px; left: 50%; z-index: 60;
+  background: var(--bg3); border: 1px solid var(--accent); color: var(--ink);
+  border-radius: var(--r); padding: 10px 16px; font-size: 12px;
+  max-width: min(80vw, 460px); box-shadow: var(--sombra-flota);
+  transform: translateX(-50%) translateY(10px) scale(.96); opacity: 0; visibility: hidden;
+  transition: opacity 140ms ease, transform 140ms ease, visibility 0s linear 140ms;
+}
+#brindis.on {
+  opacity: 1; visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(1);
+  transition: opacity 220ms var(--sal), transform 240ms var(--sal), visibility 0s;
+}
+#brindis.malo { border-color: var(--error); }
+
+
+/* ── Carga: esqueleto con la forma de lo que viene ──────────────── */
+#cargando {
+  position: fixed; inset: 0; background: var(--bg); z-index: 80;
+  padding: 18px; overflow: hidden;
+}
+/* Si la lectura falla, el mismo lienzo pasa a explicar el problema. */
+#cargando.roto {
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; overflow-y: auto;
+}
+#cargando.roto .vacio { max-width: 520px; }
+#cargando.off { display: none; }
+.hueso { background: var(--bg2); border: 1px solid var(--line); border-radius: var(--r); }
+.hueso.late { animation: latir 1.4s ease-in-out infinite; }
+.hueso.late:nth-child(2) { animation-delay: .12s; }
+.hueso.late:nth-child(3) { animation-delay: .24s; }
+.hueso.late:nth-child(4) { animation-delay: .36s; }
+.hueso.late:nth-child(5) { animation-delay: .48s; }
+@keyframes latir { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+#cargando .fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(172px, 1fr)); gap: 12px; margin-bottom: 16px; }
+#cargando .fila .hueso { height: 88px; }
+#cargando .bloque { height: 210px; margin-bottom: 16px; }
+#cargando .bloque.corto { height: 140px; }
+
+
+/* ── Barras de desplazamiento ───────────────────────────────────── */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 5px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink3); background-clip: padding-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+* { scrollbar-color: var(--line2) transparent; scrollbar-width: thin; }
+
+
+/* ── Teléfono ───────────────────────────────────────────────────── */
+@media (max-width: 820px) {
+  #app { flex-direction: column; }
+  #lateral {
+    width: 100%; flex: 0 0 auto; border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  #marca, #pieLateral { display: none; }
+  nav {
+    display: flex; overflow-x: auto; overscroll-behavior-x: contain;
+    padding: 7px; gap: 4px; scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav button { width: auto; flex: 0 0 auto; margin-bottom: 0; padding: 7px 11px; }
+  nav button .pill { display: none; }
+  main { padding: 12px; }
+  header { height: 48px; flex-basis: 48px; padding: 0 12px; }
+  header h1 { font-size: 14px; }
+  header .crumb { display: none; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(136px, 1fr)); gap: 10px; }
+  .kpi { padding: 11px 12px; }
+  .kpi .cifra { font-size: 21px; }
+  .kpi .etiqueta { letter-spacing: .6px; }
+  .modal { max-height: 92vh; }
+  #velo { padding: 12px; }
+  /* El dedo necesita más blanco que el ratón. */
+  button.mini { padding: 6px 10px; }
+  td.acc button { margin-left: 3px; }
+}
+
+
+/* ── Menos movimiento: se van los desplazamientos, quedan los
+   cambios de opacidad y color que ayudan a entender qué pasó. ──── */
+@media (prefers-reduced-motion: reduce) {
+  .modal, #brindis, .barra .relleno, button:active, nav button:active {
+    transform: none !important;
+    animation: none !important;
+  }
+  .hueso.late { animation: none !important; opacity: .75; }
+  * { transition-duration: 120ms !important; }
+}
+</style>
+
+<meta name="description" content="Vista previa interactiva del CRM interno de SMILE IMPORTER — datos de ejemplo, no clientes reales.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
   :root { --mono: "Cascadia Mono", "JetBrains Mono", Consolas, ui-monospace, monospace; }
-  html, body { margin: 0; padding: 0; }
+  /* La cinta de demo se apila sobre la app en vez de restarle una
+     altura fija, así crece si el texto se parte en dos líneas. */
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { display: flex; flex-direction: column; }
   #demoAviso {
+    flex: 0 0 auto;
     background: var(--accent-dim); border-bottom: 1px solid var(--accent);
     color: var(--accent); font-family: var(--mono); font-size: 10px;
-    letter-spacing: 1px; padding: 7px 18px; text-align: center;
+    letter-spacing: .5px; padding: 7px 18px; text-align: center;
+    display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
   }
-  #app { height: calc(100vh - 30px); }
+  #demoAviso button {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .5px;
+    background: transparent; color: var(--accent); border: 1px solid var(--accent);
+    border-radius: var(--r); padding: 3px 9px; gap: 5px;
+  }
+  #demoAviso button .ico { width: 13px; height: 13px; flex-basis: 13px; }
+  @media (hover: hover) and (pointer: fine) {
+    #demoAviso button:hover { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  }
+  #app { flex: 1 1 auto; height: auto; min-height: 0; }
   .pasos { counter-reset: paso; display: flex; flex-direction: column; gap: 18px; }
   .paso { display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start; }
   .paso .n {
@@ -39,7 +577,83 @@
 <body>
 
 
-<div id="cargando">CARGANDO DATOS…</div>
+<!-- Iconos dibujados sobre malla de 24, un solo grosor de trazo.
+     Se referencian con <use href="#i-…"> desde toda la interfaz. -->
+<svg id="iconos" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="i-panel" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="7.5" height="8" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/>
+    <rect x="3" y="14.5" width="7.5" height="6.5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/>
+  </symbol>
+  <symbol id="i-pipeline" viewBox="0 0 24 24">
+    <rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="11" rx="1.5"/>
+    <rect x="16" y="4" width="5" height="7" rx="1.5"/>
+  </symbol>
+  <symbol id="i-inventario" viewBox="0 0 24 24">
+    <path d="M3 7.6 12 3l9 4.6v8.8L12 21l-9-4.6z"/><path d="M3 7.6 12 12.2l9-4.6"/><path d="M12 12.2V21"/>
+  </symbol>
+  <symbol id="i-contactos" viewBox="0 0 24 24">
+    <path d="M15.6 21A12.6 12.6 0 0 1 3 8.4V5.9A1.9 1.9 0 0 1 4.9 4h2.8a1 1 0 0 1 1 .8l.8 3.4a1 1 0 0 1-.4 1L7.5 10.5a12.4 12.4 0 0 0 6 6l1.3-1.6a1 1 0 0 1 1-.4l3.4.8a1 1 0 0 1 .8 1v2.8A1.9 1.9 0 0 1 18.1 21z"/>
+  </symbol>
+  <symbol id="i-agenda" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>
+  </symbol>
+  <symbol id="i-metricas" viewBox="0 0 24 24">
+    <path d="M3 20.5h18"/><path d="M6.5 20.5v-6M12 20.5V6.5M17.5 20.5v-9.5"/>
+  </symbol>
+  <symbol id="i-ajustes" viewBox="0 0 24 24">
+    <path d="M4 6.5h9M19 6.5h1M4 12h1.5M10.5 12H20M4 17.5h9M19 17.5h1"/>
+    <circle cx="15.5" cy="6.5" r="2.2"/><circle cx="8" cy="12" r="2.2"/><circle cx="15.5" cy="17.5" r="2.2"/>
+  </symbol>
+  <symbol id="i-instalar" viewBox="0 0 24 24">
+    <path d="M12 3.5v11.5M7.5 10.5 12 15l4.5-4.5M4 20.5h16"/>
+  </symbol>
+  <symbol id="i-mensaje" viewBox="0 0 24 24">
+    <path d="M21 3 10.4 13.6"/><path d="M21 3l-6.6 18-3.9-7.4L3.2 9.7z"/>
+  </symbol>
+  <symbol id="i-agendar" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>
+  </symbol>
+  <symbol id="i-editar" viewBox="0 0 24 24">
+    <path d="M16.4 3.6a2.2 2.2 0 0 1 3.1 3.1L8.2 18l-4.2 1.1L5.1 15z"/><path d="m14.6 5.4 3.1 3.1"/>
+  </symbol>
+  <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6.5 6.5 17.5 17.5M17.5 6.5 6.5 17.5"/></symbol>
+  <symbol id="i-mas" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></symbol>
+  <symbol id="i-menos" viewBox="0 0 24 24"><path d="M5.5 12h13"/></symbol>
+  <symbol id="i-recargar" viewBox="0 0 24 24">
+    <path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"/><path d="M20.5 4v5.5H15"/>
+  </symbol>
+  <symbol id="i-correo" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.6 6.6 8.4 5.9 8.4-5.9"/>
+  </symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24">
+    <path d="M20.5 11.6a8.2 8.2 0 0 1-8.5 8.2 8.7 8.7 0 0 1-3.6-.8L3.5 20.5l1.6-4.7a8 8 0 0 1-1.1-4.2 8.2 8.2 0 0 1 8.5-8.1 8.2 8.2 0 0 1 8 8.1z"/>
+  </symbol>
+  <symbol id="i-buscar" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.4 15.4 5.1 5.1"/></symbol>
+  <symbol id="i-usuario" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24">
+    <path d="M4.6 5.5 3 13v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5l-1.6-7.5A2 2 0 0 0 17.4 4H6.6a2 2 0 0 0-2 1.5z"/>
+    <path d="M3 13h5l1.5 3h5l1.5-3h5"/>
+  </symbol>
+  <symbol id="i-externo" viewBox="0 0 24 24">
+    <path d="M14 3.5h6.5V10M20.5 3.5 11.8 12.2"/>
+    <path d="M18 14v5.5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5V8A1.5 1.5 0 0 1 5 6.5h5"/>
+  </symbol>
+  <symbol id="i-hecho" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.8 2.8L16 9.5"/></symbol>
+  <symbol id="i-etiqueta" viewBox="0 0 24 24">
+    <path d="M3.5 11.4V4.8a1.3 1.3 0 0 1 1.3-1.3h6.6a1.3 1.3 0 0 1 .9.4l8 8a1.3 1.3 0 0 1 0 1.8l-6.5 6.5a1.3 1.3 0 0 1-1.8 0l-8-8a1.3 1.3 0 0 1-.5-.8z"/>
+    <path d="M7.8 7.8v.01"/>
+  </symbol>
+</defs></svg>
+
+<!-- Esqueleto con la silueta del Panel, para que la espera no sea un salto. -->
+<div id="cargando">
+  <div class="fila">
+    <div class="hueso late"></div><div class="hueso late"></div><div class="hueso late"></div>
+    <div class="hueso late"></div><div class="hueso late"></div>
+  </div>
+  <div class="hueso late bloque"></div>
+  <div class="hueso late bloque corto"></div>
+</div>
 
 <div id="app">
 
@@ -49,13 +663,13 @@
       <div class="sub">CRM · INVENTARIO</div>
     </div>
     <nav id="nav">
-      <button data-v="panel"      class="on"><span class="glifo">▤</span> Panel</button>
-      <button data-v="pipeline"><span class="glifo">◧</span> Pipeline <span class="pill" id="pillPipe">0</span></button>
-      <button data-v="inventario"><span class="glifo">▦</span> Inventario <span class="pill" id="pillInv">0</span></button>
-      <button data-v="contactos"><span class="glifo">☏</span> Contactos <span class="pill" id="pillCon">0</span></button>
-      <button data-v="agenda"><span class="glifo">◷</span> Agenda <span class="pill" id="pillAge">0</span></button>
-      <button data-v="metricas"><span class="glifo">◈</span> Métricas</button>
-      <button data-v="ajustes"><span class="glifo">⚙</span> Ajustes</button>
+      <button data-v="panel" class="on"><svg class="ico"><use href="#i-panel"/></svg> Panel</button>
+      <button data-v="pipeline"><svg class="ico"><use href="#i-pipeline"/></svg> Pipeline <span class="pill" id="pillPipe">0</span></button>
+      <button data-v="inventario"><svg class="ico"><use href="#i-inventario"/></svg> Inventario <span class="pill" id="pillInv">0</span></button>
+      <button data-v="contactos"><svg class="ico"><use href="#i-contactos"/></svg> Contactos <span class="pill" id="pillCon">0</span></button>
+      <button data-v="agenda"><svg class="ico"><use href="#i-agenda"/></svg> Agenda <span class="pill" id="pillAge">0</span></button>
+      <button data-v="metricas"><svg class="ico"><use href="#i-metricas"/></svg> Métricas</button>
+      <button data-v="ajustes"><svg class="ico"><use href="#i-ajustes"/></svg> Ajustes</button>
     </nav>
     <div id="pieLateral">
       <div id="pieMoneda">BS · BOLIVIA</div>
@@ -68,8 +682,12 @@
       <h1 id="titulo">Panel</h1>
       <span class="crumb" id="subtitulo"></span>
       <div class="der">
-        <button class="mini" id="btnResumen" title="Enviarme por correo el resumen de seguimientos y stock">Resumen por correo</button>
-        <button class="mini" id="btnRecargar">Recargar</button>
+        <button class="mini" id="btnResumen" title="Enviarme por correo el resumen de seguimientos y stock">
+          <svg class="ico"><use href="#i-correo"/></svg> Resumen por correo
+        </button>
+        <button class="mini" id="btnRecargar" title="Volver a leer la planilla">
+          <svg class="ico"><use href="#i-recargar"/></svg> Recargar
+        </button>
       </div>
     </header>
     <main id="vista"></main>
@@ -77,39 +695,346 @@
 
 </div>
 
-<div id="velo"><div class="modal">
-  <div class="cab"><h2 id="modalTitulo">—</h2><button onclick="cerrarModal()">✕</button></div>
+<div id="velo"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+  <div class="cab">
+    <h2 id="modalTitulo">—</h2>
+    <button onclick="cerrarModal()" title="Cerrar" aria-label="Cerrar"><svg class="ico"><use href="#i-cerrar"/></svg></button>
+  </div>
   <div class="cuerpo" id="modalCuerpo"></div>
 </div></div>
 
-<div id="brindis"></div>
+<div id="brindis" role="status" aria-live="polite"></div>
 
 <script>
 window.google = { script: { run: (function () {
-  var D = {"config":{"moneda":"Bs","negocio":"SMILE IMPORTER","whatsapp":"59157703748","whatsappAlterno":"59171777847","instagram":"","facebook":"https://www.facebook.com/profile.php?id=61593579992274","waCloudActivo":false,"plantillas":{"seguimiento":"Hola {cliente}, le escribo de {negocio}. Quedamos en conversar por {producto} (REF {cod}). Sigue interesado/a?","cotizacion":"Hola {cliente}, le paso la cotizacion de {negocio}: {producto} (REF {cod}) a {precio}.","cierre":"Hola {cliente}, confirmamos su {producto} (REF {cod}) por {precio}. Le coordino la entrega?"}},"catalogos":{"estados":["Pregunta","En desarrollo","En proceso","Vendido"],"estadosAbiertos":["Pregunta","En desarrollo","En proceso"],"canales":["WhatsApp","Messenger","Ambos"],"categorias":["Rotatorios","Diagnostico","Operatoria","Cirugia","Protesis"],"tiposMov":["Ingreso","Salida","Ajuste"]},"productos":[{"cod":"E-01","nombre":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","precio":1500,"precioCaja":0,"unidadesCaja":0,"costo":1270,"stockMinimo":1,"activo":true,"stock":-3,"notas":""},{"cod":"E-02","nombre":"Motor de endodoncia de consola","categoria":"Rotatorios","precio":6000,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-03","nombre":"Colorimetro dental - escala 16 tonos","categoria":"Diagnostico","precio":250,"precioCaja":0,"unidadesCaja":0,"costo":190,"stockMinimo":1,"activo":true,"stock":2,"notas":""},{"cod":"E-04","nombre":"Espejos intraorales de rodio","categoria":"Diagnostico","precio":35,"precioCaja":300,"unidadesCaja":10,"costo":30,"stockMinimo":1,"activo":true,"stock":10,"notas":""},{"cod":"E-05","nombre":"Calentador de resina compuesta","categoria":"Operatoria","precio":1500,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-06","nombre":"Turbina de alta velocidad angulada","categoria":"Rotatorios","precio":650,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-07","nombre":"Set de espatulas de resina - 6 piezas","categoria":"Operatoria","precio":370,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-08","nombre":"Set de pinceles de resina","categoria":"Operatoria","precio":70,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-09","nombre":"Set de elevadores atraumaticos - 7 pzs","categoria":"Cirugia","precio":850,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-10","nombre":"Camara intraoral WiFi HD","categoria":"Diagnostico","precio":760,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-11","nombre":"Lupas de magnificacion 3.5x","categoria":"Diagnostico","precio":1450,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-12","nombre":"Elevadores de seno - 4 piezas","categoria":"Cirugia","precio":750,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""},{"cod":"E-13","nombre":"Cubetas de impresion perforadas","categoria":"Protesis","precio":90,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"stock":0,"notas":""}],"oportunidades":[{"id":"OP-0001","fecha":"2026-08-24","cliente":"Cliente A","telefono":"59160000001","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1490,"total":1490,"estado":"Vendido","canal":"WhatsApp","ciudad":"La Paz","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0002","fecha":"2026-08-24","cliente":"Cliente B","telefono":"59160000002","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":2,"precio":1400,"total":2800,"estado":"Vendido","canal":"Messenger","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0003","fecha":"2026-08-24","cliente":"Cliente C","telefono":"59160000003","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Pregunta","canal":"Ambos","ciudad":"","proximo":"2026-08-27","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0004","fecha":"2026-08-24","cliente":"Cliente D","telefono":"59160000004","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Vendido","canal":"WhatsApp","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0005","fecha":"2026-08-24","cliente":"Cliente E","telefono":"59160000005","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"En proceso","canal":"Messenger","ciudad":"Trópico","proximo":"2026-08-27","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0006","fecha":"2026-08-24","cliente":"Cliente F","telefono":"59160000006","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Pregunta","canal":"Ambos","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0007","fecha":"2026-08-24","cliente":"Cliente G","telefono":"59160000007","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Vendido","canal":"WhatsApp","ciudad":"La Paz","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0008","fecha":"2026-08-24","cliente":"Cliente H","telefono":"59160000008","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"En desarrollo","canal":"Messenger","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0009","fecha":"2026-08-24","cliente":"Cliente I","telefono":"59160000009","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Vendido","canal":"Ambos","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0010","fecha":"2026-08-24","cliente":"Cliente J","telefono":"59160000010","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Pregunta","canal":"WhatsApp","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."}],"movimientos":[{"id":"MV-0001","fecha":"2026-08-24","cod":"E-01","tipo":"Ingreso","cantidad":3,"costo":1270,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0002","fecha":"2026-08-24","cod":"E-03","tipo":"Ingreso","cantidad":2,"costo":190,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0003","fecha":"2026-08-24","cod":"E-04","tipo":"Ingreso","cantidad":10,"costo":30,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0004","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente A","ref":"OP-0001"},{"id":"MV-0005","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":2,"costo":0,"motivo":"Venta a Cliente B","ref":"OP-0002"},{"id":"MV-0006","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente D","ref":"OP-0004"},{"id":"MV-0007","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente G","ref":"OP-0007"},{"id":"MV-0008","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente I","ref":"OP-0009"}],"contactos":[{"id":"CT-0001","nombre":"Cliente A","telefono":"59160000001","canal":"WhatsApp","ciudad":"La Paz","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0002","nombre":"Cliente B","telefono":"59160000002","canal":"Messenger","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0003","nombre":"Cliente C","telefono":"59160000003","canal":"Ambos","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0004","nombre":"Cliente D","telefono":"59160000004","canal":"WhatsApp","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0005","nombre":"Cliente E","telefono":"59160000005","canal":"Messenger","ciudad":"Trópico","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0006","nombre":"Cliente F","telefono":"59160000006","canal":"Ambos","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0007","nombre":"Cliente G","telefono":"59160000007","canal":"WhatsApp","ciudad":"La Paz","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0008","nombre":"Cliente H","telefono":"59160000008","canal":"Messenger","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0009","nombre":"Cliente I","telefono":"59160000009","canal":"Ambos","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0010","nombre":"Cliente J","telefono":"59160000010","canal":"WhatsApp","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."}],"agenda":[{"id":"AG-0001","cuando":"2026-08-24 09:00","cliente":"Cliente C","telefono":"59160000003","ref":"OP-0003","asunto":"Seguimiento E-01 — Cliente C","canal":"WhatsApp","estado":"Pendiente","evento":"abc@google.com"},{"id":"AG-0002","cuando":"2026-08-26 15:30","cliente":"Cliente E","telefono":"59160000005","ref":"OP-0005","asunto":"Enviar cotización a Trópico","canal":"Ambos","estado":"Pendiente","evento":""}],"hoy":"2026-08-24"};
+  var CLAVE = 'smileCrmDemoV1';
+  var SEMILLA = {"productos":[{"cod":"E-01","nombre":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","precio":1500,"precioCaja":0,"unidadesCaja":0,"costo":1270,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-02","nombre":"Motor de endodoncia de consola","categoria":"Rotatorios","precio":6000,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-03","nombre":"Colorimetro dental - escala 16 tonos","categoria":"Diagnostico","precio":250,"precioCaja":0,"unidadesCaja":0,"costo":190,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-04","nombre":"Espejos intraorales de rodio","categoria":"Diagnostico","precio":35,"precioCaja":300,"unidadesCaja":10,"costo":30,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-05","nombre":"Calentador de resina compuesta","categoria":"Operatoria","precio":1500,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-06","nombre":"Turbina de alta velocidad angulada","categoria":"Rotatorios","precio":650,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-07","nombre":"Set de espatulas de resina - 6 piezas","categoria":"Operatoria","precio":370,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-08","nombre":"Set de pinceles de resina","categoria":"Operatoria","precio":70,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-09","nombre":"Set de elevadores atraumaticos - 7 pzs","categoria":"Cirugia","precio":850,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-10","nombre":"Camara intraoral WiFi HD","categoria":"Diagnostico","precio":760,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-11","nombre":"Lupas de magnificacion 3.5x","categoria":"Diagnostico","precio":1450,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-12","nombre":"Elevadores de seno - 4 piezas","categoria":"Cirugia","precio":750,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""},{"cod":"E-13","nombre":"Cubetas de impresion perforadas","categoria":"Protesis","precio":90,"precioCaja":0,"unidadesCaja":0,"costo":0,"stockMinimo":1,"activo":true,"notas":""}],"oportunidades":[{"id":"OP-0001","fecha":"2026-08-24","cliente":"Cliente A","telefono":"59160000001","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1490,"total":1490,"estado":"Vendido","canal":"WhatsApp","ciudad":"La Paz","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0002","fecha":"2026-08-24","cliente":"Cliente B","telefono":"59160000002","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":2,"precio":1400,"total":2800,"estado":"Vendido","canal":"Messenger","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0003","fecha":"2026-08-24","cliente":"Cliente C","telefono":"59160000003","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Pregunta","canal":"Ambos","ciudad":"","proximo":"2026-08-27","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0004","fecha":"2026-08-24","cliente":"Cliente D","telefono":"59160000004","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Vendido","canal":"WhatsApp","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0005","fecha":"2026-08-24","cliente":"Cliente E","telefono":"59160000005","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"En proceso","canal":"Messenger","ciudad":"Trópico","proximo":"2026-08-27","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0006","fecha":"2026-08-24","cliente":"Cliente F","telefono":"59160000006","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1500,"total":1500,"estado":"Pregunta","canal":"Ambos","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0007","fecha":"2026-08-24","cliente":"Cliente G","telefono":"59160000007","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Vendido","canal":"WhatsApp","ciudad":"La Paz","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0008","fecha":"2026-08-24","cliente":"Cliente H","telefono":"59160000008","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"En desarrollo","canal":"Messenger","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0009","fecha":"2026-08-24","cliente":"Cliente I","telefono":"59160000009","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Vendido","canal":"Ambos","ciudad":"","proximo":"","notas":"Ejemplo — no es un cliente real."},{"id":"OP-0010","fecha":"2026-08-24","cliente":"Cliente J","telefono":"59160000010","cod":"E-01","producto":"Motor de endodoncia inalambrico Y-SMART","categoria":"Rotatorios","cantidad":1,"precio":1300,"total":1300,"estado":"Pregunta","canal":"WhatsApp","ciudad":"","proximo":"2026-08-21","notas":"Ejemplo — no es un cliente real."}],"movimientos":[{"id":"MV-0001","fecha":"2026-08-24","cod":"E-01","tipo":"Ingreso","cantidad":3,"costo":1270,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0002","fecha":"2026-08-24","cod":"E-03","tipo":"Ingreso","cantidad":2,"costo":190,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0003","fecha":"2026-08-24","cod":"E-04","tipo":"Ingreso","cantidad":10,"costo":30,"motivo":"Compra inicial (ejemplo)","ref":""},{"id":"MV-0004","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente A","ref":"OP-0001"},{"id":"MV-0005","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":2,"costo":0,"motivo":"Venta a Cliente B","ref":"OP-0002"},{"id":"MV-0006","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente D","ref":"OP-0004"},{"id":"MV-0007","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente G","ref":"OP-0007"},{"id":"MV-0008","fecha":"2026-08-24","cod":"E-01","tipo":"Salida","cantidad":1,"costo":0,"motivo":"Venta a Cliente I","ref":"OP-0009"}],"contactos":[{"id":"CT-0001","nombre":"Cliente A","telefono":"59160000001","canal":"WhatsApp","ciudad":"La Paz","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0002","nombre":"Cliente B","telefono":"59160000002","canal":"Messenger","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0003","nombre":"Cliente C","telefono":"59160000003","canal":"Ambos","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0004","nombre":"Cliente D","telefono":"59160000004","canal":"WhatsApp","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0005","nombre":"Cliente E","telefono":"59160000005","canal":"Messenger","ciudad":"Trópico","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0006","nombre":"Cliente F","telefono":"59160000006","canal":"Ambos","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0007","nombre":"Cliente G","telefono":"59160000007","canal":"WhatsApp","ciudad":"La Paz","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0008","nombre":"Cliente H","telefono":"59160000008","canal":"Messenger","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0009","nombre":"Cliente I","telefono":"59160000009","canal":"Ambos","ciudad":"","etiqueta":"Cliente","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."},{"id":"CT-0010","nombre":"Cliente J","telefono":"59160000010","canal":"WhatsApp","ciudad":"","etiqueta":"Prospecto","alta":"2026-08-24","notas":"Ejemplo — no es un cliente real."}],"agenda":[{"id":"AG-0001","cuando":"2026-08-24 09:00","cliente":"Cliente C","telefono":"59160000003","ref":"OP-0003","asunto":"Seguimiento E-01 — Cliente C","canal":"WhatsApp","estado":"Pendiente","evento":""},{"id":"AG-0002","cuando":"2026-08-26 15:30","cliente":"Cliente E","telefono":"59160000005","ref":"OP-0005","asunto":"Enviar cotización a Trópico","canal":"Ambos","estado":"Pendiente","evento":""}],"configPares":{"moneda":"Bs","nombre_comercial":"SMILE IMPORTER","whatsapp_comercial":"59157703748","whatsapp_alterno":"59171777847","instagram_url":"","facebook_url":"https://www.facebook.com/profile.php?id=61593579992274","wa_cloud_token":"","wa_cloud_phone_id":"","ig_business_id":"","meta_catalog_id":"","plantilla_seguimiento":"Hola {cliente}, le escribo de {negocio}. Quedamos en conversar por {producto} (REF {cod}). Sigue interesado/a?","plantilla_cotizacion":"Hola {cliente}, le paso la cotizacion de {negocio}: {producto} (REF {cod}) a {precio}.","plantilla_cierre":"Hola {cliente}, confirmamos su {producto} (REF {cod}) por {precio}. Le coordino la entrega?"},"catalogos":{"estados":["Pregunta","En desarrollo","En proceso","Vendido"],"estadosAbiertos":["Pregunta","En desarrollo","En proceso"],"canales":["WhatsApp","Messenger","Ambos"],"categorias":["Rotatorios","Diagnostico","Operatoria","Cirugia","Protesis"],"tiposMov":["Ingreso","Salida","Ajuste"]}};
+
+  function cargarEstado() {
+    try {
+      var crudo = localStorage.getItem(CLAVE);
+      if (crudo) return JSON.parse(crudo);
+    } catch (e) {}
+    return JSON.parse(JSON.stringify(SEMILLA));
+  }
+  function guardar() {
+    try { localStorage.setItem(CLAVE, JSON.stringify(E)); } catch (e) {}
+  }
+  var E = cargarEstado();
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function hoyISO() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+  function nuevoId(lista, prefijo) {
+    var max = 0;
+    lista.forEach(function (f) {
+      var m = String(f.id || '').match(/(\d+)$/);
+      if (m) max = Math.max(max, parseInt(m[1], 10));
+    });
+    return prefijo + '-' + ('0000' + (max + 1)).slice(-4);
+  }
+  function normalizarTel(v) {
+    var d = String(v == null ? '' : v).replace(/\D/g, '');
+    if (!d) return '';
+    if (d.length === 8) d = '591' + d;
+    return d;
+  }
+  function normalizarEstado(v) {
+    var s = String(v || '').trim().toLowerCase();
+    if (s.indexOf('vend') === 0) return 'Vendido';
+    if (s.indexOf('proceso') >= 0) return 'En proceso';
+    if (s.indexOf('desarrollo') >= 0) return 'En desarrollo';
+    if (s.indexOf('pregunt') === 0) return 'Pregunta';
+    return E.catalogos.estados.indexOf(v) >= 0 ? v : 'Pregunta';
+  }
+  function buscarProducto(cod) {
+    if (!cod) return null;
+    var c = String(cod).trim().toUpperCase();
+    var out = null;
+    E.productos.forEach(function (p) { if (String(p.cod).trim().toUpperCase() === c) out = p; });
+    return out;
+  }
+  function stockPorCod() {
+    var acc = {};
+    E.movimientos.forEach(function (m) {
+      var cod = String(m.cod).trim();
+      var c = Number(m.cantidad || 0);
+      if (!cod || !c) return;
+      var t = String(m.tipo || '').toLowerCase();
+      acc[cod] = (acc[cod] || 0) + (t === 'salida' ? -c : c);
+    });
+    return acc;
+  }
+  function registrarMovimiento(cod, tipo, cantidad, costo, motivo, ref) {
+    var id = nuevoId(E.movimientos, 'MV');
+    E.movimientos.push({
+      id: id, fecha: hoyISO(), cod: String(cod || '').trim().toUpperCase(), tipo: tipo,
+      cantidad: cantidad, costo: costo || '', motivo: String(motivo || ''), ref: String(ref || ''),
+    });
+    return id;
+  }
+  function guardarContacto(d) {
+    var tel = normalizarTel(d.telefono);
+    if (!tel) throw new Error('El contacto necesita un numero de telefono.');
+    var existente = null;
+    E.contactos.forEach(function (c) { if (normalizarTel(c.telefono) === tel) existente = c; });
+    if (existente) {
+      existente.telefono = tel;
+      if (d.nombre) existente.nombre = d.nombre;
+      if (d.canal) existente.canal = d.canal;
+      if (d.ciudad) existente.ciudad = d.ciudad;
+      if (d.etiqueta) existente.etiqueta = d.etiqueta;
+      if (d.notas) existente.notas = d.notas;
+      return { ok: true, id: existente.id, nuevo: false };
+    }
+    var id = nuevoId(E.contactos, 'CT');
+    E.contactos.push({
+      id: id, nombre: String(d.nombre || 'Sin nombre'), telefono: tel,
+      canal: E.catalogos.canales.indexOf(d.canal) >= 0 ? d.canal : 'WhatsApp',
+      ciudad: String(d.ciudad || ''), etiqueta: String(d.etiqueta || 'Prospecto'),
+      alta: hoyISO(), notas: String(d.notas || ''),
+    });
+    return { ok: true, id: id, nuevo: true };
+  }
+
+  function construirMensaje(idOportunidad, tipo) {
+    var o = null;
+    E.oportunidades.forEach(function (x) { if (x.id === idOportunidad) o = x; });
+    if (!o) throw new Error('No existe la oportunidad ' + idOportunidad);
+    var plantilla = E.configPares['plantilla_' + (tipo || 'seguimiento')] || E.configPares.plantilla_seguimiento || 'Hola {cliente}.';
+    var t = String(plantilla)
+      .replace(/\{cliente\}/g, o.cliente.split(' ')[0])
+      .replace(/\{producto\}/g, o.producto).replace(/\{cod\}/g, o.cod)
+      .replace(/\{precio\}/g, (E.configPares.moneda || 'Bs') + ' ' + o.precio)
+      .replace(/\{negocio\}/g, E.configPares.nombre_comercial || 'SMILE IMPORTER');
+    return {
+      texto: t, telefono: o.telefono, waCloudActivo: false,
+      whatsapp: o.telefono ? 'https://wa.me/' + o.telefono + '?text=' + encodeURIComponent(t) : '',
+      messenger: 'https://m.me/61593579992274',
+    };
+  }
+
   var ok = null, err = null;
   var api = {
     withSuccessHandler: function (f) { ok = f; return api; },
     withFailureHandler: function (f) { err = f; return api; },
-    apiCargar: function () { setTimeout(function () { ok(D); }, 90); },
-    apiMensaje: function (id, tipo) {
-      var o = D.oportunidades.filter(function (x) { return x.id === id; })[0];
-      var t = D.config.plantillas[tipo || 'seguimiento']
-        .replace(/\{cliente\}/g, o.cliente.split(' ')[0])
-        .replace(/\{producto\}/g, o.producto).replace(/\{cod\}/g, o.cod)
-        .replace(/\{precio\}/g, 'Bs ' + o.precio).replace(/\{negocio\}/g, 'SMILE IMPORTER');
-      setTimeout(function () { ok({ texto: t, telefono: o.telefono, waCloudActivo: false,
-        whatsapp: 'https://wa.me/' + o.telefono + '?text=' + encodeURIComponent(t),
-        messenger: 'https://m.me/61593579992274' }); }, 60);
+
+    apiCargar: function () {
+      setTimeout(function () {
+        var stock = stockPorCod();
+        ok({
+          config: {
+            moneda: E.configPares.moneda || 'Bs',
+            negocio: E.configPares.nombre_comercial || 'SMILE IMPORTER',
+            whatsapp: String(E.configPares.whatsapp_comercial || ''),
+            whatsappAlterno: String(E.configPares.whatsapp_alterno || ''),
+            instagram: String(E.configPares.instagram_url || ''),
+            facebook: String(E.configPares.facebook_url || ''),
+            waCloudActivo: !!(E.configPares.wa_cloud_token && E.configPares.wa_cloud_phone_id),
+            plantillas: {
+              seguimiento: String(E.configPares.plantilla_seguimiento || ''),
+              cotizacion: String(E.configPares.plantilla_cotizacion || ''),
+              cierre: String(E.configPares.plantilla_cierre || ''),
+            },
+          },
+          catalogos: E.catalogos,
+          productos: E.productos.map(function (p) {
+            return Object.assign({}, p, { stock: stock[p.cod] || 0 });
+          }),
+          oportunidades: E.oportunidades,
+          movimientos: E.movimientos.slice().reverse(),
+          contactos: E.contactos,
+          agenda: E.agenda.slice().sort(function (a, b) { return a.cuando < b.cuando ? -1 : 1; }),
+          hoy: hoyISO(),
+        });
+      }, 90);
     },
-    apiMetricasMeta: function () { setTimeout(function () { ok({ disponible: false, motivo: 'Falta wa_cloud_token en la pestana Config.' }); }, 60); },
-    apiResumenAhora: function () { setTimeout(function () { ok({ ok: true }); }, 60); }
+
+    apiGuardarOportunidad: function (d) {
+      setTimeout(function () {
+        try {
+          var prod = buscarProducto(d.cod);
+          var cantidad = Number(d.cantidad || 1) || 1;
+          var precio = Number(d.precio || (prod ? prod.precio : 0)) || 0;
+          var tel = normalizarTel(d.telefono);
+          var campos = {
+            cliente: String(d.cliente || '').trim(), telefono: tel,
+            cod: String(d.cod || '').trim().toUpperCase(),
+            producto: prod ? prod.nombre : String(d.producto || ''),
+            categoria: prod ? prod.categoria : String(d.categoria || ''),
+            cantidad: cantidad, precio: precio, total: cantidad * precio,
+            estado: normalizarEstado(d.estado),
+            canal: E.catalogos.canales.indexOf(d.canal) >= 0 ? d.canal : 'WhatsApp',
+            ciudad: String(d.ciudad || '').trim(), proximo: d.proximo || '',
+            notas: String(d.notas || ''),
+          };
+          var id = d.id, estadoPrevio = null, op;
+          if (id) {
+            op = null;
+            E.oportunidades.forEach(function (o) { if (o.id === id) op = o; });
+            if (!op) throw new Error('No existe la oportunidad ' + id);
+            estadoPrevio = op.estado;
+            Object.assign(op, campos);
+          } else {
+            id = nuevoId(E.oportunidades, 'OP');
+            op = Object.assign({ id: id, fecha: hoyISO() }, campos);
+            E.oportunidades.push(op);
+          }
+          var esVenta = campos.estado === 'Vendido';
+          var eraVenta = estadoPrevio === 'Vendido';
+          if (esVenta && !eraVenta) {
+            registrarMovimiento(campos.cod, 'Salida', cantidad, '', 'Venta a ' + campos.cliente, id);
+          } else if (!esVenta && eraVenta) {
+            registrarMovimiento(campos.cod, 'Ingreso', cantidad, '', 'Reversion de venta ' + id, id);
+          }
+          if (tel) guardarContacto({
+            nombre: campos.cliente, telefono: tel, canal: campos.canal, ciudad: campos.ciudad,
+            etiqueta: esVenta ? 'Cliente' : 'Prospecto', notas: '',
+          });
+          guardar();
+          ok({ ok: true, id: id });
+        } catch (e) { err(e); }
+      }, 60);
+    },
+
+    apiEliminarOportunidad: function (id) {
+      setTimeout(function () {
+        E.oportunidades = E.oportunidades.filter(function (o) { return o.id !== id; });
+        guardar();
+        ok({ ok: true });
+      }, 60);
+    },
+
+    apiGuardarContacto: function (d) {
+      setTimeout(function () {
+        try { var r = guardarContacto(d); guardar(); ok(r); }
+        catch (e) { err(e); }
+      }, 60);
+    },
+
+    apiEliminarContacto: function (id) {
+      setTimeout(function () {
+        E.contactos = E.contactos.filter(function (c) { return c.id !== id; });
+        guardar();
+        ok({ ok: true });
+      }, 60);
+    },
+
+    apiMovimiento: function (d) {
+      setTimeout(function () {
+        try {
+          var tipo = E.catalogos.tiposMov.indexOf(d.tipo) >= 0 ? d.tipo : 'Ingreso';
+          var cant = Math.abs(Number(d.cantidad || 0));
+          if (!cant) throw new Error('La cantidad del movimiento no puede ser cero.');
+          var id = registrarMovimiento(d.cod, tipo, cant, d.costo, d.motivo, d.ref);
+          if (tipo === 'Ingreso' && Number(d.costo || 0) > 0) {
+            var p = buscarProducto(d.cod);
+            if (p) p.costo = Number(d.costo);
+          }
+          guardar();
+          ok({ ok: true, id: id });
+        } catch (e) { err(e); }
+      }, 60);
+    },
+
+    apiGuardarProducto: function (d) {
+      setTimeout(function () {
+        try {
+          var cod = String(d.cod || '').trim().toUpperCase();
+          if (!cod) throw new Error('El producto necesita un codigo (por ejemplo E-14).');
+          var campos = {
+            nombre: String(d.nombre || ''),
+            categoria: E.catalogos.categorias.indexOf(d.categoria) >= 0 ? d.categoria : (d.categoria || ''),
+            precio: Number(d.precio || 0), precioCaja: Number(d.precioCaja || 0),
+            unidadesCaja: Number(d.unidadesCaja || 0), costo: Number(d.costo || 0),
+            stockMinimo: Number(d.stockMinimo || 0), activo: d.activo !== false,
+            notas: String(d.notas || ''),
+          };
+          var existente = buscarProducto(cod);
+          if (existente) {
+            Object.assign(existente, campos);
+          } else {
+            E.productos.push(Object.assign({ cod: cod }, campos));
+            if (Number(d.stockInicial || 0) > 0) {
+              registrarMovimiento(cod, 'Ingreso', Number(d.stockInicial), d.costo, 'Stock inicial', '');
+            }
+          }
+          guardar();
+          ok({ ok: true, cod: cod });
+        } catch (e) { err(e); }
+      }, 60);
+    },
+
+    apiGuardarConfig: function (pares) {
+      setTimeout(function () {
+        Object.keys(pares).forEach(function (k) { E.configPares[k] = pares[k]; });
+        guardar();
+        ok({ ok: true });
+      }, 60);
+    },
+
+    apiAgendar: function (d) {
+      setTimeout(function () {
+        try {
+          if (!d.cuando) throw new Error('Fecha invalida para el recordatorio.');
+          var op = null;
+          if (d.ref) E.oportunidades.forEach(function (o) { if (o.id === d.ref) op = o; });
+          var cliente = String(d.cliente || (op ? op.cliente : '')).trim();
+          var tel = normalizarTel(d.telefono || (op ? op.telefono : ''));
+          var asunto = String(d.asunto || (op ? 'Seguimiento ' + op.cod + ' - ' + cliente : 'Recordatorio'));
+          var cuando = String(d.cuando).replace('T', ' ');
+          var id = nuevoId(E.agenda, 'AG');
+          E.agenda.push({
+            id: id, cuando: cuando, cliente: cliente, telefono: tel, ref: String(d.ref || ''),
+            asunto: asunto, canal: E.catalogos.canales.indexOf(d.canal) >= 0 ? d.canal : 'WhatsApp',
+            estado: 'Pendiente', evento: '',
+          });
+          if (op) op.proximo = cuando.slice(0, 10);
+          guardar();
+          ok({ ok: true, id: id, calendario: false });
+        } catch (e) { err(e); }
+      }, 60);
+    },
+
+    apiCerrarRecordatorio: function (id) {
+      setTimeout(function () {
+        E.agenda.forEach(function (a) { if (a.id === id) a.estado = 'Hecho'; });
+        guardar();
+        ok({ ok: true });
+      }, 60);
+    },
+
+    apiMensaje: function (idOportunidad, tipo) {
+      setTimeout(function () {
+        try { ok(construirMensaje(idOportunidad, tipo)); }
+        catch (e) { err(e); }
+      }, 60);
+    },
+
+    apiEnviarWhatsApp: function (idOportunidad, texto) {
+      setTimeout(function () {
+        try {
+          var m = construirMensaje(idOportunidad, 'seguimiento');
+          ok({ enviado: false, motivo: 'sin_api', link: m.whatsapp, texto: texto || m.texto });
+        } catch (e) { err(e); }
+      }, 60);
+    },
+
+    apiMetricasMeta: function () {
+      setTimeout(function () {
+        ok({ disponible: false, motivo: 'Falta wa_cloud_token en la pestana Config.' });
+      }, 60);
+    },
+
+    apiResumenAhora: function () {
+      setTimeout(function () {
+        err(new Error('Esto es una página estática de demostración: enviar el correo real requiere instalar el CRM en tu planilla (ver pestaña Instalar).'));
+      }, 60);
+    },
   };
-  ['apiGuardarOportunidad','apiCambiarEstado','apiEliminarOportunidad','apiGuardarContacto',
-   'apiEliminarContacto','apiMovimiento','apiGuardarProducto','apiGuardarConfig','apiAgendar',
-   'apiCerrarRecordatorio','apiEnviarWhatsApp','apiEnviarCorreo'].forEach(function (n) {
-    api[n] = function () { setTimeout(function () { ok({ ok: true, id: 'DEMO-0001', nuevo: true, calendario: true, enviado: true }); }, 60); };
-  });
+
   return api;
 })(), host: { close: function () {} } } };
 </script>
@@ -136,6 +1061,25 @@ function bs(n) {
 function num(n) { return Number(n || 0).toLocaleString('es-BO', { maximumFractionDigits: 0 }); }
 function tel(t) { return t ? '+' + t : '—'; }
 function claseEstado(e) { return String(e || '').toLowerCase().replace(/\s+/g, ''); }
+
+/** Icono del sprite de Index. Un solo grosor de trazo en toda la interfaz. */
+function ico(nombre, clase) {
+  return '<svg class="ico' + (clase ? ' ' + clase : '') + '" aria-hidden="true"><use href="#i-' + nombre + '"/></svg>';
+}
+
+/** Boton de solo icono: necesita nombre accesible propio. */
+function btnIco(nombre, rotulo, onclick, clase) {
+  return '<button class="mini icono' + (clase ? ' ' + clase : '') + '" onclick="' + onclick +
+    '" title="' + esc(rotulo) + '" aria-label="' + esc(rotulo) + '">' + ico(nombre) + '</button>';
+}
+
+/** Un vacio explica para que sirve la vista y ofrece la salida. */
+function vacio(icono, titulo, detalle, accion) {
+  return '<div class="vacio">' + ico(icono, 'xl') +
+    '<p class="t">' + esc(titulo) + '</p>' +
+    '<p class="d">' + esc(detalle) + '</p>' +
+    (accion ? '<div class="acciones">' + accion + '</div>' : '') + '</div>';
+}
 
 function brindis(txt, malo) {
   var b = document.getElementById('brindis');
@@ -178,12 +1122,16 @@ function cargar(silencioso) {
     contadores();
     render();
   }).catch(function (e) {
-    document.getElementById('cargando').innerHTML =
-      '<div style="text-align:center;max-width:520px">' +
-      '<div class="err" style="margin-bottom:10px">NO PUDE LEER LA PLANILLA</div>' +
-      '<div class="tenue" style="font-family:var(--ui);font-size:12px">' + esc(e.message || e) +
-      '<br><br>Si dice que falta una pestaña, cerrá esta ventana y corré<br>' +
-      '<b>SMILE CRM → Configuración inicial / migrar datos</b>.</div></div>';
+    /* El error dice qué pasó y cuál es la salida, no sólo que falló. */
+    var c = document.getElementById('cargando');
+    c.className = 'roto';
+    c.innerHTML = '<div class="vacio">' + ico('inbox', 'xl') +
+      '<p class="t">No pude leer la planilla</p>' +
+      '<p class="d">' + esc(e.message || e) + '</p>' +
+      '<div class="aviso" style="margin-top:16px;text-align:left">Si dice que falta una pestaña, cerrá esta ' +
+      'ventana y corré <b>SMILE CRM → Configuración inicial / migrar datos</b> desde el menú de la hoja.</div>' +
+      '<div class="acciones"><button class="primario" onclick="cargar()">' + ico('recargar') +
+      ' Reintentar</button></div></div>';
   });
 }
 
@@ -261,8 +1209,8 @@ function vPanel() {
     kpi('Vendido', bs(ingreso), vendidas.length + ' operaciones · ' + unidades + ' unidades', 'acento') +
     kpi('Pipeline abierto', bs(pipeline), abiertas.length + ' oportunidades vivas', '') +
     kpi('Conversión', conversion + '%', vendidas.length + ' de ' + ops.length + ' consultas', '') +
-    kpi('Seguimientos vencidos', String(vencidos.length), vencidos.length ? 'hay que escribirles hoy' : 'al día', vencidos.length ? 'aviso' : '') +
-    kpi('Stock bajo mínimo', String(bajos.length), bajos.length ? 'referencias para reponer' : 'todo cubierto', bajos.length ? 'aviso' : '') +
+    kpi('Seguimientos vencidos', String(vencidos.length), vencidos.length ? 'hay que escribirles hoy' : 'al día', vencidos.length ? 'kpi-aviso' : '') +
+    kpi('Stock bajo mínimo', String(bajos.length), bajos.length ? 'referencias para reponer' : 'todo cubierto', bajos.length ? 'kpi-aviso' : '') +
     '</div>';
 
   if (negativos.length) {
@@ -284,7 +1232,9 @@ function vPanel() {
   });
   var cats = Object.keys(porCat).sort(function (a, b) { return porCat[b].vend - porCat[a].vend; });
   var tope = Math.max.apply(null, cats.map(function (c) { return porCat[c].vend + porCat[c].abierto; }).concat([1]));
-  if (!cats.length) h += '<div class="vacio">TODAVIA NO HAY OPORTUNIDADES CARGADAS</div>';
+  if (!cats.length) h += vacio('pipeline', 'Todavía no hay oportunidades',
+    'Cada consulta que te llega por WhatsApp o Messenger se anota acá y avanza hasta convertirse en venta.',
+    '<button class="primario" onclick="formOportunidad()">' + ico('mas') + ' Primera entrada</button>');
   h += '<div class="barras">';
   cats.forEach(function (c) {
     var d = porCat[c];
@@ -320,8 +1270,8 @@ function vPanel() {
         '<td>' + tagEstado(o.estado) + '</td>' +
         '<td class="num">' + bs(o.total) + '</td>' +
         '<td class="mono tenue">' + esc(o.proximo) + '</td>' +
-        '<td class="acc"><button class="mini" onclick="mensaje(\'' + o.id + '\')">Mensaje</button> ' +
-        '<button class="mini" onclick="agendar(\'' + o.id + '\')">Agendar</button></td></tr>';
+        '<td class="acc"><button class="mini" onclick="mensaje(\'' + o.id + '\')">' + ico('mensaje') + ' Mensaje</button>' +
+        '<button class="mini" onclick="agendar(\'' + o.id + '\')">' + ico('agendar') + ' Agendar</button></td></tr>';
     });
     h += '</tbody></table></div></div>';
   }
@@ -367,7 +1317,7 @@ function vPipeline() {
     opt('', 'Todos', F.estado) + D.catalogos.estados.map(function (e) { return opt(e, e, F.estado); }).join('') + '</select></div>';
   h += '<div class="campo"><span class="etiqueta">Canal</span><select onchange="F.canal=this.value;pintarTabla()">' +
     opt('', 'Todos', F.canal) + D.catalogos.canales.map(function (c) { return opt(c, c, F.canal); }).join('') + '</select></div>';
-  h += '<button class="primario" onclick="formOportunidad()">+ Nueva entrada</button>';
+  h += '<button class="primario" onclick="formOportunidad()">' + ico('mas') + ' Nueva entrada</button>';
   h += '</div>';
 
   h += '<div id="tablaPipe"></div>';
@@ -397,7 +1347,8 @@ function pintarTabla() {
   var ops = filtradas();
 
   if (!ops.length) {
-    cont.innerHTML = '<div class="panel"><div class="vacio">NINGUNA OPORTUNIDAD CON ESOS FILTROS</div></div>';
+    cont.innerHTML = '<div class="panel">' + vacio('buscar', 'Ninguna oportunidad con esos filtros',
+      'Probá vaciar la búsqueda, o poner el estado y el canal en «Todos».') + '</div>';
     return;
   }
 
@@ -438,9 +1389,9 @@ function pintarTabla() {
         '<td class="tenue">' + (esc(o.ciudad) || '—') + '</td>' +
         '<td class="mono ' + (vencido ? 'warn' : 'tenue') + '" style="font-size:11px">' + (esc(o.proximo) || '—') + '</td>' +
         '<td class="acc">' +
-          '<button class="mini" onclick="mensaje(\'' + o.id + '\')" title="Armar mensaje">✉</button> ' +
-          '<button class="mini" onclick="agendar(\'' + o.id + '\')" title="Agendar seguimiento">◷</button> ' +
-          '<button class="mini" onclick="formOportunidad(\'' + o.id + '\')" title="Editar">✎</button>' +
+          btnIco('mensaje', 'Armar mensaje', 'mensaje(\'' + o.id + '\')') +
+          btnIco('agendar', 'Agendar seguimiento', 'agendar(\'' + o.id + '\')') +
+          btnIco('editar', 'Editar oportunidad', 'formOportunidad(\'' + o.id + '\')') +
         '</td></tr>';
     });
     h += '</tbody></table></div></div>';
@@ -537,7 +1488,7 @@ function borrarOportunidad(id) {
 
 /* ── Mensajes ───────────────────────────────────────────────────── */
 function mensaje(idOp) {
-  abrirModal('Mensaje', '<div class="vacio">ARMANDO EL MENSAJE…</div>');
+  abrirModal('Mensaje', '<div class="vacio">' + ico('mensaje', 'xl') + '<p class="t">Armando el mensaje…</p></div>');
   srv('apiMensaje', idOp, 'seguimiento', '').then(function (m) {
     var h = '<div class="campo"><span class="etiqueta">Plantilla</span><select id="mTipo" onchange="recargarPlantilla(\'' + idOp + '\')">' +
       opt('seguimiento', 'Seguimiento', 'seguimiento') + opt('cotizacion', 'Cotización', '') + opt('cierre', 'Cierre', '') +
@@ -547,11 +1498,11 @@ function mensaje(idOp) {
     h += '<div class="acciones">';
     if (m.whatsapp) {
       h += '<a href="' + esc(m.whatsapp) + '" target="_blank" rel="noopener" id="mWa">' +
-        '<button class="primario">Abrir WhatsApp</button></a>';
+        '<button class="primario">' + ico('whatsapp') + ' Abrir WhatsApp</button></a>';
     } else {
       h += '<button disabled>Sin teléfono cargado</button>';
     }
-    h += '<a href="' + esc(m.messenger) + '" target="_blank" rel="noopener"><button>Abrir Messenger</button></a>';
+    h += '<a href="' + esc(m.messenger) + '" target="_blank" rel="noopener"><button>' + ico('externo') + ' Abrir Messenger</button></a>';
     if (m.waCloudActivo) h += '<button id="mEnviar">Enviar por WhatsApp API</button>';
     h += '<button onclick="cerrarModal()" style="margin-left:auto">Cerrar</button></div>';
 
@@ -639,12 +1590,12 @@ function vInventario() {
     kpi('Referencias', String(D.productos.length), D.productos.filter(function (p) { return p.activo; }).length + ' activas', '') +
     kpi('Unidades en stock', num(unidades), 'suma de todo el catálogo', '') +
     kpi('Valor del stock', bs(valor), 'a costo, o a precio si no hay costo', 'acento') +
-    kpi('Bajo mínimo', String(bajos.length), bajos.length ? 'reponer' : 'todo cubierto', bajos.length ? 'aviso' : '') +
+    kpi('Bajo mínimo', String(bajos.length), bajos.length ? 'reponer' : 'todo cubierto', bajos.length ? 'kpi-aviso' : '') +
     '</div>';
 
   h += '<div class="panel"><div class="cab"><h2>Catálogo y stock</h2><div class="der">' +
-    '<button class="mini" onclick="formMovimiento()">Registrar movimiento</button>' +
-    '<button class="mini primario" onclick="formProducto()">+ Producto</button></div></div>' +
+    '<button class="mini" onclick="formMovimiento()">' + ico('inventario') + ' Registrar movimiento</button>' +
+    '<button class="mini primario" onclick="formProducto()">' + ico('mas') + ' Producto</button></div></div>' +
     '<div class="tabla-wrap"><table><thead><tr>' +
     '<th>COD</th><th>Equipo</th><th>Tipo</th><th class="num">Precio</th><th class="num">Costo</th>' +
     '<th class="num">Stock</th><th class="num">Mín.</th><th class="num">Vendidas</th><th></th>' +
@@ -666,9 +1617,9 @@ function vInventario() {
       '<td class="num tenue">' + p.stockMinimo + '</td>' +
       '<td class="num tenue">' + (vendidasPorCod[p.cod] || 0) + '</td>' +
       '<td class="acc">' +
-        '<button class="mini" onclick="formMovimiento(\'' + p.cod + '\',\'Ingreso\')">+</button> ' +
-        '<button class="mini" onclick="formMovimiento(\'' + p.cod + '\',\'Salida\')">−</button> ' +
-        '<button class="mini" onclick="formProducto(\'' + p.cod + '\')">✎</button>' +
+        btnIco('mas', 'Registrar ingreso de ' + p.cod, 'formMovimiento(\'' + p.cod + '\',\'Ingreso\')') +
+        btnIco('menos', 'Registrar salida de ' + p.cod, 'formMovimiento(\'' + p.cod + '\',\'Salida\')') +
+        btnIco('editar', 'Editar ' + p.cod, 'formProducto(\'' + p.cod + '\')') +
       '</td></tr>';
   });
   h += '</tbody></table></div></div>';
@@ -677,7 +1628,9 @@ function vInventario() {
     '<span class="crumb">' + D.movimientos.length + ' EN TOTAL</span></div><div class="tabla-wrap"><table><thead><tr>' +
     '<th>Fecha</th><th>COD</th><th>Tipo</th><th class="num">Cant.</th><th class="num">Costo u.</th><th>Motivo</th><th>Ref</th>' +
     '</tr></thead><tbody>';
-  if (!D.movimientos.length) h += '<tr><td colspan="7"><div class="vacio">SIN MOVIMIENTOS</div></td></tr>';
+  if (!D.movimientos.length) h += '<tr><td colspan="7">' + vacio('inventario', 'Sin movimientos todavía',
+    'Cada compra al proveedor y cada venta deja su fila acá. El stock sale de sumarlas, nunca se escribe a mano.',
+    '<button class="mini" onclick="formMovimiento()">' + ico('mas') + ' Registrar el primero</button>') + '</td></tr>';
   D.movimientos.slice(0, 40).forEach(function (m) {
     h += '<tr><td class="mono tenue">' + esc(m.fecha) + '</td><td class="mono">' + esc(m.cod) + '</td>' +
       '<td><span class="tag ' + (m.tipo === 'Salida' ? 'pregunta' : 'vendido') + '">' + esc(m.tipo) + '</span></td>' +
@@ -758,7 +1711,7 @@ function vContactos() {
   var h = '<div class="filtros">' +
     '<div class="campo busca"><span class="etiqueta">Buscar</span>' +
     '<input id="cq" placeholder="Nombre, teléfono, ciudad…" oninput="pintarContactos()"></div>' +
-    '<button class="primario" onclick="formContacto()">+ Nuevo número</button></div>' +
+    '<button class="primario" onclick="formContacto()">' + ico('mas') + ' Nuevo número</button></div>' +
     '<div id="tablaCon"></div>';
   setTimeout(pintarContactos, 0);
   return h;
@@ -776,7 +1729,11 @@ function pintarContactos() {
     '<span class="crumb">' + lista.length + ' DE ' + D.contactos.length + '</span></div><div class="tabla-wrap"><table><thead><tr>' +
     '<th>Nombre</th><th>Teléfono</th><th>Canal</th><th>Ciudad</th><th>Etiqueta</th><th class="num">Oport.</th><th>Alta</th><th></th>' +
     '</tr></thead><tbody>';
-  if (!lista.length) h += '<tr><td colspan="8"><div class="vacio">SIN CONTACTOS</div></td></tr>';
+  if (!lista.length) h += '<tr><td colspan="8">' + (q
+    ? vacio('buscar', 'Ningún contacto con esa búsqueda', 'Probá con parte del nombre, del teléfono o de la ciudad.')
+    : vacio('contactos', 'La agenda está vacía',
+        'Todo número que cargues en una oportunidad aparece acá solo. También podés agregarlo a mano.',
+        '<button class="primario" onclick="formContacto()">' + ico('mas') + ' Nuevo número</button>')) + '</td></tr>';
   lista.forEach(function (c) {
     h += '<tr><td>' + esc(c.nombre) + '</td>' +
       '<td class="mono">' + tel(c.telefono) + '</td>' +
@@ -786,8 +1743,9 @@ function pintarContactos() {
       '<td class="num tenue">' + (ops[c.telefono] || 0) + '</td>' +
       '<td class="mono tenue">' + esc(c.alta) + '</td>' +
       '<td class="acc">' +
-        (c.telefono ? '<a href="https://wa.me/' + esc(c.telefono) + '" target="_blank" rel="noopener"><button class="mini">WhatsApp</button></a> ' : '') +
-        '<button class="mini" onclick="formContacto(\'' + c.id + '\')">✎</button></td></tr>';
+        (c.telefono ? '<a href="https://wa.me/' + esc(c.telefono) + '" target="_blank" rel="noopener">' +
+          '<button class="mini">' + ico('whatsapp') + ' WhatsApp</button></a>' : '') +
+        btnIco('editar', 'Editar contacto', 'formContacto(\'' + c.id + '\')') + '</td></tr>';
   });
   h += '</tbody></table></div></div>';
   document.getElementById('tablaCon').innerHTML = h;
@@ -838,14 +1796,16 @@ function vAgenda() {
   var hechos = D.agenda.filter(function (a) { return a.estado === 'Hecho'; });
   var hoy = D.hoy;
 
-  var h = '<div class="filtros"><button class="primario" onclick="agendar()">+ Nuevo recordatorio</button>' +
-    '<button onclick="document.getElementById(\'btnResumen\').click()">Mandarme el resumen ahora</button></div>';
+  var h = '<div class="filtros"><button class="primario" onclick="agendar()">' + ico('mas') + ' Nuevo recordatorio</button>' +
+    '<button onclick="document.getElementById(\'btnResumen\').click()">' + ico('correo') + ' Mandarme el resumen ahora</button></div>';
 
   h += '<div class="panel"><div class="cab"><h2>Pendientes</h2><span class="crumb">' + pend.length + '</span></div>' +
     '<div class="tabla-wrap"><table><thead><tr>' +
     '<th>Cuándo</th><th>Asunto</th><th>Cliente</th><th>Canal</th><th>Ref</th><th>Calendar</th><th></th>' +
     '</tr></thead><tbody>';
-  if (!pend.length) h += '<tr><td colspan="7"><div class="vacio">NADA PENDIENTE</div></td></tr>';
+  if (!pend.length) h += '<tr><td colspan="7">' + vacio('agenda', 'No hay nada agendado',
+    'Cada seguimiento que agendes desde el Pipeline aparece acá y en tu Google Calendar, con aviso a 1 hora y a 10 minutos.',
+    '<button class="primario" onclick="agendar()">' + ico('mas') + ' Nuevo recordatorio</button>') + '</td></tr>';
   pend.forEach(function (a) {
     var vencido = a.cuando.slice(0, 10) <= hoy;
     h += '<tr><td class="mono ' + (vencido ? 'warn' : '') + '">' + esc(a.cuando) + '</td>' +
@@ -855,8 +1815,8 @@ function vAgenda() {
       '<td class="mono tenue">' + (esc(a.ref) || '—') + '</td>' +
       '<td>' + (a.evento ? '<span class="tag vendido">EN CALENDAR</span>' : '<span class="tag">SOLO CRM</span>') + '</td>' +
       '<td class="acc">' +
-        (a.ref ? '<button class="mini" onclick="mensaje(\'' + a.ref + '\')">✉</button> ' : '') +
-        '<button class="mini" onclick="cerrarRecordatorio(\'' + a.id + '\')">Hecho</button></td></tr>';
+        (a.ref ? btnIco('mensaje', 'Armar mensaje', 'mensaje(\'' + a.ref + '\')') : '') +
+        '<button class="mini" onclick="cerrarRecordatorio(\'' + a.id + '\')">' + ico('hecho') + ' Hecho</button></td></tr>';
   });
   h += '</tbody></table></div></div>';
 
@@ -933,14 +1893,14 @@ function enlaceMetrica(nombre, url, desc, configurado) {
   /* Un botón que lleva a la portada de la red no sirve de nada: si no hay
      URL cargada, el botón queda apagado y dice por qué. */
   h += configurado
-    ? '<a href="' + esc(url) + '" target="_blank" rel="noopener"><button>Abrir</button></a>'
+    ? '<a href="' + esc(url) + '" target="_blank" rel="noopener"><button>' + ico('externo') + ' Abrir</button></a>'
     : '<button disabled>Sin cuenta cargada</button>';
   return h + '</div>';
 }
 
 function traerMetricas() {
   var c = document.getElementById('metricasApi');
-  c.innerHTML = '<div class="vacio">CONSULTANDO META…</div>';
+  c.innerHTML = '<div class="vacio">' + ico('metricas', 'xl') + '<p class="t">Consultando Meta…</p></div>';
   srv('apiMetricasMeta').then(function (r) {
     if (!r.disponible) { c.innerHTML = '<div class="aviso malo">' + esc(r.motivo) + '</div>'; return; }
     var h = '<div class="kpis" style="margin:0">';
@@ -1021,13 +1981,23 @@ cargar();
 (function () {
   var av = document.createElement('div');
   av.id = 'demoAviso';
-  av.textContent = 'DEMO · DATOS DE EJEMPLO, NO SON CLIENTES REALES · GUARDADO SIMULADO';
+  var texto = document.createElement('span');
+  texto.textContent = 'DEMO INTERACTIVA · PODÉS AGREGAR, EDITAR Y BORRAR — SE GUARDA SOLO EN TU NAVEGADOR, NADIE MÁS LO VE';
+  var reset = document.createElement('button');
+  reset.innerHTML = ico('recargar') + ' Restablecer datos de ejemplo';
+  reset.onclick = function () {
+    if (!confirm('¿Borrar todos tus cambios y volver a los datos de ejemplo originales?')) return;
+    try { localStorage.removeItem('smileCrmDemoV1'); } catch (e) {}
+    location.reload();
+  };
+  av.appendChild(texto);
+  av.appendChild(reset);
   document.body.insertBefore(av, document.getElementById('app'));
 
   var nav = document.getElementById('nav');
   var b = document.createElement('button');
   b.dataset.v = 'instalar';
-  b.innerHTML = '<span class="glifo">↓</span> Instalar';
+  b.innerHTML = ico('instalar') + ' Instalar';
   nav.appendChild(b);
   TITULOS.instalar = ['Instalar', 'OCHO MINUTOS, DENTRO DE LA MISMA PLANILLA'];
 
@@ -1076,6 +2046,16 @@ cargar();
       'acceso <b>Solo yo</b>. Guardás la URL en la pantalla de inicio del celular.</p>');
 
     h += '</div></div></div>';
+
+    h += '<div class="panel"><div class="cab"><h2>Sobre esta demo</h2></div><div class="cuerpo">' +
+      '<div class="aviso bien"><b>Acá podés editar de verdad.</b> Crear/editar/borrar oportunidades, ' +
+      'contactos, productos y movimientos de inventario funciona y persiste al recargar la página — ' +
+      'pero se guarda solo en el navegador de cada quien (<code>localStorage</code>), no en un servidor. ' +
+      'Nadie más ve tus cambios, y si abrís esta misma página en otro navegador o dispositivo, empieza ' +
+      'de cero. Usá «Restablecer datos de ejemplo» arriba para volver al punto de partida.</div>' +
+      '<div class="aviso">Lo que <b>no</b> funciona acá porque necesita el backend real de Google: ' +
+      'mandar el correo del resumen diario, y crear el evento en Google Calendar al agendar ' +
+      '(el recordatorio sí se guarda en la Agenda del CRM, solo que sin el aviso de Calendar).</div></div></div>';
 
     h += '<div class="panel"><div class="cab"><h2>Si algo falla</h2></div>' +
       '<div class="tabla-wrap"><table><thead><tr><th>Síntoma</th><th>Causa y arreglo</th></tr></thead><tbody>' +
