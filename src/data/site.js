@@ -77,7 +77,7 @@ export const PRODUCTOS = [
     ref: 'E-03',
     nombre: 'Colorímetro dental · escala clásica 16 tonos',
     categoria: 'Diagnóstico',
-    precio: 250,
+    precio: 300,
     stock: true,
     imagen: 'productos/e-03.webp',
     detalle:
