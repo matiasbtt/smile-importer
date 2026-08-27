@@ -56,7 +56,7 @@ export const PRODUCTOS = [
     ref: 'E-01',
     nombre: 'Motor de endodoncia inalámbrico Y-SMART',
     categoria: 'Rotatorios',
-    precio: 1500,
+    precio: 1650,
     stock: true,
     imagen: 'productos/e-01.webp',
     detalle:
@@ -67,7 +67,7 @@ export const PRODUCTOS = [
     nombre:
       'Unidad de cirugía e implantología con bomba de irrigación y contraángulo 1:5',
     categoria: 'Rotatorios',
-    precio: 6000,
+    precio: 5590,
     stock: true,
     imagen: 'productos/e-02.webp',
     detalle:
@@ -130,9 +130,9 @@ export const PRODUCTOS = [
     categoria: 'Operatoria',
     precio: 70,
     stock: true,
-    imagen: null, // ⇦ pendiente: la carpeta E-08 de Drive todavía no tiene foto
+    imagen: 'productos/e-08.png',
     detalle:
-      'Pinceles para modelado y estratificación de composite. Ficha técnica a completar cuando llegue la fotografía.',
+      'Pinceles para modelado y estratificación de composite.',
   },
   {
     ref: 'E-09',
@@ -183,5 +183,25 @@ export const PRODUCTOS = [
     imagen: 'productos/e-13.webp',
     detalle:
       'Juego de cubetas superior e inferior perforadas, con mango y tope. Disponibles en tres colores.',
+  },
+  {
+    ref: 'E-14',
+    nombre: 'Endomotor inalámbrico RUITODENTAL',
+    categoria: 'Rotatorios',
+    precio: 1450,
+    stock: true,
+    imagen: 'productos/e-14.jpeg',
+    detalle:
+      'Endomotor inalámbrico con localizador de ápice integrado, pantalla táctil, contraángulo reductor y estuche de carga.',
+  },
+  {
+    ref: 'E-15',
+    nombre: 'Espátulas de Recina Delgados',
+    categoria: 'Prótesis',
+    precio: 550,
+    stock: true,
+    imagen: 'productos/e-15.jpeg',
+    detalle:
+      'Set de espátulas delgadas para trabajo de resina y prótesis, mango ergonómico y hoja de precisión.',
   },
 ];
