@@ -1,0 +1,1387 @@
+<title>Ruta Fanny's</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bodoni+Moda:ital,wght@0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#F3EBEA; --surface:#FBF7F6; --surface-2:#EFE4E3;
+  --ink:#2B171C; --ink-2:#5E464B; --ink-3:#8A7075;
+  --line:#DFCDCB; --line-soft:#EADCDA;
+  --wine:#7A2E3C; --wine-2:#A03A4E; --pistacho:#4F7A3D; --miel:#A9761B;
+  --bar:#A03A4E; --bar-good:#4F8A3D; --bar-bad:#B3232F; --track:#E6D6D4;
+  color-scheme: light;
+  --shadow:0 1px 2px rgba(43,23,28,.06), 0 8px 24px -16px rgba(43,23,28,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1A1114; --surface:#221619; --surface-2:#2C1D21;
+    --ink:#F2E7E5; --ink-2:#C3AAAE; --ink-3:#96797E;
+    --line:#3D2A2F; --line-soft:#322327;
+    --wine:#E5919F; --wine-2:#EDA4B1; --pistacho:#9CC77F; --miel:#DCA744;
+    --bar:#CB667F; --bar-good:#3E8C56; --bar-bad:#D2545F; --track:#33232A;
+    color-scheme: dark;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1A1114; --surface:#221619; --surface-2:#2C1D21;
+  --ink:#F2E7E5; --ink-2:#C3AAAE; --ink-3:#96797E;
+  --line:#3D2A2F; --line-soft:#322327;
+  --wine:#E5919F; --wine-2:#EDA4B1; --pistacho:#9CC77F; --miel:#DCA744;
+  --bar:#CB667F; --bar-good:#3E8C56; --bar-bad:#D2545F; --track:#33232A;
+  color-scheme: dark;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",Arial,sans-serif;
+  font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px; margin:0 auto; padding:0 clamp(1rem,4vw,2.5rem)}
+.prose{max-width:66ch}
+h1,h2,h3{text-wrap:balance; margin:0}
+h1{font-family:"Bodoni Moda",Georgia,serif; font-weight:700; font-size:clamp(2.4rem,6.4vw,4.1rem); line-height:1.03; letter-spacing:-.015em}
+h2{font-family:"Bodoni Moda",Georgia,serif; font-weight:700; font-size:clamp(1.7rem,3.6vw,2.5rem); line-height:1.12; letter-spacing:-.01em}
+h3{font-size:1.08rem; font-weight:700; letter-spacing:-.005em}
+h4{margin:0; font-size:.94rem; font-weight:700}
+p{margin:0}
+a{color:inherit}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.72rem; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--wine);
+}
+.lede{font-size:clamp(1.05rem,2vw,1.24rem); line-height:1.55; color:var(--ink-2)}
+.muted{color:var(--ink-2)}
+.small{font-size:.9rem}
+.xsmall{font-size:.82rem; color:var(--ink-2)}
+strong{font-weight:600}
+em.term{font-style:normal; font-weight:600; color:var(--wine); border-bottom:1px solid color-mix(in oklab, var(--wine) 35%, transparent)}
+
+/* ---------- rhythm ---------- */
+section{padding-block:clamp(3rem,7vw,5.5rem); border-top:1px solid var(--line-soft)}
+section:first-of-type{border-top:0}
+.stack{display:flex; flex-direction:column; gap:1.15rem}
+.stack-lg{display:flex; flex-direction:column; gap:2.2rem}
+.stack-sm{display:flex; flex-direction:column; gap:.6rem}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(3.4rem,9vw,6.5rem) clamp(2.5rem,5vw,4rem); border-top:0}
+.hero-rule{height:1px; background:linear-gradient(90deg,var(--wine),transparent); margin:2rem 0 0}
+.hero h1 em{font-style:italic; color:var(--wine)}
+.hero-meta{
+  display:flex; flex-wrap:wrap; gap:.5rem 1.4rem; margin-top:1.6rem;
+  font-family:"IBM Plex Mono",monospace; font-size:.76rem; color:var(--ink-3);
+  letter-spacing:.04em; text-transform:uppercase;
+}
+
+/* ---------- cards ---------- */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:1.3rem 1.4rem}
+.grid-3{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem}
+.grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem}
+.term-card h3{color:var(--wine); font-family:"Bodoni Moda",Georgia,serif; font-size:1.35rem; font-weight:600}
+
+/* ---------- callouts ---------- */
+.lock{
+  display:flex; gap:.85rem; align-items:flex-start;
+  background:var(--surface-2); border:1px solid var(--line); border-left:3px solid var(--wine);
+  border-radius:2px; padding:.95rem 1.1rem;
+}
+.lock .k{
+  font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--wine); white-space:nowrap; padding-top:.18rem; font-weight:600;
+}
+.note{border-left:3px solid var(--miel); background:var(--surface); padding:.9rem 1.1rem; border-radius:2px; border-top:1px solid var(--line); border-right:1px solid var(--line); border-bottom:1px solid var(--line)}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:3px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:.92rem}
+caption{text-align:left; padding:.9rem 1rem .2rem; font-size:.86rem; color:var(--ink-2)}
+th,td{text-align:left; padding:.72rem .9rem; border-bottom:1px solid var(--line-soft); vertical-align:top}
+thead th{
+  font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-2); font-weight:600; border-bottom:1px solid var(--line); white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:color-mix(in oklab, var(--wine) 5%, transparent)}
+td.num{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.pill{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.08em;
+  text-transform:uppercase; padding:.16rem .45rem; border-radius:2px; border:1px solid currentColor; white-space:nowrap;
+}
+.pill.si{color:var(--pistacho)} .pill.no{color:var(--wine-2)} .pill.top{color:var(--miel)}
+
+/* ---------- mapa (rail) ---------- */
+.railshell{margin-top:2rem}
+.rail{
+  display:grid; grid-auto-flow:column; align-items:stretch; gap:0;
+  overflow-x:auto; scroll-snap-type:x proximity; padding:.4rem .2rem 1.4rem;
+  scrollbar-width:thin;
+}
+.stop{
+  scroll-snap-align:center; width:250px; display:flex; flex-direction:column; gap:.5rem;
+  background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  padding:1rem 1.05rem 1.1rem; text-decoration:none; transition:border-color .18s, transform .18s;
+}
+.stop:hover,.stop:focus-visible{border-color:var(--wine); transform:translateY(-2px)}
+.stop .n{font-family:"Bodoni Moda",Georgia,serif; font-size:1.7rem; font-weight:700; color:var(--wine); line-height:1}
+.stop h3{font-size:1rem}
+.stop p{font-size:.85rem; color:var(--ink-2); line-height:1.45}
+.stop .out{
+  margin-top:auto; padding-top:.6rem; border-top:1px dashed var(--line);
+  font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.05em; color:var(--ink-3);
+}
+.stop .out b{color:var(--ink); font-weight:600; letter-spacing:0; font-family:"Archivo",sans-serif}
+.link{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.3rem;
+  width:92px; flex:0 0 auto; color:var(--ink-3);
+}
+.link svg{display:block}
+.link span{font-family:"IBM Plex Mono",monospace; font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; text-align:center; line-height:1.3}
+.railhint{
+  display:flex; justify-content:space-between; align-items:center; gap:1rem;
+  font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); margin-top:.2rem;
+}
+
+/* ---------- step sections ---------- */
+.stephead{display:flex; gap:1.1rem; align-items:baseline; margin-bottom:.4rem}
+.stephead .n{
+  font-family:"Bodoni Moda",Georgia,serif; font-size:clamp(2.2rem,5vw,3.2rem); font-weight:700;
+  color:var(--wine); line-height:.9; font-variant-numeric:tabular-nums;
+}
+.needs{
+  font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:1.4rem; display:block;
+}
+.backmap{
+  font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px;
+}
+.backmap:hover{color:var(--wine); border-color:var(--wine)}
+
+/* ---------- figure ---------- */
+figure{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:1.4rem 1.2rem 1rem}
+figure svg{width:100%; height:auto; color:var(--ink)}
+figcaption{margin-top:.9rem; font-size:.86rem; color:var(--ink-2); max-width:62ch}
+
+/* ---------- checklist ---------- */
+ul.checks{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55rem}
+ul.checks li{position:relative; padding-left:1.45rem; font-size:.95rem}
+ul.checks li::before{
+  content:""; position:absolute; left:0; top:.52rem; width:9px; height:9px;
+  border:1.5px solid var(--wine); border-radius:1px;
+}
+ol.steps{margin:0; padding-left:1.3rem; display:flex; flex-direction:column; gap:.55rem}
+ol.steps li{padding-left:.25rem}
+ol.steps::marker{color:var(--wine)}
+
+/* ---------- calculadora ---------- */
+.calc{display:flex; flex-direction:column; gap:1.5rem; margin-top:1.6rem}
+.calcblock{background:var(--surface); border:1px solid var(--line); border-radius:3px; overflow:hidden}
+.calcblock > header{
+  display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;
+  padding:.8rem 1rem; border-bottom:1px solid var(--line); background:var(--surface-2);
+}
+.calcblock > header h4{font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2)}
+.calcbody{padding:1rem}
+input[type="number"],input[type="text"]{
+  font-family:"IBM Plex Mono",monospace; font-size:.88rem; font-variant-numeric:tabular-nums;
+  background:var(--paper); color:var(--ink); border:1px solid var(--line); border-radius:2px;
+  padding:.36rem .5rem; width:100%; min-width:0;
+}
+input[type="number"]{text-align:right}
+input:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--wine); outline-offset:2px}
+.ctable{width:100%; min-width:640px; border-collapse:collapse; font-size:.88rem}
+.ctable th{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:600; padding:.3rem .4rem .5rem; text-align:right; white-space:nowrap}
+.ctable th:first-child{text-align:left}
+.ctable td{padding:.22rem .4rem; border-bottom:1px solid var(--line-soft)}
+.ctable td.out{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink); white-space:nowrap}
+.ctable tr:last-child td{border-bottom:0}
+.btn{
+  font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  background:transparent; color:var(--wine); border:1px solid var(--wine); border-radius:2px;
+  padding:.38rem .7rem; cursor:pointer; transition:background .15s;
+}
+.btn:hover{background:color-mix(in oklab, var(--wine) 12%, transparent)}
+.btn.ghost{color:var(--ink-3); border-color:var(--line)}
+.btn.ghost:hover{background:var(--surface-2); color:var(--ink)}
+.btn.mini{padding:.15rem .4rem; font-size:.68rem; line-height:1.4}
+.fieldgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:.9rem}
+.field{display:flex; flex-direction:column; gap:.28rem}
+.field label{font-size:.78rem; color:var(--ink-2); font-weight:500}
+.field .hint{font-size:.72rem; color:var(--ink-3)}
+
+/* resultados */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1px; background:var(--line)}
+.tile{background:var(--surface); padding:1rem}
+.tile .lab{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.tile .val{font-family:"Bodoni Moda",Georgia,serif; font-size:1.9rem; font-weight:700; line-height:1.1; font-variant-numeric:tabular-nums; margin-top:.3rem}
+.tile .sub{font-size:.78rem; color:var(--ink-2); margin-top:.15rem}
+.val.good{color:var(--pistacho)} .val.bad{color:var(--bar-bad)}
+
+/* barras */
+.bars{display:flex; flex-direction:column; gap:8px; margin-top:.3rem}
+.barrow{display:grid; grid-template-columns:minmax(120px,148px) 1fr minmax(78px,auto); gap:.7rem; align-items:center; font-size:.84rem}
+.barlab{color:var(--ink-2)}
+.bartrack{background:var(--track); height:14px; border-radius:2px; overflow:hidden}
+.barfill{display:block; height:100%; background:var(--bar); border-radius:0 4px 4px 0; transition:width .25s ease}
+.barfill.good{background:var(--bar-good)} .barfill.bad{background:var(--bar-bad)}
+.barval{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink)}
+
+.priceladder td.num{color:var(--ink)}
+.priceladder tr.pick{background:color-mix(in oklab, var(--wine) 9%, transparent)}
+
+/* ---------- cierre ---------- */
+.final{background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:1.5rem}
+footer{padding:2.5rem 0 4rem; color:var(--ink-3); font-size:.82rem; border-top:1px solid var(--line-soft)}
+
+@media (prefers-reduced-motion: reduce){*{transition:none !important; animation:none !important; scroll-behavior:auto !important}}
+html{scroll-behavior:smooth}
+@media (max-width:640px){
+  body{font-size:16px}
+  .stop{width:230px}
+  .link{width:64px}
+}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">Estrategia de marca · Fanny's · Postres artesanales</p>
+  <h1 style="margin-top:1.1rem">Un rollo no se vuelve marca por el logo.<br>Se vuelve marca por el <em>orden</em>.</h1>
+  <div class="hero-rule"></div>
+  <p class="lede" style="margin-top:1.8rem; max-width:60ch">
+    Ustedes ya tienen lo más difícil y lo más caro de conseguir: un producto que funciona.
+    Lo que falta no es talento, es secuencia. Abajo hay nueve pasos, cada uno produce algo
+    concreto que el siguiente necesita para existir. Si se saltan uno, el que sigue se hace mal
+    y hay que pagarlo dos veces.
+  </p>
+  <div class="hero-meta">
+    <span>9 pasos encadenados</span><span>Marca · Producto · Envase · Precio</span><span>Calculadora de costos incluida</span>
+  </div>
+</header>
+
+<section id="conceptos">
+  <p class="eyebrow">Punto de partida</p>
+  <h2 style="margin-top:.7rem">Tres palabras que hay que entender antes de gastar un peso</h2>
+  <p class="lede" style="margin-top:1rem; max-width:62ch">Nadie necesita estudiar marketing para esto. Necesitan estas tres ideas, bien entendidas.</p>
+
+  <div class="grid-3" style="margin-top:2rem">
+    <div class="card term-card stack-sm">
+      <h3>Marca</h3>
+      <p class="small">No es el logo. Es <strong>lo que la gente siente y espera</strong> cuando ve su nombre. El logo es solo el recordatorio visual de esa expectativa.</p>
+      <p class="xsmall">Prueba: si mañana borran el logo del envase, ¿alguien reconocería el producto? Si la respuesta es no, todavía no hay marca.</p>
+    </div>
+    <div class="card term-card stack-sm">
+      <h3>Posicionamiento</h3>
+      <p class="small">Es <strong>ser dueños de una sola idea</strong> en la cabeza del cliente. No de cinco. Una. La marca que quieren imitar no es "rica": es "la galleta enorme y decadente que te regalas".</p>
+      <p class="xsmall">Prueba: si sus clientes tuvieran que describirlos en tres palabras, ¿dirían todos las mismas tres?</p>
+    </div>
+    <div class="card term-card stack-sm">
+      <h3>ADN de marca</h3>
+      <p class="small">Son las <strong>seis decisiones fijas</strong> que no cambian nunca, y de las que se desprende todo lo demás: el nombre, el color, el precio, el tono de los mensajes.</p>
+      <p class="xsmall">Prueba: si los dos socios responden distinto a "¿qué prometemos siempre?", no hay ADN todavía; hay dos negocios.</p>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.6rem; max-width:70ch">
+    <p class="small"><strong>El "wow, esto es de calidad" no viene del sabor.</strong> Viene de la <em class="term">coherencia</em>:
+    el producto, el envase, la foto, el precio y la forma de hablar dicen todos lo mismo. Un rollo excelente en una bolsa
+    de supermercado, con un precio bajo y una foto borrosa, se percibe barato. El sabor solo confirma después lo que
+    el resto ya prometió.</p>
+  </div>
+</section>
+
+<section id="posicionar">
+  <p class="eyebrow">Antes del mapa</p>
+  <h2 style="margin-top:.7rem">Elijan el territorio: ¿de qué van a ser dueños?</h2>
+  <div class="prose stack" style="margin-top:1.2rem">
+    <p>Una marca pequeña no puede ser muchas cosas. Puede ser <strong>una</strong>, y serlo mejor que nadie en su ciudad.
+      Estos son los tres territorios realistas para un rollo de canela. Elijan uno hoy; los otros dos quedan prohibidos.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:1.4rem">
+    <table>
+      <caption>Territorios posibles. El tercero es el que más se parece a lo que describieron.</caption>
+      <thead><tr><th>Territorio</th><th>La frase que la gente repetiría</th><th>A qué los obliga</th><th>Encaje</th></tr></thead>
+      <tbody>
+        <tr><td><strong>El antojo generoso</strong></td><td>"El rollo que no se comparte."</td><td>Tamaño grande, relleno abundante, precio medio, mucho volumen. Compites por cantidad.</td><td><span class="pill no">Bajo</span></td></tr>
+        <tr><td><strong>El regalo listo</strong></td><td>"El postre que se lleva a una casa."</td><td>Caja rígida, sabores clásicos, entrega puntual, presentación impecable. Vendes ocasiones.</td><td><span class="pill si">Medio</span></td></tr>
+        <tr><td><strong>Repostería de autor</strong></td><td>"Rollos de tanda pequeña, con rellenos que cambian."</td><td>Cantidad limitada, sabores rotativos, estética sobria, precio alto sin descuentos. Vendes criterio.</td><td><span class="pill top">Alto ★</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:1.4rem; max-width:76ch">
+    <h4 style="font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2)">La frase de posicionamiento — plantilla</h4>
+    <p style="margin-top:.8rem; font-family:'Bodoni Moda',Georgia,serif; font-size:1.15rem; line-height:1.5">
+      Para <span style="color:var(--wine)">[público]</span>, Fanny's es la <span style="color:var(--wine)">[categoría]</span>
+      que <span style="color:var(--wine)">[beneficio único]</span>, porque <span style="color:var(--wine)">[la razón para creerlo]</span>.
+    </p>
+    <p class="small muted" style="margin-top:1rem"><strong>Ejemplo ya llenado:</strong> "Para quien quiere llevar un postre que impresione
+      sin cargar una torta, Fanny's es la repostería de rollos de autor que hornea tandas pequeñas con un relleno distinto
+      cada semana, porque cada rollo se hornea el mismo día en que se entrega."</p>
+    <p class="xsmall" style="margin-top:.7rem">Esa frase no se publica: se usa internamente para decidir. Cada vez que duden de algo
+      (un color, un precio, un empaque, un descuento), la respuesta es la frase.</p>
+  </div>
+</section>
+
+<section id="orden">
+  <p class="eyebrow">Por qué este orden y no otro</p>
+  <h2 style="margin-top:.7rem">La ruta común cuesta el doble</h2>
+  <p class="lede" style="margin-top:1rem; max-width:60ch">Casi todos los emprendimientos empiezan por el logo. Es lo más divertido y lo más
+    visible. También es lo que obliga a rehacer todo cuando aparecen el envase y el precio.</p>
+
+  <figure style="margin-top:1.8rem">
+    <svg viewBox="0 0 880 300" role="img" aria-label="Comparación de dos rutas: la ruta común empieza por el logo y obliga a rehacer identidad y envase cuando llegan el envase y el precio; la ruta propuesta va de ADN a nombre, identidad, envase y precio sin retrocesos.">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--wine)"/>
+        </marker>
+      </defs>
+
+      <text x="0" y="16" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.6" fill="currentColor" opacity=".55">RUTA COMUN</text>
+      <g font-family="Archivo, sans-serif" font-size="12.5" fill="currentColor">
+        <rect x="0" y="34" width="128" height="42" rx="2" fill="none" stroke="currentColor" opacity=".45"/>
+        <text x="64" y="60" text-anchor="middle">Logo bonito</text>
+        <line x1="132" y1="55" x2="176" y2="55" stroke="currentColor" opacity=".55" marker-end="url(#ar)"/>
+        <rect x="180" y="34" width="128" height="42" rx="2" fill="none" stroke="currentColor" opacity=".45"/>
+        <text x="244" y="60" text-anchor="middle">Producto</text>
+        <line x1="312" y1="55" x2="356" y2="55" stroke="currentColor" opacity=".55" marker-end="url(#ar)"/>
+        <rect x="360" y="34" width="128" height="42" rx="2" fill="none" stroke="currentColor" opacity=".45"/>
+        <text x="424" y="60" text-anchor="middle">Envase</text>
+        <line x1="492" y1="55" x2="536" y2="55" stroke="currentColor" opacity=".55" marker-end="url(#ar)"/>
+        <rect x="540" y="34" width="128" height="42" rx="2" fill="none" stroke="currentColor" opacity=".45"/>
+        <text x="604" y="60" text-anchor="middle">Precio</text>
+      </g>
+      <path d="M604,80 L604,120 L64,120 L64,84" fill="none" stroke="var(--wine)" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+      <text x="334" y="140" text-anchor="middle" font-family="Archivo, sans-serif" font-size="11.5" fill="var(--wine)">el logo no cabe, el envase no cierra, el precio no da margen — a rehacer todo</text>
+
+      <line x1="0" y1="158" x2="880" y2="158" stroke="currentColor" opacity=".18"/>
+
+      <text x="0" y="186" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.6" fill="var(--wine)">RUTA FANNY'S</text>
+      <g font-family="Archivo, sans-serif" font-size="12.5" fill="currentColor">
+        <rect x="0" y="204" width="116" height="42" rx="2" fill="none" stroke="var(--wine)" stroke-width="1.3"/>
+        <text x="58" y="230" text-anchor="middle">ADN</text>
+        <line x1="122" y1="225" x2="185" y2="225" stroke="currentColor" opacity=".7" marker-end="url(#ar)"/>
+        <text x="153" y="216" text-anchor="middle" font-size="10" opacity=".7">define</text>
+        <rect x="191" y="204" width="116" height="42" rx="2" fill="none" stroke="var(--wine)" stroke-width="1.3"/>
+        <text x="249" y="230" text-anchor="middle">Nombre</text>
+        <line x1="313" y1="225" x2="376" y2="225" stroke="currentColor" opacity=".7" marker-end="url(#ar)"/>
+        <text x="344" y="216" text-anchor="middle" font-size="10" opacity=".7">viste a</text>
+        <rect x="382" y="204" width="116" height="42" rx="2" fill="none" stroke="var(--wine)" stroke-width="1.3"/>
+        <text x="440" y="230" text-anchor="middle">Identidad</text>
+        <line x1="504" y1="225" x2="567" y2="225" stroke="currentColor" opacity=".7" marker-end="url(#ar)"/>
+        <text x="535" y="216" text-anchor="middle" font-size="10" opacity=".7">se imprime</text>
+        <rect x="573" y="204" width="116" height="42" rx="2" fill="none" stroke="var(--wine)" stroke-width="1.3"/>
+        <text x="631" y="230" text-anchor="middle">Envase</text>
+        <line x1="695" y1="225" x2="758" y2="225" stroke="currentColor" opacity=".7" marker-end="url(#ar)"/>
+        <text x="726" y="216" text-anchor="middle" font-size="10" opacity=".7">fija el</text>
+        <rect x="764" y="204" width="116" height="42" rx="2" fill="none" stroke="var(--wine)" stroke-width="1.3"/>
+        <text x="822" y="230" text-anchor="middle">Precio</text>
+      </g>
+      <text x="0" y="276" font-family="Archivo, sans-serif" font-size="11.5" fill="currentColor" opacity=".65">Cada caja entrega el dato que la siguiente necesita. No hay flechas hacia atrás.</text>
+    </svg>
+    <figcaption>Arriba: el envase y el precio aparecen al final y descubren que la identidad no sirve, así que se rehace y se paga otra vez.
+      Abajo: el envase se diseña cuando el logo ya existe, y el precio se calcula cuando el envase ya tiene costo. Mismo trabajo, una sola vez.</figcaption>
+  </figure>
+</section>
+
+<section id="mapa">
+  <p class="eyebrow">El mapa</p>
+  <h2 style="margin-top:.7rem">Nueve pasos, de izquierda a derecha</h2>
+  <p class="lede" style="margin-top:1rem; max-width:64ch">
+    Cada tarjeta produce un <strong>entregable</strong>: una cosa concreta y terminada.
+    Ese entregable es el material con el que se hace el paso siguiente. Sin él, el siguiente
+    paso se hace a ciegas. Toquen una tarjeta para ir al detalle.
+  </p>
+
+  <div class="railshell">
+    <div class="railhint"><span>Paso 01 → Paso 09</span><span>Deslizá hacia la derecha →</span></div>
+    <div class="rail">
+
+      <a class="stop" href="#paso-1">
+        <span class="n">01</span><h3>ADN de marca</h3>
+        <p>Responder seis preguntas y quedarse con una sola promesa que los dos socios repitan igual.</p>
+        <span class="out">Entrega<br><b>La promesa en una frase</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>sin promesa<br>no hay nombre</span></div>
+
+      <a class="stop" href="#paso-2">
+        <span class="n">02</span><h3>Nombre y posición</h3>
+        <p>Decidir si se quedan con Fanny's, verificar que esté libre y escribir la frase de posicionamiento.</p>
+        <span class="out">Entrega<br><b>Nombre definitivo</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>sin nombre<br>no hay logo</span></div>
+
+      <a class="stop" href="#paso-3">
+        <span class="n">03</span><h3>Identidad visual</h3>
+        <p>El kit mínimo: logotipo, dos colores, dos tipografías, un sello. Nada más por ahora.</p>
+        <span class="out">Entrega<br><b>Logo en vector + colores</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>el sello va<br>sobre el producto</span></div>
+
+      <a class="stop" href="#paso-4">
+        <span class="n">04</span><h3>Producto terminado</h3>
+        <p>Cerrar rellenos y toppings, estandarizar peso y tamaño, y hacer que se vea tan bien como sabe.</p>
+        <span class="out">Entrega<br><b>Ficha técnica y tamaño final</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>el envase se elige<br>con la medida real</span></div>
+
+      <a class="stop" href="#paso-5">
+        <span class="n">05</span><h3>Envase</h3>
+        <p>Elegir la caja, el molde y la faja impresa. Es el 50% de la percepción de calidad.</p>
+        <span class="out">Entrega<br><b>Costo del envase por rollo</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>sin ese costo<br>el precio es un invento</span></div>
+
+      <a class="stop" href="#paso-6">
+        <span class="n">06</span><h3>Costos y precio</h3>
+        <p>Calcular cuánto cuesta un rollo de verdad (incluido su trabajo) y fijar el precio con margen.</p>
+        <span class="out">Entrega<br><b>Precio de venta</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>se prueba vendiendo,<br>no regalando</span></div>
+
+      <a class="stop" href="#paso-7">
+        <span class="n">07</span><h3>Cata y primeros clientes</h3>
+        <p>Amigos y conocidos, pero con método: ficha de cata, precio simbólico y permiso para usar su opinión.</p>
+        <span class="out">Entrega<br><b>Fotos, testimonios y 20 contactos</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>sin pruebas<br>nadie confía</span></div>
+
+      <a class="stop" href="#paso-8">
+        <span class="n">08</span><h3>Lanzamiento</h3>
+        <p>Instagram abierto con contenido real, tandas limitadas por semana y pedidos por WhatsApp.</p>
+        <span class="out">Entrega<br><b>Clientes que repiten</b></span>
+      </a>
+      <div class="link" aria-hidden="true"><svg width="34" height="10" viewBox="0 0 34 10"><line x1="0" y1="5" x2="27" y2="5" stroke="currentColor" stroke-width="1.4"/><polygon points="27,1 34,5 27,9" fill="currentColor"/></svg><span>solo entonces<br>se amplía</span></div>
+
+      <a class="stop" href="#paso-9">
+        <span class="n">09</span><h3>Ampliar el catálogo</h3>
+        <p>Conos de pizza, vasos de yogurt, galletas y crumble. Uno por vez, y solo si el rollo ya se vende solo.</p>
+        <span class="out">Entrega<br><b>Segundo producto rentable</b></span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section id="paso-1">
+  <div class="stephead"><span class="n">01</span><h2>El ADN: seis preguntas, una sola vez</h2></div>
+  <span class="needs">Requisito previo: ninguno · Este es el punto de partida</span>
+
+  <div class="prose stack">
+    <p>El ADN de marca es una herramienta de una sola página. No se publica, no se diseña: se usa para decidir.
+      Siéntense los dos, respondan las seis preguntas <strong>por escrito</strong> y guárdenlo. Cada vez que
+      discutan sobre un color, un precio o un descuento, la discusión se resuelve leyendo esta hoja.</p>
+    <p>La regla que hace que funcione: <strong>respuestas cortas y excluyentes</strong>. Si la respuesta le sirve
+      también a la panadería de la esquina, no sirve.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:1.6rem">
+    <table>
+      <caption>Las seis preguntas del ADN, con un ejemplo posible para Fanny's. Reemplácenlo por el suyo.</caption>
+      <thead><tr><th>Pregunta</th><th>Qué está definiendo</th><th>Ejemplo de respuesta</th><th>Cómo saben que está bien</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Propósito</strong><br><span class="xsmall">¿Por qué existimos, más allá de vender?</span></td><td>La razón que hace que valga la pena madrugar a hornear.</td><td>"Que un postre de verdad sea algo cotidiano y no un lujo de ocasión."</td><td>Ninguno de los dos lo lee y piensa "esto es puro relleno".</td></tr>
+        <tr><td><strong>2. Público</strong><br><span class="xsmall">¿Para quién exactamente?</span></td><td>A quién le hablan las fotos, el precio y el tono.</td><td>Adultos de 22 a 40 que se dan gustos y que comparten lo que comen.</td><td>Pueden nombrar tres personas reales que encajan.</td></tr>
+        <tr><td><strong>3. Promesa</strong><br><span class="xsmall">¿Qué garantizamos siempre?</span></td><td>El contrato con el cliente. Es lo que no puede fallar nunca.</td><td>"Horneado el mismo día. Si no está fresco, no sale."</td><td>Es medible y podría incumplirse. Si no se puede incumplir, no es promesa.</td></tr>
+        <tr><td><strong>4. Personalidad</strong><br><span class="xsmall">Si la marca fuera persona, ¿cómo habla?</span></td><td>El tono de los textos, los mensajes, las respuestas.</td><td>Cercana pero cuidadosa. Explica, no grita. Nunca usa mayúsculas ni "¡corre, últimas unidades!".</td><td>Tres adjetivos, y uno de ellos es incómodo (les cierra puertas).</td></tr>
+        <tr><td><strong>5. Diferencia</strong><br><span class="xsmall">¿Qué hacemos que el resto no?</span></td><td>La razón para elegirlos a ustedes y no al de al lado.</td><td>Un relleno nuevo cada semana, en tandas contadas.</td><td>El competidor no lo puede copiar el lunes siguiente sin cambiar su operación.</td></tr>
+        <tr><td><strong>6. Enemigo</strong><br><span class="xsmall">¿Contra qué estamos?</span></td><td>Le da carácter a la marca y ordena lo que nunca harán.</td><td>El postre industrial que lleva semanas empacado y sabe a azúcar y nada más.</td><td>Se entiende sin insultar a nadie por su nombre.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="lock" style="margin-top:1.4rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">No pasen al paso 02 hasta que cada uno, por separado y sin mirar la hoja, escriba la
+      <strong>promesa</strong> y las dos versiones digan lo mismo. Un nombre elegido antes de eso es una corazonada, no una decisión.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-2">
+  <div class="stephead"><span class="n">02</span><h2>El nombre: ¿se quedan con Fanny's?</h2></div>
+  <span class="needs">Necesita del paso 01: la promesa escrita</span>
+
+  <div class="prose stack">
+    <p>Lo primero, para quitar el peso de encima: <strong>ningún nombre hace fracasar a un buen producto,
+      y ningún nombre salva a uno malo</strong>. Dicho eso, el nombre sí decide cuánto trabajo cuesta
+      construir la marca alrededor, y si podrán crecer sin cambiarlo después. Aquí está el análisis honesto.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:1.6rem">
+    <table>
+      <caption>"Fanny's": lo que juega a favor y lo que juega en contra.</caption>
+      <thead><tr><th style="width:50%">A favor</th><th style="width:50%">En contra</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Tiene una persona detrás.</strong> Las marcas de postres más queridas se llaman como alguien (Isabella's, Mrs. Fields, Famous Amos). Un nombre propio promete una cocina y una receta, no una fábrica.</td>
+          <td><strong>Significado en inglés.</strong> "Fanny" es vulgar en inglés británico y significa "trasero" en Estados Unidos. Si algún día quieren turistas, exportar o simplemente que no se rían en un comentario, es un problema real.</td>
+        </tr>
+        <tr>
+          <td><strong>Cálido y familiar.</strong> Comunica "hecho en casa, receta propia", que es exactamente el origen de ustedes.</td>
+          <td><strong>Está muy usado.</strong> Hay panaderías, pastelerías y tiendas "Fanny" en casi todos los países hispanohablantes. Registrar la marca y conseguir el usuario de Instagram y el dominio va a ser difícil.</td>
+        </tr>
+        <tr>
+          <td><strong>Corto y fácil de decir.</strong> Dos sílabas, se pronuncia igual como se escribe en español, se recuerda al primer intento.</td>
+          <td><strong>Puede leerse "señora mayor".</strong> En Latinoamérica, Fanny es un nombre de otra generación. Empuja la percepción hacia "casero y tradicional", justo lo contrario del "premium contemporáneo" que buscan.</td>
+        </tr>
+        <tr>
+          <td><strong>No los encierra en un producto.</strong> Sirve igual para rollos, galletas, conos de pizza y yogurt. Un nombre como "Rollos y Canela" los habría dejado atrapados.</td>
+          <td><strong>No dice nada del producto.</strong> Van a tener que invertir más tiempo y contenido explicando quiénes son, porque el nombre solo no informa nada.</td>
+        </tr>
+        <tr>
+          <td><strong>El apóstrofe posiciona.</strong> El "'s" es un código visual que la gente ya asocia con repostería de autor. Trabaja gratis a su favor.</td>
+          <td><strong>El apóstrofe estorba al escribir.</strong> Nadie escribe el apóstrofe al buscar. Van a necesitar "fannys" en redes y dominio, y a vivir con las dos escrituras conviviendo.</td>
+        </tr>
+        <tr>
+          <td><strong>Se diseña fácil.</strong> Da monograma (una F), firma manuscrita y sello redondo sin esfuerzo. Buen material para el paso 03.</td>
+          <td><strong>Si no existe una Fanny real, la historia se cae.</strong> Y una historia inventada choca de frente con una marca que promete honestidad.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note" style="margin-top:1.4rem; max-width:76ch">
+    <p class="small"><strong>Veredicto:</strong> si Fanny es una persona real de la familia y el negocio va a ser
+      local y en español, el nombre es <strong>viable y hasta valioso</strong> — pero hay que contar su historia
+      desde el día uno, o queda como un nombre cualquiera. Si aspiran a crecer más allá del público hispanohablante,
+      o si Fanny no existe, <strong>cámbienlo ahora</strong>: hoy no cuesta nada y en dos años cuesta todo lo construido.</p>
+  </div>
+
+  <h3 style="margin-top:2.4rem">Alternativas, por si acaso</h3>
+  <p class="small muted" style="margin-top:.5rem; max-width:66ch">Tres caminos: conservar a Fanny con más aire de marca, apostar por la forma del producto, o apostar por el ingrediente.</p>
+
+  <div class="tablewrap" style="margin-top:1rem">
+    <table>
+      <thead><tr><th>Nombre</th><th>Camino</th><th>Por qué funciona</th><th>Riesgo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Casa Fanny</strong> <span class="pill top">★</span></td><td>Conservar</td><td>"Casa" sube la categoría de golpe: suena a establecimiento con historia, no a cuenta de Instagram. Mantiene el afecto y quita el problema del apóstrofe.</td><td>Suena tradicional; hay que compensar con una identidad visual moderna.</td></tr>
+        <tr><td><strong>Fanny &amp; Co.</strong></td><td>Conservar</td><td>Formaliza sin perder el nombre. Da espacio para el catálogo completo.</td><td>La fórmula "&amp; Co." está muy vista; no diferencia por sí sola.</td></tr>
+        <tr><td><strong>Fanny Bakehouse</strong></td><td>Conservar</td><td>Añade categoría clara y profesional. Bueno si van a tener local algún día.</td><td>Largo, anglicismo, y arrastra el problema de "fanny" en inglés — el peor de los dos mundos.</td></tr>
+        <tr><td><strong>Espiral</strong> <span class="pill top">★</span></td><td>La forma</td><td>Se adueñan de la firma visual del rollo. Corto, memorable, sirve para todo el catálogo y se dibuja solo como logo.</td><td>Palabra común: hay que registrarla con apellido ("Espiral Repostería") para poder defenderla.</td></tr>
+        <tr><td><strong>Doce Vueltas</strong></td><td>La forma</td><td>Específico y con historia (las vueltas de la masa). Muy memorable y difícil de copiar.</td><td>Largo para redes; obliga a explicarlo, aunque explicarlo es buen contenido.</td></tr>
+        <tr><td><strong>Roulé</strong></td><td>La forma</td><td>Francés para "enrollado". Percepción premium inmediata.</td><td>Nadie sabe pronunciarlo ni escribirlo. Encarece cada búsqueda y cada recomendación de boca en boca.</td></tr>
+        <tr><td><strong>Casia</strong> <span class="pill top">★</span></td><td>El ingrediente</td><td>Es el nombre botánico de la canela. Corto, elegante, suena a marca fina, casi seguro registrable, y esconde un dato que la gente disfruta aprender.</td><td>No se entiende solo: los primeros meses hay que enseñarlo ("Casia = canela").</td></tr>
+        <tr><td><strong>Ámbar</strong></td><td>El ingrediente</td><td>El color del caramelo y del horneado. Bonito, corto, premium, sirve para todo el catálogo.</td><td>Usado en muchos otros rubros; no evoca postre por sí mismo.</td></tr>
+        <tr><td><strong>Melado</strong></td><td>El ingrediente</td><td>El punto exacto del azúcar. Latino, cálido y muy poco usado como marca.</td><td>Puede sonar regional o confundirse con productos de panela.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:2.4rem">La prueba del nombre: seis verificaciones, en una tarde</h3>
+  <ul class="checks" style="margin-top:1rem; max-width:70ch">
+    <li><strong>Teléfono.</strong> Díganlo en voz alta a alguien que no lo conozca y pídanle que lo escriba. Si lo escribe mal, es un costo permanente.</li>
+    <li><strong>Disponibilidad.</strong> Búsquenlo en Instagram, en Google Maps de su ciudad y en el registro de marcas de su país. Si ya existe en la misma categoría, descártenlo hoy.</li>
+    <li><strong>Techo.</strong> ¿Sirve el nombre cuando vendan galletas y yogurt? Si no, están comprando un cambio de nombre en dos años.</li>
+    <li><strong>Idioma.</strong> Búsquenlo en inglés, portugués y en jerga local. Es la verificación que casi nadie hace y la que más caro se paga.</li>
+    <li><strong>Sello.</strong> Escríbanlo a mano dentro de un círculo de 3 cm. Si no cabe o no se lee, no funcionará en el envase.</li>
+    <li><strong>La prueba del año.</strong> Escríbanlo 20 veces seguidas. Si a la décima les cansa, a sus clientes también.</li>
+  </ul>
+
+  <div class="lock" style="margin-top:1.6rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">No pasen al paso 03 sin el nombre <strong>verificado y reservado</strong>: usuario de Instagram tomado,
+      dominio comprado y trámite de marca iniciado. Encargar un logo de un nombre que después no se puede usar es
+      el gasto más común y más evitable de todos.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-3">
+  <div class="stephead"><span class="n">03</span><h2>Identidad visual: el kit mínimo</h2></div>
+  <span class="needs">Necesita del paso 02: el nombre definitivo y reservado</span>
+
+  <div class="prose stack">
+    <p>Aquí es donde casi todos gastan de más y consiguen de menos. No necesitan un manual de marca de 40 páginas.
+      Necesitan seis piezas, y que las seis se apliquen <strong>siempre iguales</strong>. La repetición es lo que
+      hace que una marca se vea grande; la variedad es lo que la hace ver improvisada.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:1.6rem">
+    <table>
+      <caption>Lo único que hace falta para verse profesional. Todo lo demás puede esperar un año.</caption>
+      <thead><tr><th>Pieza</th><th>Qué es exactamente</th><th>Regla que la hace ver cara</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Logotipo</strong></td><td>El nombre escrito con una tipografía elegida, en archivo vectorial (.svg o .ai). Nada más. Sin rollo dibujado, sin trigo, sin chef sonriente.</td><td>Que se lea a 1 cm de alto y en un solo color. Si necesita colores para entenderse, está mal hecho.</td></tr>
+        <tr><td><strong>Sello secundario</strong></td><td>Una versión circular o un monograma (la inicial) para stickers pequeños, la tapa de la caja y la foto de perfil.</td><td>Es el que más se va a usar. Debe funcionar en 2 cm.</td></tr>
+        <tr><td><strong>Color principal</strong></td><td>Uno. Solo uno. El que van a repetir en todo hasta que la gente lo asocie con ustedes sin leer el nombre.</td><td>Elijan uno que no use la competencia local. Huyan del café y el naranja: los usan todas las panaderías.</td></tr>
+        <tr><td><strong>Color de fondo</strong></td><td>Un neutro cálido para cajas y fotos (crema, hueso, papel). Es el 80% de la superficie visible.</td><td>Que el mismo neutro esté en la caja, en el sticker y en el fondo de las fotos.</td></tr>
+        <tr><td><strong>Dos tipografías</strong></td><td>Una con carácter para el nombre y los títulos; una simple y legible para todo lo demás (precios, sabores, textos).</td><td>Dos. Nunca tres. Y jamás cambiar de tipografía entre un post y otro.</td></tr>
+        <tr><td><strong>Fórmula de foto</strong></td><td>Un mismo fondo, una misma luz (de ventana, lateral), un mismo ángulo. Escrito y repetido.</td><td>El feed se ve profesional cuando las fotos se parecen entre sí, no cuando cada una es bonita por separado.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.6rem">
+    <div class="card stack-sm">
+      <h4>Lo que hace ver caro</h4>
+      <ul class="checks" style="margin-top:.4rem">
+        <li>Espacio vacío alrededor del logo. Mucho.</li>
+        <li>Un solo color fuerte y todo lo demás neutro.</li>
+        <li>Tipografía pequeña y bien espaciada.</li>
+        <li>Repetir exactamente los mismos elementos siempre.</li>
+        <li>Decir poco. Un envase con tres frases se ve barato.</li>
+      </ul>
+    </div>
+    <div class="card stack-sm">
+      <h4>Lo que hace ver improvisado</h4>
+      <ul class="checks" style="margin-top:.4rem">
+        <li>Degradados, sombras y brillos en el logo.</li>
+        <li>Más de tres colores en el envase.</li>
+        <li>Emojis en el empaque o en el nombre de los sabores.</li>
+        <li>Fotos con luz amarilla de cocina y fondo desordenado.</li>
+        <li>Cambiar de estilo cada semana "para variar".</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lock" style="margin-top:1.6rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">No manden a imprimir <strong>nada</strong> —ni un sticker— antes de tener el logo en vector
+      y el color definido con su código exacto. Reimprimir es el gasto que más duele porque no deja nada a cambio.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-4">
+  <div class="stephead"><span class="n">04</span><h2>Producto: que se vea tan bien como sabe</h2></div>
+  <span class="needs">Necesita del paso 03: el sello y los colores, para el acabado y la foto</span>
+
+  <div class="prose stack">
+    <p>Tienen la masa y el molde. Faltan tres cosas: <strong>cerrar el sistema de sabores</strong>,
+      <strong>estandarizar</strong> para que todos los rollos salgan iguales, y <strong>trabajar el aspecto</strong>,
+      porque en este negocio la primera mordida es con los ojos y casi siempre a través de una pantalla.</p>
+  </div>
+
+  <h3 style="margin-top:2rem">El sistema de sabores (para no ahogarse en opciones)</h3>
+  <p class="small muted" style="margin-top:.5rem; max-width:66ch">No inventen sabores sueltos. Armen una fórmula de cuatro capas y combínenla. Así cada sabor nuevo cuesta una decisión, no un rediseño.</p>
+
+  <div class="tablewrap" style="margin-top:1rem">
+    <table>
+      <thead><tr><th>Capa</th><th>Función</th><th>Ejemplos</th><th>Regla</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Base</strong></td><td>La masa y la canela. No se toca.</td><td>Su masa actual.</td><td>Es la firma. Nunca cambia.</td></tr>
+        <tr><td><strong>2. Relleno</strong></td><td>Define el sabor y el nombre del producto.</td><td>Dulce de leche, pistacho, frutos rojos, chocolate amargo, manzana con especias.</td><td>Que se vea al partir el rollo. Un relleno invisible es dinero perdido.</td></tr>
+        <tr><td><strong>3. Cobertura</strong></td><td>Aporta brillo y contraste de color.</td><td>Glaseado de queso crema, glaseado blanco, caramelo salado, ganache.</td><td>Cubrir el 70%, nunca el 100%. El espiral tiene que verse.</td></tr>
+        <tr><td><strong>4. Acabado</strong></td><td>Textura y el detalle que se fotografía.</td><td>Crumble, pistacho picado, cacao nibs, ralladura, sal en escamas.</td><td>Siempre algo crocante. Es lo que separa "casero" de "de pastelería".</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note" style="margin-top:1rem; max-width:72ch">
+    <p class="small"><strong>Cuántos sabores tener:</strong> tres fijos todo el año (uno clásico, uno cremoso, uno con fruta)
+      y <strong>uno rotativo por semana</strong>. El rotativo es el motor del negocio: da razón para publicar,
+      razón para volver y sensación de escasez sin mentir. Es exactamente la "propuesta de valor única" que buscan.</p>
+  </div>
+
+  <h3 style="margin-top:2.4rem">Doce ajustes para que el rollo se vea pintoresco</h3>
+  <p class="small muted" style="margin-top:.5rem; max-width:66ch">Ordenados por impacto visual frente a esfuerzo. Los cuatro primeros cambian más la percepción que cualquier logo.</p>
+
+  <div class="tablewrap" style="margin-top:1rem">
+    <table>
+      <caption>Cada fila es una prueba concreta que pueden hacer en la próxima tanda.</caption>
+      <thead><tr><th>Ajuste</th><th>Cómo hacerlo</th><th>Por qué cambia la percepción</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Altura antes que ancho</strong></td><td>Molde individual de pared alta y masa un poco más ajustada, para que el rollo suba en lugar de expandirse.</td><td>Un rollo alto se lee "de pastelería"; uno plano y ancho se lee "casero". Es el cambio más grande de todos.</td></tr>
+        <tr><td><strong>2. Espiral a la vista</strong></td><td>Terminar el enrollado con la punta hacia arriba y al centro, y no aplastar al colocar en el molde.</td><td>El espiral es la firma del producto y es lo que la gente fotografía. Si se pierde, el rollo se vuelve un bollo cualquiera.</td></tr>
+        <tr><td><strong>3. Glaseado a hilo, no ahogado</strong></td><td>Manga o cuchara, en líneas paralelas o en zigzag, cubriendo unas tres cuartas partes.</td><td>Cubrir todo esconde el producto y lee "producción en masa". Dejar ver la miga dorada lee "hecho a mano".</td></tr>
+        <tr><td><strong>4. Contraste de color</strong></td><td>Glaseado claro sobre miga dorada, más un acabado oscuro encima (cacao, pistacho, caramelo).</td><td>Es lo que hace que la foto se distinga en una pantalla pequeña. Sin contraste, el rollo desaparece.</td></tr>
+        <tr><td><strong>5. Peso exacto por rollo</strong></td><td>Pesar la porción de masa siempre igual (por ejemplo 100 g) con una balanza de cocina.</td><td>Que todos los rollos de la caja se vean idénticos es <em>la</em> señal de profesionalismo. La irregularidad es lo primero que delata a un aficionado.</td></tr>
+        <tr><td><strong>6. Colocado, no espolvoreado</strong></td><td>Poner el acabado en un punto o una franja: tres piezas de pistacho, una línea de crumble.</td><td>Lo colocado se ve intencional; lo espolvoreado por encima se ve accidental.</td></tr>
+        <tr><td><strong>7. Brillo recién salido</strong></td><td>Pincelar mantequilla derretida o almíbar apenas sale del horno, antes del glaseado.</td><td>El brillo se lee como frescura y humedad. Lo opaco se lee como seco, aunque no lo esté.</td></tr>
+        <tr><td><strong>8. Textura crocante encima</strong></td><td>Crumble, nuez tostada o praliné sobre el glaseado.</td><td>Rompe la superficie lisa y da sensación de capas y trabajo. También mejora el bocado.</td></tr>
+        <tr><td><strong>9. Diseñar el corte</strong></td><td>Distribuir el relleno para que al partir por la mitad se vean capas limpias y definidas.</td><td>La foto del rollo abierto es la que más se comparte. Si por dentro se ve uniforme, no hay foto.</td></tr>
+        <tr><td><strong>10. Bordes limpios</strong></td><td>Limpiar el borde del molde y la base antes de empacar. Un pincel y un paño.</td><td>Las manchas fuera del producto son la diferencia visual entre una pastelería y una cocina.</td></tr>
+        <tr><td><strong>11. Un gesto repetido</strong></td><td>El mismo trazo decorativo en todos los sabores: tres hilos diagonales, un punto central, una espiral de glaseado.</td><td>Convierte el acabado en firma reconocible. Al tercer mes la gente identifica el rollo sin ver la marca.</td></tr>
+        <tr><td><strong>12. Temperatura de entrega</strong></td><td>Definir la ventana en que se entrega tibio, e incluir la instrucción de recalentado (15 s en microondas o 4 min en horno).</td><td>Tibio brilla, se estira y huele. Frío se ve opaco. Están vendiendo el momento, no solo el rollo.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:2.4rem">La ficha técnica (media hoja que vale oro)</h3>
+  <p class="small muted" style="margin-top:.5rem; max-width:68ch">Escriban en un papel: gramos de masa por rollo, gramos de relleno, gramos de cobertura, temperatura y tiempo de horno, tiempo de leudado, rendimiento por tanda y vida útil en horas. Sin esto no se puede costear (paso 06), no se puede delegar y no se puede repetir un buen resultado.</p>
+
+  <div class="lock" style="margin-top:1.4rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">No elijan envase hasta tener <strong>tres tandas seguidas idénticas</strong> y la medida final del rollo
+      (alto y diámetro) escrita. Una caja comprada para un rollo que después crece un centímetro es una caja perdida.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-5">
+  <div class="stephead"><span class="n">05</span><h2>Envase: la mitad de la percepción de calidad</h2></div>
+  <span class="needs">Necesita del paso 04: medida final del rollo · del paso 03: logo y color</span>
+
+  <div class="prose stack">
+    <p>El cliente ve el envase antes que el producto, y lo ve durante todo el trayecto a casa. En repostería premium
+      el envase no es "lo que protege": es el 50% de lo que están vendiendo. También es, junto con el trabajo,
+      el costo que más gente olvida meter en el precio.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:1.6rem">
+    <table>
+      <caption>Opciones reales de envase, evaluadas para un rollo con glaseado.</caption>
+      <thead><tr><th>Opción</th><th>Costo</th><th>Cómo se percibe</th><th>Cuidado</th><th>Veredicto</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Molde de papel horneable</strong><br><span class="xsmall">se hornea y se entrega dentro del mismo molde</span></td>
+          <td>Muy bajo</td><td>Profesional. Sostiene la altura y da un borde limpio y repetido.</td>
+          <td>Buscar el diámetro exacto del molde metálico que ya usan.</td>
+          <td><span class="pill si">Siempre, dentro de la caja</span></td>
+        </tr>
+        <tr>
+          <td><strong>Caja kraft con ventana</strong><br><span class="xsmall">individual o de dos</span></td>
+          <td>Medio</td><td>Artesanal-premium. Se ve el producto, que es la mitad de la venta.</td>
+          <td>El glaseado se pega a la ventana si el rollo va tibio y sin molde.</td>
+          <td><span class="pill top">Elección principal ★</span></td>
+        </tr>
+        <tr>
+          <td><strong>Caja rígida con tapa</strong><br><span class="xsmall">4 o 6 unidades</span></td>
+          <td>Alto</td><td>La más premium. Convierte el producto en regalo y permite subir el precio.</td>
+          <td>Pedido mínimo alto de imprenta. Inmoviliza dinero.</td>
+          <td><span class="pill si">Solo para la caja regalo</span></td>
+        </tr>
+        <tr>
+          <td><strong>Faja de papel impresa</strong><br><span class="xsmall">"sleeve" que abraza una caja lisa</span></td>
+          <td>Muy bajo</td><td>Truco del oficio: caja neutra barata + faja impresa = se ve mandada a hacer.</td>
+          <td>Hay que ajustar bien la medida o queda floja y se ve descuidada.</td>
+          <td><span class="pill top">El mejor costo/beneficio ★</span></td>
+        </tr>
+        <tr>
+          <td><strong>Clamshell plástico (PET)</strong></td>
+          <td>Bajo</td><td>Se ve todo el producto, pero lee "supermercado" y anula la percepción premium.</td>
+          <td>Se empaña con el producto tibio y arruina la foto.</td>
+          <td><span class="pill no">Evitar</span></td>
+        </tr>
+        <tr>
+          <td><strong>Bolsa kraft con base</strong></td>
+          <td>Muy bajo</td><td>Casual y correcto para pan, insuficiente para un rollo glaseado.</td>
+          <td>Aplasta la cobertura. El producto llega distinto al que compraron.</td>
+          <td><span class="pill no">Solo como bolsa exterior</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.6rem">
+    <div class="card stack-sm">
+      <h4>Las cinco reglas del envase</h4>
+      <ul class="checks" style="margin-top:.4rem">
+        <li><strong>Que se vea el producto</strong>, por ventana o al abrir. Vender a ciegas obliga a bajar el precio.</li>
+        <li><strong>Que no toque la cobertura.</strong> Altura interior mayor que la del rollo con glaseado.</li>
+        <li><strong>Que aguante 30 minutos de viaje</strong> sin que el rollo se voltee.</li>
+        <li><strong>Que tenga una superficie lisa</strong> donde pegar el sello, siempre en el mismo lugar.</li>
+        <li><strong>Que se vea bien en una foto</strong> sobre una mesa. Es publicidad gratis en manos del cliente.</li>
+      </ul>
+    </div>
+    <div class="card stack-sm">
+      <h4>El ritual de apertura (cuatro piezas baratas)</h4>
+      <ol class="steps" style="margin-top:.4rem">
+        <li><strong>Sello</strong> que cierra la caja: obliga a romperlo, y eso es un pequeño momento.</li>
+        <li><strong>Papel encerado</strong> del color de la marca, envolviendo el rollo.</li>
+        <li><strong>Tarjeta pequeña</strong> con el nombre del sabor de la semana y la instrucción de recalentado.</li>
+        <li><strong>Una frase escrita</strong> siempre igual en el interior de la tapa. Una sola, no un párrafo.</li>
+      </ol>
+      <p class="xsmall" style="margin-top:.5rem">Costo total de las cuatro: céntimos por caja. Efecto sobre la percepción: enorme.</p>
+    </div>
+  </div>
+
+  <div class="lock" style="margin-top:1.6rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">Anoten el <strong>costo por unidad de todo lo que toca el producto</strong> —molde, caja, faja, sello, papel,
+      tarjeta y bolsa— antes de pasar al paso 06. Ese número entra en la calculadora. Sin él, cualquier precio que fijen es un invento.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-6">
+  <div class="stephead"><span class="n">06</span><h2>Costos y precio: la calculadora</h2></div>
+  <span class="needs">Necesita del paso 04: la ficha técnica · del paso 05: el costo del envase</span>
+
+  <div class="prose stack">
+    <p>Casi todos los emprendimientos de repostería quiebran por lo mismo: le ponen precio al rollo sumando
+      los ingredientes y multiplicando por dos. Ese cálculo <strong>ignora el envase, el gas, la luz, lo que se
+      pierde y —sobre todo— su propio trabajo</strong>. El resultado es un negocio que factura y no deja nada.</p>
+    <p>Cambien los números de abajo por los suyos. La tabla se recalcula sola y guarda lo que escriban en este navegador.</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.6rem">
+    <div class="card stack-sm">
+      <h4>Margen, en una línea</h4>
+      <p class="small">El <strong>margen</strong> se mide sobre el <em>precio de venta</em>, no sobre el costo.
+        Si un rollo cuesta 2 y lo venden a 5, el margen es 60% ((5−2)/5). Fórmula para despejar el precio:</p>
+      <p style="font-family:'IBM Plex Mono',monospace; font-size:.9rem; margin-top:.5rem">precio = costo ÷ (1 − margen)</p>
+    </div>
+    <div class="card stack-sm">
+      <h4>Referencias del oficio</h4>
+      <ul class="checks" style="margin-top:.4rem">
+        <li>Margen bruto sano en repostería artesanal: <strong>60% a 70%</strong>.</li>
+        <li>Si su precio no llega a <strong>3 veces el costo de materia prima</strong>, revisen la receta o el tamaño.</li>
+        <li>Págense la hora. Un negocio que solo funciona con su trabajo gratis no es un negocio.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="calc" id="calc">
+
+    <div class="calcblock">
+      <header><h4>Ajustes generales</h4><button class="btn ghost" type="button" id="reset">Restablecer ejemplo</button></header>
+      <div class="calcbody">
+        <div class="fieldgrid">
+          <div class="field"><label for="moneda">Símbolo de moneda</label><input type="text" id="moneda" value="$" maxlength="4" style="text-align:center"></div>
+          <div class="field"><label for="rollos">Rollos por tanda</label><input type="number" id="rollos" min="1" step="1" value="12"></div>
+          <div class="field"><label for="merma">Merma / rotos (%)</label><input type="number" id="merma" min="0" max="50" step="0.5" value="5"><span class="hint">Lo que no se puede vender.</span></div>
+          <div class="field"><label for="precio">Precio de venta que quieren probar</label><input type="number" id="precio" min="0" step="0.1" value="6.5"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calcblock">
+      <header><h4>1 · Ingredientes de una tanda</h4><button class="btn mini" type="button" id="addIng">+ Agregar ingrediente</button></header>
+      <div class="calcbody">
+        <div class="tablewrap" style="border:0; background:transparent">
+          <table class="ctable">
+            <thead><tr>
+              <th>Ingrediente</th><th>Precio del paquete</th><th>Contenido del paquete</th><th>Usado en la tanda</th><th>Costo</th><th></th>
+            </tr></thead>
+            <tbody id="ingBody"></tbody>
+            <tfoot><tr>
+              <td colspan="4" style="text-align:right; padding-top:.7rem"><strong>Total ingredientes por tanda</strong></td>
+              <td class="out" id="totIng" style="padding-top:.7rem"><strong>—</strong></td><td></td>
+            </tr></tfoot>
+          </table>
+        </div>
+        <p class="xsmall" style="margin-top:.7rem">Usen la misma unidad en "contenido" y "usado" (gramos con gramos, mililitros con mililitros, unidades con unidades).</p>
+      </div>
+    </div>
+
+    <div class="calcblock">
+      <header><h4>2 · Otros costos de la tanda</h4><span class="xsmall">Total: <span class="out" id="totOtros" style="font-family:'IBM Plex Mono',monospace">—</span></span></header>
+      <div class="calcbody">
+        <div class="fieldgrid">
+          <div class="field"><label for="gas">Gas y luz de la tanda</label><input type="number" id="gas" min="0" step="0.1" value="1.2"></div>
+          <div class="field"><label for="horas">Horas de trabajo</label><input type="number" id="horas" min="0" step="0.25" value="2.5"><span class="hint">Amasar, hornear, decorar, empacar y limpiar.</span></div>
+          <div class="field"><label for="valorHora">Cuánto vale su hora</label><input type="number" id="valorHora" min="0" step="0.1" value="4"><span class="hint">Lo que les pagarían por ese trabajo.</span></div>
+          <div class="field"><label for="transporte">Transporte / entregas</label><input type="number" id="transporte" min="0" step="0.1" value="2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calcblock">
+      <header><h4>3 · Costos por rollo</h4><span class="xsmall">Total: <span class="out" id="totUnit" style="font-family:'IBM Plex Mono',monospace">—</span></span></header>
+      <div class="calcbody">
+        <div class="fieldgrid">
+          <div class="field"><label for="envase">Envase (molde + caja + faja)</label><input type="number" id="envase" min="0" step="0.01" value="0.45"></div>
+          <div class="field"><label for="sello">Sello, tarjeta y papel</label><input type="number" id="sello" min="0" step="0.01" value="0.08"></div>
+          <div class="field"><label for="comision">Comisión de app o pasarela</label><input type="number" id="comision" min="0" step="0.01" value="0"><span class="hint">Solo si venden por plataforma.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calcblock">
+      <header><h4>4 · Costos fijos del mes</h4><span class="xsmall">Por rollo: <span class="out" id="fijoRollo" style="font-family:'IBM Plex Mono',monospace">—</span></span></header>
+      <div class="calcbody">
+        <div class="fieldgrid">
+          <div class="field"><label for="fijos">Gastos fijos mensuales</label><input type="number" id="fijos" min="0" step="1" value="60"><span class="hint">Internet, publicidad, moldes, utensilios, permisos.</span></div>
+          <div class="field"><label for="ventaMes">Rollos que esperan vender al mes</label><input type="number" id="ventaMes" min="1" step="1" value="300"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calcblock">
+      <header><h4>Resultado</h4><span class="xsmall">Se actualiza mientras escriben</span></header>
+      <div class="tiles" aria-live="polite">
+        <div class="tile"><div class="lab">Costo real por rollo</div><div class="val" id="rCosto">—</div><div class="sub" id="rCostoSub">todo incluido</div></div>
+        <div class="tile"><div class="lab">Precio sugerido</div><div class="val" id="rSug">—</div><div class="sub">con 65% de margen, redondeado</div></div>
+        <div class="tile"><div class="lab">Su margen</div><div class="val" id="rMargen">—</div><div class="sub" id="rMargenSub">al precio que pusieron</div></div>
+        <div class="tile"><div class="lab">Ganancia por tanda</div><div class="val" id="rTanda">—</div><div class="sub" id="rTandaSub">—</div></div>
+        <div class="tile"><div class="lab">Punto de equilibrio</div><div class="val" id="rEquilibrio">—</div><div class="sub">rollos al mes para no perder</div></div>
+      </div>
+      <div class="calcbody" style="border-top:1px solid var(--line)">
+        <h4 style="font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2)">A dónde va cada rollo que venden</h4>
+        <p class="xsmall" style="margin-top:.35rem; margin-bottom:.9rem">Reparto de un rollo vendido al precio que pusieron arriba.</p>
+        <div class="bars" id="bars"></div>
+        <p class="xsmall" id="barNote" style="margin-top:.8rem"></p>
+      </div>
+      <div class="calcbody" style="border-top:1px solid var(--line)">
+        <h4 style="font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2)">Escalera de precios</h4>
+        <div class="tablewrap" style="border:0; background:transparent; margin-top:.7rem">
+          <table class="ctable priceladder" style="min-width:420px">
+            <thead><tr><th>Margen</th><th>Precio necesario</th><th>Precio redondeado</th><th>Ganancia por rollo</th></tr></thead>
+            <tbody id="ladder"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.6rem; max-width:74ch">
+    <p class="small"><strong>Cómo leer el resultado.</strong> Si el precio sugerido les parece alto para su ciudad, hay tres
+      salidas honestas y una tramposa. Honestas: bajar el costo del envase, subir el rendimiento por tanda (hornear más rollos
+      en el mismo tiempo) o subir el valor percibido para que el precio deje de parecer alto. La tramposa es no pagarse
+      las horas — y esa es la que cierra negocios.</p>
+  </div>
+
+  <div class="lock" style="margin-top:1.4rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">No inviten a nadie a probar hasta tener el precio decidido. La primera vez que alguien prueba su rollo,
+      tiene que existir ya un precio: si prueban gratis y sin precio, la referencia que les queda en la cabeza es cero.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-7">
+  <div class="stephead"><span class="n">07</span><h2>¿Invitar a los amigos? Sí, pero no regalando</h2></div>
+  <span class="needs">Necesita del paso 06: el precio · del paso 05: el envase real</span>
+
+  <div class="prose stack">
+    <p>La idea es buena y el instinto es correcto: necesitan que la gente pruebe. Pero <strong>regalar postres tiene
+      dos costos ocultos</strong>. El primero: lo gratis no tiene precio de referencia, así que cuando después
+      cobren, sus conocidos sentirán que subieron el precio desde cero. El segundo: los amigos mienten. Todos dicen
+      "está buenísimo", y ustedes se quedan sin la única información que buscaban.</p>
+    <p>La solución no es dejar de invitarlos: es <strong>convertir el regalo en un intercambio</strong>. Ustedes dan
+      producto; ellos dan opinión honesta, una foto y permiso para usar su testimonio. Eso deja de ser un favor
+      y pasa a ser una cata de lanzamiento — que además suena a marca profesional.</p>
+  </div>
+
+  <h3 style="margin-top:2rem">Tres formatos, en este orden</h3>
+  <div class="tablewrap" style="margin-top:1rem">
+    <table>
+      <thead><tr><th>Formato</th><th>Cómo funciona</th><th>Qué obtienen</th><th>Cuándo</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Cata de lanzamiento</strong><br><span class="xsmall">10 a 15 personas</span></td>
+          <td>Los invitan formalmente ("estamos lanzando Fanny's y necesitamos tu paladar"). Cada uno recibe dos rollos
+            de sabores distintos <strong>en el envase real</strong>, con la ficha de cata. Se comprometen a llenarla.</td>
+          <td>Qué sabor gana, qué falla y, sobre todo, cuánto pagarían.</td>
+          <td>Semana 1</td>
+        </tr>
+        <tr>
+          <td><strong>2. Precio fundador</strong><br><span class="xsmall">preventa de un lote limitado</span></td>
+          <td>Anuncian 30 rollos a un precio de lanzamiento (20-30% menos que el precio final), por una sola semana,
+            con fecha de entrega fija. Se paga por adelantado.</td>
+          <td>La prueba que ninguna cata da: <strong>que la gente paga</strong>. Y el dinero para la siguiente tanda.</td>
+          <td>Semana 2</td>
+        </tr>
+        <tr>
+          <td><strong>3. Caja de dos, a precio normal</strong></td>
+          <td>Se acabó el descuento. Quien quiera probar, compra la caja de dos, que ya tiene margen sano.</td>
+          <td>El precio real validado y el fin del "regálame uno".</td>
+          <td>Semana 3 en adelante</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.6rem">
+    <div class="card stack-sm">
+      <h4>La ficha de cata (una tarjeta, 60 segundos)</h4>
+      <p class="xsmall">Anónima, del 1 al 5, y entregada junto con los rollos.</p>
+      <ul class="checks" style="margin-top:.4rem">
+        <li>Aspecto al abrir la caja</li>
+        <li>Aroma</li>
+        <li>Textura de la masa</li>
+        <li>Dulzor (1 = poco, 5 = demasiado)</li>
+        <li>Relleno: ¿se siente y se ve?</li>
+        <li>¿Te comerías otro ahora mismo?</li>
+      </ul>
+      <p class="small" style="margin-top:.6rem"><strong>Y las dos preguntas que de verdad importan:</strong></p>
+      <ol class="steps" style="margin-top:.3rem">
+        <li>"¿Cuánto pagarías por este rollo?" (respuesta abierta, sin sugerir precio)</li>
+        <li>"¿A quién se lo regalarías?" — quien no puede nombrar a nadie, no volverá a comprar.</li>
+      </ol>
+    </div>
+    <div class="card stack-sm">
+      <h4>Cómo se pide, para que funcione</h4>
+      <ol class="steps" style="margin-top:.4rem">
+        <li><strong>No digan "te regalo unos rollos".</strong> Digan "te invito a la cata de lanzamiento de Fanny's, necesito tu opinión sincera". Cambia todo lo que la persona percibe.</li>
+        <li><strong>Entreguen en el envase definitivo</strong>, con sello y tarjeta. Están probando la experiencia completa, no la receta.</li>
+        <li><strong>Pidan la foto explícitamente:</strong> "¿nos mandas una foto cuando lo abras? La necesitamos para el lanzamiento".</li>
+        <li><strong>Pidan permiso para citar</strong> su comentario con nombre. Un testimonio con nombre real vale diez sin nombre.</li>
+        <li><strong>Cierren con la venta:</strong> "el precio va a ser X, y la primera tanda sale el sábado; ¿te aparto uno?".</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.4rem; max-width:74ch">
+    <p class="small"><strong>Si no quieren regalar nada:</strong> la alternativa es la <strong>degustación en punto ajeno</strong>.
+      Acuerden con una cafetería de barrio que no haga repostería: ustedes ponen rollos cortados en cuartos para sus clientes
+      un sábado, la cafetería pone el público. Prueban con desconocidos —que sí dicen la verdad—, y de paso nace un canal de venta.</p>
+  </div>
+
+  <div class="lock" style="margin-top:1.4rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">No abran el Instagram al público hasta tener <strong>al menos 8 fichas de cata llenas,
+      5 fotos usables y 3 testimonios con nombre</strong>. Una cuenta que abre con contenido y pruebas nace creíble;
+      una que abre vacía pidiendo pedidos, nace pidiendo favores.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-8">
+  <div class="stephead"><span class="n">08</span><h2>Lanzamiento: tandas limitadas, no catálogo infinito</h2></div>
+  <span class="needs">Necesita del paso 07: fotos, testimonios y los primeros contactos</span>
+
+  <div class="prose stack">
+    <p>El modelo que mejor funciona para un producto horneado, hecho por dos personas, y que además construye
+      percepción premium, es el de <strong>tandas anunciadas</strong>: se hornea un número fijo de rollos por semana,
+      se anuncia cuándo abren los pedidos, y cuando se acaban, se acaban. No es un truco de escasez inventado:
+      es literalmente su capacidad. Y comunica exactamente lo contrario del postre industrial.</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.6rem">
+    <div class="card stack-sm">
+      <h4>La semana tipo</h4>
+      <ol class="steps" style="margin-top:.4rem">
+        <li><strong>Lunes:</strong> anuncian el sabor rotativo de la semana. Una foto, el nombre del sabor, la fecha.</li>
+        <li><strong>Miércoles:</strong> abren pedidos por WhatsApp. Número fijo de rollos.</li>
+        <li><strong>Viernes:</strong> contenido de proceso (el amasado, el corte, el glaseado en cámara lenta).</li>
+        <li><strong>Sábado:</strong> hornean y entregan. Publican el "se agotó" — que vale más que cualquier anuncio.</li>
+        <li><strong>Domingo:</strong> republican las fotos y los mensajes de los clientes.</li>
+      </ol>
+    </div>
+    <div class="card stack-sm">
+      <h4>Los nueve primeros posts</h4>
+      <ol class="steps" style="margin-top:.4rem">
+        <li>El rollo entero, foto limpia, fondo neutro.</li>
+        <li>El corte por la mitad, capas visibles.</li>
+        <li>Quiénes son ustedes (con cara: la marca es de personas).</li>
+        <li>La promesa, escrita como frase sobre fondo del color de la marca.</li>
+        <li>El proceso de enrollado, en video.</li>
+        <li>El envase abriéndose.</li>
+        <li>Los tres sabores fijos, uno al lado del otro.</li>
+        <li>Un testimonio de la cata, con nombre.</li>
+        <li>Cómo pedir: paso a paso, con el precio visible.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.4rem; max-width:76ch">
+    <h4>El mensaje de venta por WhatsApp (cinco líneas, siempre igual)</h4>
+    <p class="small" style="margin-top:.7rem; font-family:'IBM Plex Mono',monospace; line-height:1.8; background:var(--surface-2); padding:.9rem 1rem; border-radius:2px">
+      Hola [nombre], esta semana horneamos <strong>[sabor]</strong>.<br>
+      Van 30 rollos y ya hay 12 apartados.<br>
+      Se entregan el sábado entre 4 y 7 pm, recién horneados.<br>
+      Rollo individual [precio] · caja de cuatro [precio].<br>
+      ¿Te aparto?
+    </p>
+    <p class="xsmall" style="margin-top:.7rem">Fíjense en lo que hace: nombra el producto, da escasez real, da fecha exacta,
+      da precio sin que lo pidan y termina con una pregunta cerrada. Nunca dice "¿te interesa?".</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.4rem">
+    <div class="card stack-sm">
+      <h4>Reglas que protegen el precio</h4>
+      <ul class="checks" style="margin-top:.4rem">
+        <li><strong>Nunca descuentos generales.</strong> Rompen la percepción premium en una semana y no se recuperan.</li>
+        <li>Si hay que dar algo, den <strong>producto</strong> (el quinto rollo de regalo), no descuento.</li>
+        <li><strong>Precio siempre visible.</strong> Esconderlo lee "es caro" o "improviso".</li>
+        <li><strong>Nunca vendan lo que sobró del día anterior</strong> como fresco. Una vez que se sabe, se acabó la promesa.</li>
+      </ul>
+    </div>
+    <div class="card stack-sm">
+      <h4>Los tres números a mirar cada semana</h4>
+      <ul class="checks" style="margin-top:.4rem">
+        <li><strong>Rollos vendidos</strong> por tanda (¿crece?).</li>
+        <li><strong>Clientes que repiten</strong>: si menos de 3 de cada 10 vuelven, el problema es el producto, no la promoción.</li>
+        <li><strong>Ganancia real</strong> de la tanda, sacada de la calculadora del paso 06. Facturar no es ganar.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lock" style="margin-top:1.6rem; max-width:74ch">
+    <span class="k">Candado</span>
+    <p class="small">No lancen un segundo producto hasta <strong>agotar cuatro tandas seguidas</strong> del rollo.
+      Si el producto estrella todavía no se vende solo, sumar otro no multiplica las ventas: multiplica el desorden.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="paso-9">
+  <div class="stephead"><span class="n">09</span><h2>Ampliar el catálogo, uno por vez</h2></div>
+  <span class="needs">Necesita del paso 08: cuatro tandas agotadas y clientes que repiten</span>
+
+  <div class="prose stack">
+    <p>Tienen cuatro productos más en la cabeza. Es una ventaja, pero solo si los lanzan en el orden correcto.
+      El criterio no es "cuál nos gusta más", sino: <strong>¿usa el mismo horno y las mismas manos? ¿le habla al mismo
+      cliente? ¿sostiene la misma promesa? ¿deja el mismo margen o más?</strong> Si alguna respuesta es no, va al final de la fila.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:1.6rem">
+    <table>
+      <caption>Orden sugerido para el resto del catálogo, según encaje con el rollo.</caption>
+      <thead><tr><th>Producto</th><th>Qué aporta</th><th>Qué complica</th><th>Cuándo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Galletas estilo Nueva York</strong></td><td>Mismo horno, misma masa base, misma promesa de "recién horneado". Se ve premium con cero envase adicional y aguanta el viaje.</td><td>Casi nada. Es el hermano natural del rollo.</td><td><span class="pill si">Producto 2</span></td></tr>
+        <tr><td><strong>Crumble</strong></td><td>Aprovecha el mismo crumble que ya usan de acabado. Sube el ticket promedio y funciona como postre para compartir.</td><td>Necesita envase resistente al calor y se come con cuchara: menos portable.</td><td><span class="pill si">Producto 3</span></td></tr>
+        <tr><td><strong>Vasos de yogurt con toppings</strong></td><td>Amplía el horario (desayuno) y aprovecha los mismos toppings.</td><td>Cadena de frío, vida útil corta y otro tipo de envase. Cambia la operación entera.</td><td><span class="pill no">Producto 4</span></td></tr>
+        <tr><td><strong>Conos de pizza</strong></td><td>Producto salado, muy fotogénico, buen margen.</td><td>Rompe la promesa: una marca de repostería que vende pizza confunde. Si lo hacen, considérenlo <strong>otra marca</strong>.</td><td><span class="pill no">Al final, o aparte</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note" style="margin-top:1.4rem; max-width:74ch">
+    <p class="small"><strong>Ritmo:</strong> un producto nuevo cada 8 a 12 semanas, y cada uno pasa por los pasos 04, 05 y 06
+      completos antes de venderse. El sabor rotativo semanal ya les da novedad constante: no necesitan productos nuevos
+      para tener algo que contar.</p>
+  </div>
+  <p style="margin-top:1.4rem"><a class="backmap" href="#mapa">← volver al mapa</a></p>
+</section>
+
+<section id="cierre">
+  <p class="eyebrow">Para cerrar</p>
+  <h2 style="margin-top:.7rem">Lo que rompe la percepción premium</h2>
+  <p class="lede" style="margin-top:1rem; max-width:62ch">Construir la percepción toma meses; romperla toma un mensaje mal escrito. Estas son las ocho más comunes.</p>
+
+  <div class="grid-2" style="margin-top:1.6rem">
+    <div class="card stack-sm">
+      <ul class="checks">
+        <li>Fotos con luz amarilla de cocina y fondo desordenado.</li>
+        <li>Descuentos frecuentes o cupones. La marca que rebaja, se rebaja.</li>
+        <li>Responder mensajes con faltas de ortografía y muchos signos de exclamación.</li>
+        <li>Que dos rollos de la misma caja se vean distintos.</li>
+      </ul>
+    </div>
+    <div class="card stack-sm">
+      <ul class="checks">
+        <li>Prometer un horario de entrega y llegar tarde.</li>
+        <li>Cambiar el logo, el color o el estilo cada mes.</li>
+        <li>Copiar la publicación de otra marca de postres.</li>
+        <li>Vender de todo un poco. La marca que hace de todo no es la mejor en nada.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="final" style="margin-top:2rem; max-width:78ch">
+    <h3>Los primeros catorce días</h3>
+    <ol class="steps" style="margin-top:1rem">
+      <li><strong>Días 1-2.</strong> Los dos, sentados, llenan la hoja del ADN. Salen con una promesa de una frase.</li>
+      <li><strong>Días 3-4.</strong> Deciden el nombre y hacen las seis verificaciones. Reservan Instagram y dominio.</li>
+      <li><strong>Días 5-7.</strong> Logo, sello, un color y dos tipografías. Nada más.</li>
+      <li><strong>Días 8-10.</strong> Tres tandas iguales, con los doce ajustes de aspecto aplicados. Escriben la ficha técnica.</li>
+      <li><strong>Día 11.</strong> Cotizan envases y anotan el costo por unidad.</li>
+      <li><strong>Día 12.</strong> Llenan la calculadora con sus números reales y fijan el precio.</li>
+      <li><strong>Días 13-14.</strong> Invitan a la cata de lanzamiento y recogen fichas, fotos y testimonios.</li>
+    </ol>
+    <p class="small" style="margin-top:1.1rem">Al día quince tienen algo que la mayoría de los emprendimientos de postres
+      no tiene después de un año: una promesa escrita, un producto estandarizado, un envase elegido, un precio con margen
+      y pruebas de que a la gente le gusta. Eso es una empresa, no un pasatiempo — y es exactamente lo que se percibe desde afuera.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Ruta Fanny's · Estrategia de marca, producto, envase y precio.<br>
+  Los números de la calculadora son un ejemplo: reemplácenlos por los suyos. Lo que escriban se guarda solo en este navegador.</p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "fannys-costos-v2";
+
+  var DEFAULT_ING = [
+    { n: "Harina",                 p: 2.40, c: 1000, u: 600 },
+    { n: "Mantequilla",            p: 6.00, c: 500,  u: 180 },
+    { n: "Azúcar",                 p: 1.20, c: 1000, u: 200 },
+    { n: "Canela",                 p: 3.50, c: 100,  u: 25  },
+    { n: "Levadura",               p: 2.00, c: 100,  u: 12  },
+    { n: "Leche",                  p: 1.30, c: 1000, u: 250 },
+    { n: "Huevos",                 p: 3.60, c: 12,   u: 2   },
+    { n: "Queso crema (glaseado)", p: 4.50, c: 500,  u: 200 },
+    { n: "Azúcar glas",            p: 1.80, c: 500,  u: 120 },
+    { n: "Relleno del sabor",      p: 7.00, c: 500,  u: 150 }
+  ];
+  var DEFAULT_FIELDS = {
+    moneda: "$", rollos: 12, merma: 5, precio: 6.5,
+    gas: 1.2, horas: 2.5, valorHora: 4, transporte: 2,
+    envase: 0.45, sello: 0.08, comision: 0,
+    fijos: 60, ventaMes: 300
+  };
+
+  var ing = DEFAULT_ING.map(function (r) { return { n: r.n, p: r.p, c: r.c, u: r.u }; });
+  var body = document.getElementById("ingBody");
+  var calc = document.getElementById("calc");
+
+  function el(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat(el(id).value); return isFinite(v) ? v : 0; }
+  function sym() { return (el("moneda").value || "$").trim(); }
+
+  function fmt(v) {
+    if (!isFinite(v)) v = 0;
+    var d = Math.abs(v) >= 1000 ? 0 : 2;
+    return sym() + " " + v.toLocaleString("es-419", { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  function redondear(v) {
+    var step = v >= 5000 ? 500 : v >= 1000 ? 100 : v >= 100 ? 10 : v >= 20 ? 1 : v >= 5 ? 0.5 : 0.25;
+    return Math.ceil(v / step) * step;
+  }
+
+  function rowHTML(r, i) {
+    return '<tr data-i="' + i + '">' +
+      '<td><input type="text" class="f-n" value="' + String(r.n).replace(/"/g, "&quot;") + '" aria-label="Nombre del ingrediente"></td>' +
+      '<td><input type="number" class="f-p" step="any" min="0" value="' + r.p + '" aria-label="Precio del paquete"></td>' +
+      '<td><input type="number" class="f-c" step="any" min="0" value="' + r.c + '" aria-label="Contenido del paquete"></td>' +
+      '<td><input type="number" class="f-u" step="any" min="0" value="' + r.u + '" aria-label="Cantidad usada en la tanda"></td>' +
+      '<td class="out cost">—</td>' +
+      '<td><button type="button" class="btn mini ghost del" aria-label="Eliminar ingrediente">×</button></td>' +
+      '</tr>';
+  }
+  function renderRows() {
+    body.innerHTML = ing.map(rowHTML).join("");
+  }
+
+  function readRows() {
+    var rows = body.querySelectorAll("tr");
+    ing = [];
+    for (var i = 0; i < rows.length; i++) {
+      var q = function (s) { return rows[i].querySelector(s); };
+      ing.push({
+        n: q(".f-n").value,
+        p: parseFloat(q(".f-p").value) || 0,
+        c: parseFloat(q(".f-c").value) || 0,
+        u: parseFloat(q(".f-u").value) || 0
+      });
+    }
+    return rows;
+  }
+
+  function save() {
+    try {
+      var f = {};
+      Object.keys(DEFAULT_FIELDS).forEach(function (k) { f[k] = el(k).value; });
+      localStorage.setItem(KEY, JSON.stringify({ ing: ing, f: f }));
+    } catch (e) { /* almacenamiento no disponible */ }
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return;
+      var d = JSON.parse(raw);
+      if (d && Array.isArray(d.ing) && d.ing.length) ing = d.ing;
+      if (d && d.f) Object.keys(DEFAULT_FIELDS).forEach(function (k) {
+        if (d.f[k] !== undefined && el(k)) el(k).value = d.f[k];
+      });
+    } catch (e) { /* datos ilegibles: se usan los del ejemplo */ }
+  }
+
+  function bar(label, value, max, kind) {
+    var w = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
+    return '<div class="barrow">' +
+      '<span class="barlab">' + label + '</span>' +
+      '<span class="bartrack"><span class="barfill' + (kind ? " " + kind : "") + '" style="width:' + w.toFixed(1) + '%"></span></span>' +
+      '<span class="barval">' + fmt(value) + "</span></div>";
+  }
+
+  function compute() {
+    var rows = readRows();
+    var totIng = 0;
+    for (var i = 0; i < ing.length; i++) {
+      var r = ing[i];
+      var cost = r.c > 0 ? (r.p / r.c) * r.u : 0;
+      totIng += cost;
+      rows[i].querySelector(".cost").textContent = fmt(cost);
+    }
+
+    var rollos = Math.max(1, num("rollos"));
+    var merma = Math.min(90, Math.max(0, num("merma")));
+    var vend = Math.max(0.01, rollos * (1 - merma / 100));
+
+    var trabajo = num("horas") * num("valorHora");
+    var gasTrans = num("gas") + num("transporte");
+    var totOtros = trabajo + gasTrans;
+    var totUnit = num("envase") + num("sello") + num("comision");
+    var fijoRollo = num("ventaMes") > 0 ? num("fijos") / num("ventaMes") : 0;
+
+    var cIng = totIng / vend, cTrab = trabajo / vend, cGas = gasTrans / vend;
+    var costoVar = cIng + cTrab + cGas + totUnit;
+    var costoTotal = costoVar + fijoRollo;
+
+    var precio = num("precio");
+    var utilidad = precio - costoTotal;
+    var margen = precio > 0 ? (utilidad / precio) * 100 : 0;
+
+    el("totIng").innerHTML = "<strong>" + fmt(totIng) + "</strong>";
+    el("totOtros").textContent = fmt(totOtros);
+    el("totUnit").textContent = fmt(totUnit);
+    el("fijoRollo").textContent = fmt(fijoRollo);
+
+    el("rCosto").textContent = fmt(costoTotal);
+    el("rCostoSub").textContent = "materia prima " + fmt(cIng) + " · trabajo " + fmt(cTrab);
+    el("rSug").textContent = fmt(redondear(costoTotal / 0.35));
+
+    var m = el("rMargen");
+    m.textContent = (precio > 0 ? margen.toFixed(0) : "0") + "%";
+    m.className = "val " + (margen >= 55 ? "good" : "bad");
+    el("rMargenSub").textContent = margen >= 65 ? "margen saludable"
+      : margen >= 55 ? "aceptable, pero sin colchón"
+      : margen > 0 ? "demasiado bajo para crecer"
+      : "están perdiendo dinero";
+
+    var porTanda = utilidad * vend;
+    var t = el("rTanda");
+    t.textContent = fmt(porTanda);
+    t.className = "val " + (porTanda > 0 ? "good" : "bad");
+    el("rTandaSub").textContent = "sobre " + vend.toFixed(1) + " rollos vendibles";
+
+    var contrib = precio - costoVar;
+    el("rEquilibrio").textContent = contrib > 0 ? Math.ceil(num("fijos") / contrib) : "—";
+
+    var max = Math.max(precio, costoTotal, 0.0001);
+    el("bars").innerHTML =
+      bar("Ingredientes", cIng, max) +
+      bar("Envase y sello", totUnit, max) +
+      bar("Su trabajo", cTrab, max) +
+      bar("Gas, luz, transporte", cGas, max) +
+      bar("Costos fijos", fijoRollo, max) +
+      bar(utilidad >= 0 ? "Ganancia" : "Pérdida", Math.abs(utilidad), max, utilidad >= 0 ? "good" : "bad");
+    el("barNote").textContent = utilidad >= 0
+      ? "De cada " + fmt(precio) + " que cobran, " + fmt(costoTotal) + " ya estaban gastados antes de vender."
+      : "El precio no cubre el costo: cada rollo vendido les cuesta " + fmt(-utilidad) + ".";
+
+    var ladder = "";
+    [50, 55, 60, 65, 70].forEach(function (mg) {
+      var p = costoTotal / (1 - mg / 100);
+      var pr = redondear(p);
+      var pick = Math.abs(mg - margen) < 2.5 ? ' class="pick"' : "";
+      ladder += "<tr" + pick + '><td>' + mg + '%</td><td class="out">' + fmt(p) +
+        '</td><td class="out"><strong>' + fmt(pr) + '</strong></td><td class="out">' + fmt(pr - costoTotal) + "</td></tr>";
+    });
+    el("ladder").innerHTML = ladder;
+
+    save();
+  }
+
+  calc.addEventListener("input", compute);
+  calc.addEventListener("click", function (e) {
+    var d = e.target.closest(".del");
+    if (d) {
+      if (ing.length <= 1) return;
+      var i = +d.closest("tr").dataset.i;
+      readRows(); ing.splice(i, 1); renderRows(); compute();
+    }
+  });
+  el("addIng").addEventListener("click", function () {
+    readRows(); ing.push({ n: "Nuevo ingrediente", p: 0, c: 0, u: 0 }); renderRows(); compute();
+  });
+  el("reset").addEventListener("click", function () {
+    ing = DEFAULT_ING.map(function (r) { return { n: r.n, p: r.p, c: r.c, u: r.u }; });
+    Object.keys(DEFAULT_FIELDS).forEach(function (k) { el(k).value = DEFAULT_FIELDS[k]; });
+    renderRows(); compute();
+  });
+
+  load();
+  renderRows();
+  compute();
+})();
+</script>
