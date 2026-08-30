@@ -1,0 +1,286 @@
+<title>Especímenes Casia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Archivo:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --lila:#7C5C8A; --lila-deep:#5C4166; --lila-soft:#EDE5EF;
+  --mantequilla:#F6F0C2; --tinta:#2E1F33; --papel:#FBF7EF; --papel-2:#F1E9D8;
+  --line:rgba(46,31,51,.16); --line-soft:rgba(46,31,51,.09);
+  --ink:var(--tinta); --ink-2:#5C4C61; --ink-3:#8A7A8D;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--papel); color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",Arial,sans-serif; font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:0 clamp(1rem,4vw,2.5rem)}
+h1,h2,h3{margin:0; text-wrap:balance}
+p{margin:0}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.72rem; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--lila-deep);
+}
+.muted{color:var(--ink-2)}
+.small{font-size:.92rem}
+.xsmall{font-size:.82rem; color:var(--ink-2)}
+strong{font-weight:600}
+a{color:var(--lila-deep)}
+
+section{padding-block:clamp(2.6rem,6vw,4.5rem); border-top:1px solid var(--line-soft)}
+section:first-of-type{border-top:0}
+
+/* hero */
+.hero{padding-block:clamp(3rem,8vw,5.5rem) clamp(2.2rem,5vw,3.5rem)}
+.hero h1{font-family:"Fraunces",Georgia,serif; font-weight:500; font-size:clamp(2.1rem,5.4vw,3.4rem); line-height:1.08; letter-spacing:-.01em}
+.hero .lede{margin-top:1.3rem; max-width:60ch; font-size:clamp(1.02rem,1.8vw,1.15rem); color:var(--ink-2)}
+.swatchrow{display:flex; gap:.5rem; margin-top:1.6rem}
+.sw{width:26px; height:26px; border-radius:50%; border:1px solid var(--line)}
+
+/* flower */
+.flower{display:inline-block; vertical-align:middle}
+
+/* option cards */
+.grid-3{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.2rem}
+.optcard{background:var(--papel-2); border:1px solid var(--line); border-radius:4px; overflow:hidden; display:flex; flex-direction:column}
+.optcard.pick{border-color:var(--lila-deep); box-shadow:0 0 0 1px var(--lila-deep)}
+.opthead{display:flex; justify-content:space-between; align-items:center; padding:.85rem 1.1rem; border-bottom:1px solid var(--line)}
+.opthead .tag{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.opthead .fam{font-size:.86rem; font-weight:600}
+.lockup{
+  background:var(--lila); padding:clamp(2.4rem,7vw,3.6rem) 1.2rem; display:flex; align-items:center; justify-content:center;
+  min-height:170px;
+}
+.lockup .word{color:var(--mantequilla); font-size:clamp(2.6rem,7vw,3.6rem); line-height:1; white-space:nowrap}
+.optbody{padding:1.1rem 1.2rem 1.3rem; display:flex; flex-direction:column; gap:.6rem; flex:1}
+.optbody p{font-size:.88rem; color:var(--ink-2); line-height:1.5}
+.optbody .pickline{font-size:.78rem; color:var(--lila-deep); font-weight:600}
+.pill{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.08em; text-transform:uppercase;
+  padding:.15rem .45rem; border-radius:2px; border:1px solid var(--lila-deep); color:var(--lila-deep); align-self:flex-start;
+}
+
+/* scale test */
+.scaletest{
+  display:flex; flex-wrap:wrap; gap:2.2rem; align-items:flex-end; justify-content:flex-start;
+  background:var(--papel-2); border:1px solid var(--line); border-radius:4px; padding:1.6rem;
+}
+.sealwrap{display:flex; flex-direction:column; align-items:center; gap:.6rem}
+.seal{
+  width:74px; height:74px; border-radius:50%; background:var(--mantequilla); border:1px solid var(--line);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.2rem;
+}
+.seal .word{color:var(--tinta); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase}
+.sealwrap .cap{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--ink-3); letter-spacing:.04em}
+
+/* box mockups */
+.boxrow{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.2rem}
+.boxcard{display:flex; flex-direction:column; align-items:center; gap:.7rem}
+.box{
+  width:100%; max-width:230px; aspect-ratio:4/3; background:var(--papel);
+  border:1px solid var(--line); border-radius:3px; position:relative; overflow:hidden;
+  box-shadow:0 1px 2px rgba(46,31,51,.08), 0 10px 22px -16px rgba(46,31,51,.35);
+}
+.faja{
+  position:absolute; left:0; right:0; top:38%; height:26%; background:var(--lila);
+  display:flex; align-items:center; justify-content:center;
+}
+.faja .word{color:var(--mantequilla); font-size:1.15rem; line-height:1}
+.boxseal{
+  position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%;
+  background:var(--mantequilla); border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+}
+.boxseal svg{width:14px; height:14px}
+.boxcard .cap{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
+
+/* recommendation */
+.rec{
+  background:var(--lila); color:var(--mantequilla); border-radius:4px; padding:clamp(1.6rem,4vw,2.4rem);
+  display:flex; flex-direction:column; gap:1rem;
+}
+.rec .eyebrow{color:var(--mantequilla); opacity:.75}
+.rec h2{font-family:"Fraunces",Georgia,serif; font-weight:500; font-size:clamp(1.6rem,3.4vw,2.1rem); color:var(--mantequilla)}
+.rec p{color:var(--mantequilla); opacity:.92; max-width:66ch; font-size:.98rem; line-height:1.6}
+.rec .why{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin-top:.4rem}
+.rec .why div{border-left:2px solid var(--mantequilla); padding-left:.8rem}
+.rec .why b{display:block; font-size:.88rem; margin-bottom:.15rem}
+.rec .why span{font-size:.82rem; opacity:.85}
+
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:4px; background:var(--papel-2)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.9rem}
+th,td{text-align:left; padding:.65rem .85rem; border-bottom:1px solid var(--line-soft); vertical-align:top}
+thead th{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); font-weight:600}
+tbody tr:last-child td{border-bottom:0}
+
+footer{padding:2.2rem 0 3.5rem; font-size:.82rem; color:var(--ink-3); border-top:1px solid var(--line-soft)}
+footer a{color:var(--lila-deep); text-decoration:underline}
+
+@media (max-width:640px){
+  .lockup{min-height:130px}
+}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">Casia · Identidad visual</p>
+  <h1 style="margin-top:.8rem">Tres formas de escribir el mismo nombre.</h1>
+  <p class="lede">Tres tratamientos tipográficos reales para el logotipo de Casia, sobre la paleta ya definida
+    (lila profundo, mantequilla, tinta berenjena, papel). Cada uno se muestra a tamaño de logo, a tamaño de sello
+    (2 cm, la prueba más dura) y aplicado a una caja, para comparar como se van a ver de verdad.</p>
+  <div class="swatchrow" aria-hidden="true">
+    <span class="sw" style="background:var(--lila)"></span>
+    <span class="sw" style="background:var(--mantequilla)"></span>
+    <span class="sw" style="background:var(--tinta)"></span>
+    <span class="sw" style="background:var(--papel)"></span>
+  </div>
+</header>
+
+<section id="opciones">
+  <p class="eyebrow">Las tres opciones</p>
+  <h2 style="margin-top:.7rem; font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:clamp(1.5rem,3vw,2rem)">A tamaño de logo</h2>
+
+  <div class="grid-3" style="margin-top:1.6rem">
+
+    <div class="optcard">
+      <div class="opthead"><span class="tag">Opción A</span><span class="fam">Bodoni Moda</span></div>
+      <div class="lockup">
+        <span class="word" style="font-family:'Bodoni Moda',Georgia,serif; font-weight:600; letter-spacing:.07em">casia<svg class="flower" width="0.42em" height="0.42em" viewBox="0 0 24 24" style="margin-left:.12em"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/></svg></span>
+      </div>
+      <div class="optbody">
+        <span class="pill">Editorial</span>
+        <p>Contraste alto entre trazos gruesos y hilos finos. Es la letra de las revistas de moda y las marcas de lujo:
+          el "wow" más inmediato de las tres.</p>
+        <p><strong>Riesgo:</strong> los hilos finos son delicados para imprimir en un sello pequeño o grabar en un molde;
+          hay que probarlo impreso antes de comprometerse.</p>
+      </div>
+    </div>
+
+    <div class="optcard pick">
+      <div class="opthead"><span class="tag">Opción B</span><span class="fam">Fraunces</span></div>
+      <div class="lockup">
+        <span class="word" style="font-family:'Fraunces',Georgia,serif; font-weight:500; font-optical-sizing:auto; letter-spacing:.05em">casia<svg class="flower" width="0.42em" height="0.42em" viewBox="0 0 24 24" style="margin-left:.12em"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/></svg></span>
+      </div>
+      <div class="optbody">
+        <span class="pill">Botánico</span>
+        <p>Serif cálida y algo orgánica: conserva la elegancia sin la frialdad de una editorial de moda. Sus trazos
+          gruesos se mantienen gruesos incluso pequeños, así que aguanta mejor la impresión chica.</p>
+        <p class="pickline">★ Recomendada — ver por qué, abajo.</p>
+      </div>
+    </div>
+
+    <div class="optcard">
+      <div class="opthead"><span class="tag">Opción C</span><span class="fam">Cormorant Garamond</span></div>
+      <div class="lockup">
+        <span class="word" style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; font-style:italic; letter-spacing:.03em">casia<svg class="flower" width="0.42em" height="0.42em" viewBox="0 0 24 24" style="margin-left:.12em"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--mantequilla)" stroke-width="3" stroke-linecap="round"/></svg></span>
+      </div>
+      <div class="optbody">
+        <span class="pill">Patrimonio</span>
+        <p>Un clásico de libro antiguo, en cursiva. La más "culta" de las tres a simple vista, con un aire de
+          herencia y manuscrito.</p>
+        <p><strong>Riesgo:</strong> es la más delgada y la más difícil de leer rápido en una pantalla chica o
+          en un sticker pequeño.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="escala">
+  <p class="eyebrow">La prueba que de verdad decide</p>
+  <h2 style="margin-top:.7rem; font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:clamp(1.5rem,3vw,2rem)">A tamaño de sello — 2 cm reales</h2>
+  <p class="small muted" style="margin-top:.8rem; max-width:64ch">El paso 03 de la estrategia exige que el sello funcione en 2 cm: es donde más se va a usar
+    (tapa de caja, sticker, foto de perfil) y donde una letra bonita en grande puede fallar. Compárenlas aquí, al mismo tamaño, una junto a otra.</p>
+
+  <div class="scaletest" style="margin-top:1.4rem">
+    <div class="sealwrap">
+      <div class="seal"><svg width="18" height="18" viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/></svg>
+        <span class="word" style="font-family:'Bodoni Moda',Georgia,serif; font-weight:600">casia</span></div>
+      <span class="cap">Opción A</span>
+    </div>
+    <div class="sealwrap">
+      <div class="seal"><svg width="18" height="18" viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/></svg>
+        <span class="word" style="font-family:'Fraunces',Georgia,serif; font-weight:500">casia</span></div>
+      <span class="cap">Opción B</span>
+    </div>
+    <div class="sealwrap">
+      <div class="seal"><svg width="18" height="18" viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/></svg>
+        <span class="word" style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; font-style:italic">casia</span></div>
+      <span class="cap">Opción C</span>
+    </div>
+    <p class="xsmall" style="align-self:center; max-width:22ch">A este tamaño, B se lee de un vistazo; A y C piden un segundo de más.</p>
+  </div>
+</section>
+
+<section id="cajas">
+  <p class="eyebrow">Aplicado</p>
+  <h2 style="margin-top:.7rem; font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:clamp(1.5rem,3vw,2rem)">Sobre la caja, las tres</h2>
+  <p class="small muted" style="margin-top:.8rem; max-width:64ch">Faja lila sobre caja de papel, sello en la esquina. Así se verían las tres en la mesa, antes de abrir la caja.</p>
+
+  <div class="boxrow" style="margin-top:1.4rem">
+    <div class="boxcard">
+      <div class="box">
+        <div class="faja"><span class="word" style="font-family:'Bodoni Moda',Georgia,serif; font-weight:600; letter-spacing:.06em">casia</span></div>
+        <div class="boxseal"><svg viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/></svg></div>
+      </div>
+      <span class="cap">Opción A — Bodoni Moda</span>
+    </div>
+    <div class="boxcard">
+      <div class="box">
+        <div class="faja"><span class="word" style="font-family:'Fraunces',Georgia,serif; font-weight:500; letter-spacing:.04em">casia</span></div>
+        <div class="boxseal"><svg viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/></svg></div>
+      </div>
+      <span class="cap">Opción B — Fraunces</span>
+    </div>
+    <div class="boxcard">
+      <div class="box">
+        <div class="faja"><span class="word" style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; font-style:italic">casia</span></div>
+        <div class="boxseal"><svg viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="4.5" y1="7.5" x2="19.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/><line x1="19.5" y1="7.5" x2="4.5" y2="16.5" stroke="var(--lila)" stroke-width="3" stroke-linecap="round"/></svg></div>
+      </div>
+      <span class="cap">Opción C — Cormorant Garamond</span>
+    </div>
+  </div>
+</section>
+
+<section id="recomendacion">
+  <div class="rec">
+    <p class="eyebrow">Recomendación</p>
+    <h2>Opción B — Fraunces</h2>
+    <p>Es la única de las tres que sigue siendo ella misma en las tres escalas: logo, sello y faja. Bodoni gana en
+      la primera impresión pero se arriesga a perderse impresa en chico; Cormorant es la más "culta" a simple vista
+      pero la más frágil para leer rápido. Fraunces se queda con lo mejor de las dos: trazos con carácter que
+      no desaparecen a 2 cm.</p>
+    <div class="why">
+      <div><b>Rico</b><span>Sus curvas tienen peso real, no son una serif genérica de plantilla.</span></div>
+      <div><b>Delicado</b><span>Es cálida y un poco orgánica — nunca fría, como sí puede leerse Bodoni.</span></div>
+      <div><b>Culta</b><span>Sigue siendo una serif de autor, con presencia editorial, sin caer en lo frágil.</span></div>
+      <div><b>Práctica</b><span>La única de las tres que aguanta el sello de 2 cm sin perder legibilidad.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="siguiente">
+  <p class="eyebrow">Para cerrar el paso 03</p>
+  <h2 style="margin-top:.7rem; font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:clamp(1.5rem,3vw,2rem)">Lo que falta después de elegir</h2>
+  <div class="tablewrap" style="margin-top:1.2rem">
+    <table>
+      <thead><tr><th>Paso</th><th>Qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Elegir entre las tres (o pedir un cuarto boceto si ninguna convence del todo) y probarla impresa en papel real, no solo en pantalla.</td></tr>
+        <tr><td><strong>2</strong></td><td>Pedir el archivo vectorial (.svg o .ai) del logotipo elegido y de la flor por separado, para poder usarlos a cualquier tamaño sin perder calidad.</td></tr>
+        <tr><td><strong>3</strong></td><td>Definir la versión "sello" final (la que va en 2 cm) como una pieza aparte, no como el logo grande encogido.</td></tr>
+        <tr><td><strong>4</strong></td><td>Volver a la <a href="https://claude.ai/code/artifact/a419ff3c-a702-4df4-b12a-5278e18e966d">Ruta Casia</a> y seguir al paso 04: el producto.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>Especímenes de marca · Casia. Los tres tratamientos usan la paleta ya definida en la Ruta Casia
+    (lila profundo, mantequilla, tinta berenjena, papel) — nada se inventó de nuevo aquí, solo se probó la letra.</p>
+</footer>
+
+</div>
