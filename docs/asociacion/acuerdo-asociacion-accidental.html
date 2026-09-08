@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="es-BO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acuerdo de Asociación Accidental — Smile Importer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Manrope:wght@500;700&display=swap">
+<style>
+  :root{
+    --ink:#14100C;
+    --paper:#FFFFFF;
+    --rule:#C9C4BC;
+    --rule-soft:#E4E0D9;
+    --forest:#0F2E23;
+    --muted:#5E574E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:#EDEAE4;
+    color:var(--ink);
+    font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+    font-size:11.5pt;
+    line-height:1.55;
+  }
+  .hoja{
+    background:var(--paper);
+    max-width:190mm;
+    margin:14mm auto;
+    padding:20mm 18mm;
+    box-shadow:0 1px 3px rgba(0,0,0,.16),0 12px 40px rgba(0,0,0,.10);
+  }
+  .membrete{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:16px;
+    border-bottom:1.5px solid var(--forest);
+    padding-bottom:8px;
+    margin-bottom:22px;
+  }
+  .membrete .marca{
+    font-family:Manrope,system-ui,sans-serif;
+    font-weight:700;
+    font-size:9.5pt;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--forest);
+  }
+  .membrete .folio{
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:8pt;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:right;
+  }
+  h1{
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:16pt;
+    line-height:1.2;
+    font-weight:700;
+    text-align:center;
+    text-wrap:balance;
+    margin:0 0 4px;
+    letter-spacing:-.01em;
+  }
+  .subtitulo{
+    text-align:center;
+    font-size:9.5pt;
+    color:var(--muted);
+    font-style:italic;
+    margin:0 0 26px;
+  }
+  h2{
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:10pt;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--forest);
+    margin:26px 0 8px;
+    padding-bottom:4px;
+    border-bottom:1px solid var(--rule-soft);
+    break-after:avoid;
+  }
+  h3{
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:10pt;
+    font-weight:700;
+    margin:16px 0 6px;
+    break-after:avoid;
+  }
+  p{margin:0 0 9px}
+  ol,ul{margin:0 0 10px;padding-left:22px}
+  li{margin-bottom:5px}
+  ol.romanos{list-style:lower-roman}
+  .lineablanco{
+    display:inline-block;
+    min-width:170px;
+    border-bottom:1px solid var(--ink);
+  }
+  .lineablanco.corta{min-width:95px}
+  .lineablanco.larga{min-width:100%}
+  .nota{
+    background:#F7F5F1;
+    border-left:3px solid var(--forest);
+    padding:10px 14px;
+    margin:14px 0;
+    font-size:10pt;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0 14px;
+    font-size:10pt;
+  }
+  th,td{
+    border:1px solid var(--rule);
+    padding:7px 8px;
+    text-align:left;
+    vertical-align:top;
+  }
+  th{
+    background:#F2F0EB;
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:8.5pt;
+    font-weight:700;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+  td.vacia{height:30px}
+  .firmas{
+    display:flex;
+    gap:30px;
+    margin-top:34px;
+    break-inside:avoid;
+  }
+  .firma{flex:1}
+  .firma .campo{
+    border-bottom:1px solid var(--ink);
+    height:22px;
+    margin-bottom:3px;
+  }
+  .firma .campo.alto{height:52px}
+  .firma .etiqueta{
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:7.5pt;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:12px;
+  }
+  .huella{
+    border:1px dashed var(--rule);
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:7.5pt;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:8px;
+  }
+  .pie{
+    margin-top:30px;
+    padding-top:10px;
+    border-top:1px solid var(--rule-soft);
+    font-size:8.5pt;
+    color:var(--muted);
+  }
+  .anexo{break-before:page;page-break-before:always}
+  @media print{
+    @page{size:A4;margin:16mm 15mm}
+    body{background:#fff;font-size:10.5pt}
+    .hoja{box-shadow:none;margin:0;padding:0;max-width:none}
+    .no-imprimir{display:none}
+  }
+  .no-imprimir{
+    max-width:190mm;
+    margin:0 auto -8mm;
+    padding:12px 18mm 0;
+    font-family:Manrope,system-ui,sans-serif;
+    font-size:9pt;
+    color:#5E574E;
+  }
+</style>
+</head>
+<body>
+
+<div class="no-imprimir">Documento para imprimir a doble cara en tamaño carta u oficio. Llenar a mano los espacios en blanco, firmar las dos copias (una para cada socio) y rubricar al pie de cada página.</div>
+
+<div class="hoja">
+
+  <div class="membrete">
+    <div class="marca">Smile Importer · Documento interno</div>
+    <div class="folio">Ejemplar <span class="lineablanco corta"></span> de 2<br>Fecha <span class="lineablanco corta"></span></div>
+  </div>
+
+  <h1>Acuerdo de Asociación Accidental y Reparto de Utilidades</h1>
+  <p class="subtitulo">Comercialización de equipo, instrumental e insumos odontológicos importados</p>
+
+  <h2>Cláusula primera — Partes</h2>
+  <p>Suscriben el presente acuerdo, en pleno uso de sus facultades y por su propia voluntad:</p>
+  <table>
+    <tr>
+      <th style="width:22%">Socio A</th>
+      <td>Nombre completo: <span class="lineablanco larga"></span><br><br>
+      Cédula de Identidad Nº: <span class="lineablanco"></span> exp. <span class="lineablanco corta"></span><br><br>
+      Celular: <span class="lineablanco"></span><br><br>
+      Correo: <span class="lineablanco"></span><br><br>
+      Domicilio: <span class="lineablanco larga"></span></td>
+    </tr>
+    <tr>
+      <th>Socio B</th>
+      <td>Nombre completo: <span class="lineablanco larga"></span><br><br>
+      Cédula de Identidad Nº: <span class="lineablanco"></span> exp. <span class="lineablanco corta"></span><br><br>
+      Celular: <span class="lineablanco"></span><br><br>
+      Correo: <span class="lineablanco"></span><br><br>
+      Domicilio: <span class="lineablanco larga"></span></td>
+    </tr>
+  </table>
+  <p>En adelante, e indistintamente, «los socios». Cada uno declara que los datos consignados son correctos y se obliga a comunicar por escrito al otro cualquier cambio de celular o domicilio dentro de los siete (7) días de producido.</p>
+
+  <h2>Cláusula segunda — Naturaleza del acuerdo</h2>
+  <p>Los socios constituyen una <strong>asociación accidental o de cuentas en participación</strong>, figura reconocida por el Código de Comercio boliviano para operaciones comerciales determinadas. En consecuencia, y de forma expresa:</p>
+  <ol class="romanos">
+    <li>La asociación <strong>no genera personalidad jurídica propia</strong>, no tiene razón social, no requiere inscripción en el Registro de Comercio ni constituye una sociedad comercial.</li>
+    <li>El emprendimiento opera actualmente <strong>de manera informal</strong>: no cuenta con NIT, matrícula de comercio, licencia de funcionamiento ni registro tributario. Los tributos de importación de la mercadería son cubiertos, a la fecha, por el proveedor.</li>
+    <li>Ninguna cláusula de este documento crea entre los socios una relación laboral, de dependencia, de mandato ni de representación permanente. No hay patrón ni empleado.</li>
+    <li>Cada socio responde personalmente por los actos que ejecuta frente a terceros, y frente al otro socio por los daños que le cause con dolo o negligencia grave.</li>
+    <li>Los socios se comprometen a <strong>formalizar la actividad</strong> (NIT y demás registros que correspondan) cuando el volumen de operación lo justifique, y a firmar en ese momento el anexo modificatorio que adecue este acuerdo.</li>
+  </ol>
+
+  <h2>Cláusula tercera — Objeto</h2>
+  <p>El objeto de la asociación es la <strong>compra, importación, promoción, comercialización, entrega y postventa de equipo, instrumental e insumos odontológicos</strong> dentro del territorio boliviano, por canales digitales (sitio web, WhatsApp, redes sociales) y por venta directa a odontólogos, clínicas, laboratorios y estudiantes de odontología.</p>
+  <p>Quedan comprendidas todas las operaciones conexas: selección de proveedores, negociación de precios, gestión de transporte y aduana, fijación de precios de venta, atención de consultas, garantía y servicio posventa.</p>
+
+  <h2>Cláusula cuarta — Denominación comercial</h2>
+  <p>La actividad se desarrolla hoy bajo el nombre de uso comercial <strong>«Smile Importer»</strong>. Los socios reconocen expresamente que:</p>
+  <ol class="romanos">
+    <li>Ese nombre fue adoptado por su cercanía y respaldo reputacional con un tercero ajeno a este acuerdo, y por lo tanto <strong>su uso es provisional y revocable</strong>.</li>
+    <li>Ninguno de los socios podrá registrar «Smile Importer», ni un signo confundible con él, a nombre propio y en beneficio exclusivo.</li>
+    <li>Los socios se obligan a desarrollar y registrar una <strong>marca propia</strong>, que será de titularidad conjunta en partes iguales y quedará identificada en el Anexo C una vez definida. Todo el material de marca creado a partir de ese momento pertenece a la asociación.</li>
+    <li>Si la asociación deja de usar el nombre actual, ello no afecta la vigencia ni la validez de este acuerdo, que continúa bajo la nueva denominación.</li>
+  </ol>
+
+  <h2>Cláusula quinta — Duración</h2>
+  <p>El acuerdo entra en vigencia el día de su firma y tiene <strong>duración indefinida</strong>, con renovación automática, hasta que se produzca el retiro de un socio conforme a la cláusula décima quinta o la disolución de común acuerdo. Los socios se comprometen a revisarlo por escrito, como mínimo, una vez cada doce (12) meses.</p>
+
+  <h2>Cláusula sexta — Aportes</h2>
+  <p>Cada socio aporta a la asociación bienes, trabajo y capital según el detalle valorizado del <strong>Anexo C</strong>, que forma parte inseparable de este documento. A título enunciativo:</p>
+  <table>
+    <tr>
+      <th style="width:22%">Socio A</th>
+      <td>Activos digitales de su autoría (sitio web, catálogo comercial, portafolio, sistema de registro de clientes, fotografía de producto e identidad visual); equipos propios afectados al negocio; capital de trabajo aportado en efectivo; trabajo técnico y logístico permanente.</td>
+    </tr>
+    <tr>
+      <th>Socio B</th>
+      <td>Cartera y red de contactos del rubro; capital de trabajo aportado en efectivo; trabajo comercial permanente de atención, cierre de ventas y posventa.</td>
+    </tr>
+  </table>
+  <p>Los aportes no dinerarios se valorizan de común acuerdo al momento de su incorporación y quedan registrados con fecha en el Anexo C. Los activos digitales aportados por el Socio A <strong>quedan afectados al uso de la asociación</strong> mientras el acuerdo esté vigente; su titularidad y el destino de los mismos ante un retiro se rigen por las cláusulas décima segunda y décima quinta.</p>
+
+  <h2>Cláusula séptima — Roles y responsabilidades</h2>
+  <p>Los socios se reparten la operación de la siguiente manera, y cada uno asume la responsabilidad plena de su área:</p>
+
+  <h3>7.1 — Socio B: área comercial</h3>
+  <ul>
+    <li>Atender la <strong>línea de WhatsApp comercial</strong> de la empresa y responder a los interesados (leads) que llegan por el sitio web, redes sociales, referidos y publicidad.</li>
+    <li>Responder todo mensaje entrante dentro de un plazo máximo de <span class="lineablanco corta"></span> horas en horario de atención, y dar seguimiento a las consultas que no cierran en el primer contacto.</li>
+    <li><strong>Cerrar las ventas</strong>: cotizar con la lista de precios vigente, negociar dentro de los márgenes autorizados, coordinar la forma de pago y confirmar el pedido.</li>
+    <li>Registrar cada lead y cada venta en la planilla o sistema de registro común, el mismo día en que ocurren.</li>
+    <li>Atender la posventa: garantía, reclamos, cambios y seguimiento del cliente.</li>
+    <li>Cobrar y depositar el dinero de cada venta en la caja del negocio conforme a la cláusula décima.</li>
+  </ul>
+
+  <h3>7.2 — Socio A: área técnica, logística y de abastecimiento</h3>
+  <ul>
+    <li><strong>Desarrollo y mantenimiento</strong> del sitio web, catálogo digital, sistema de registro de clientes y demás herramientas; altas y bajas de producto, precios y fotografías.</li>
+    <li><strong>Logística y transporte</strong>: coordinación del envío, retiro, internación, almacenamiento y entrega de la mercadería.</li>
+    <li><strong>Adquisición de productos</strong>: búsqueda y evaluación de proveedores, negociación de precios y condiciones, control de calidad al recibir, y gestión de la importación.</li>
+    <li>Mantener actualizada la <strong>estructura de costos</strong> y el precio mínimo de venta de cada referencia, e informar al Socio B toda variación antes de que entre en vigencia.</li>
+    <li>Producir el material comercial: fichas de producto, fotografía, publicaciones y piezas de publicidad.</li>
+  </ul>
+
+  <h3>7.3 — Decisiones conjuntas</h3>
+  <p>Requieren el acuerdo expreso de ambos socios, y quedan asentadas por escrito: la fijación y modificación de precios de lista, la compra de un lote de mercadería, la contratación de servicios pagados recurrentes, la incorporación de un tercero al negocio, el retiro de utilidades por encima de lo previsto en la cláusula décima, y cualquier compromiso que obligue a la asociación por un monto superior a Bs <span class="lineablanco corta"></span>.</p>
+
+  <h2>Cláusula octava — Cumplimiento de objetivos y deber de apoyo mutuo</h2>
+  <ol class="romanos">
+    <li>Ambos socios se obligan a <strong>cumplir las tareas de su área y los objetivos trazados</strong> para cada período, los que se fijan por escrito en el <strong>Anexo B</strong> y se revisan en reunión conjunta al menos una (1) vez al mes.</li>
+    <li>Si un socio <strong>necesita ayuda</strong> para cumplir su parte, el otro está obligado a <strong>brindarle apoyo técnico y práctico</strong>: explicarle el procedimiento, acompañarlo, capacitarlo o ejecutar la tarea con él, dentro de un plazo razonable y no mayor a <span class="lineablanco corta"></span> horas desde el pedido, salvo impedimento justificado.</li>
+    <li>Pedir ayuda no constituye incumplimiento. <strong>Negarla sin causa justificada, sí.</strong></li>
+    <li>Ningún socio puede volverse un punto único de falla: cada uno debe dejar documentados sus procedimientos, contraseñas y contactos clave, de modo que el otro pueda operar el negocio en su ausencia.</li>
+    <li>El incumplimiento reiterado y no justificado de las tareas u objetivos de un área habilita al otro socio a convocar una revisión del reparto de utilidades de la cláusula décima, proporcional al trabajo efectivamente asumido, la que deberá constar por escrito y firmada.</li>
+  </ol>
+
+  <h2>Cláusula novena — Independencia respecto de la relación sentimental</h2>
+  <p>Los socios declaran conocer y aceptar que <strong>la sociedad comercial y la relación sentimental que hoy los une son dos vínculos separados e independientes entre sí</strong>. En consecuencia:</p>
+  <ol class="romanos">
+    <li>La terminación, suspensión o cualquier alteración de la relación de pareja <strong>no extingue, no suspende ni modifica</strong> este acuerdo. El negocio continúa operando exactamente igual, con los mismos roles, obligaciones y porcentajes de reparto.</li>
+    <li>Ningún socio podrá usar el negocio, los accesos, la caja, la mercadería, los clientes ni las redes como <strong>instrumento de presión, castigo o represalia</strong> en un conflicto personal.</li>
+    <li>Ningún socio podrá suspender unilateralmente sus tareas, dejar de responder mensajes de clientes ni retener información del negocio por motivos personales.</li>
+    <li>Si alguno de los dos considera que la convivencia comercial se ha vuelto inviable, el único camino previsto es el <strong>retiro formal</strong> de la cláusula décima quinta, y nunca el abandono, el bloqueo o la obstrucción.</li>
+    <li>Las conversaciones y decisiones del negocio se mantienen en los canales del negocio, y no se resuelven ni se revierten en el ámbito personal.</li>
+  </ol>
+
+  <h2>Cláusula décima — Caja, utilidades y reparto</h2>
+  <ol class="romanos">
+    <li>El negocio maneja una <strong>caja separada</strong> del dinero personal de cada socio, en la cuenta o billetera consignada en el Anexo C. Todo cobro ingresa a esa caja dentro de las 48 horas de recibido.</li>
+    <li>Se entiende por <strong>utilidad neta</strong> el ingreso por ventas menos el costo de adquisición de la mercadería, los costos de importación y transporte, los costos operativos directos (entrega, empaque, comisiones de cobro, publicidad, garantía y reposición) y la amortización de activos, según la estructura de costos vigente del negocio.</li>
+    <li>La utilidad neta se reparte entre los socios en la proporción <span class="lineablanco corta"></span>% para el Socio A y <span class="lineablanco corta"></span>% para el Socio B. A falta de indicación, el reparto es del cincuenta por ciento (50%) para cada uno.</li>
+    <li>De cada venta se destina un <span class="lineablanco corta"></span>% a <strong>reinversión</strong> (fondo de compra de mercadería), antes de repartir. Ese fondo no se reparte ni se retira sin acuerdo escrito de ambos.</li>
+    <li>El reparto se liquida <span class="lineablanco corta"></span> (semanal / quincenal / mensualmente), contra la planilla de ventas y costos del período, revisada y aceptada por ambos.</li>
+    <li><strong>Ningún socio retira dinero de la caja sin registrarlo.</strong> Todo retiro se anota con fecha, monto y concepto, y el otro socio debe poder verlo.</li>
+    <li>Las pérdidas, faltantes de caja y mercadería dañada por causa no imputable a un socio en particular se soportan en la misma proporción del reparto.</li>
+  </ol>
+
+  <h2>Cláusula décima primera — Registros y transparencia</h2>
+  <p>Los socios llevan y mantienen actualizados, con acceso permanente para ambos: la planilla de ventas, la estructura de costos por producto, el registro de leads y clientes, el inventario de mercadería y el registro de movimientos de caja. Cualquier socio puede pedir en cualquier momento la revisión conjunta de estos registros, y el otro no puede negarse.</p>
+  <p>Los precios de venta se fijan siempre a partir de la <strong>estructura de costos vigente</strong>, que incluye costos que no siempre son visibles: pasajes, transporte, aduana, empaque, entrega, comisiones de cobro, publicidad, garantía y desgaste de los activos.</p>
+
+  <h2>Cláusula décima segunda — Activos, accesos y credenciales</h2>
+  <ol class="romanos">
+    <li>Son <strong>activos de la asociación</strong>, con independencia de quién los haya creado o pagado: la base de datos de clientes y leads; el número de WhatsApp comercial; las cuentas de redes sociales y el correo del negocio; el dominio y el hosting; el catálogo, las fotografías de producto y los textos comerciales; el inventario de mercadería; y la marca propia que se desarrolle.</li>
+    <li>Los <strong>activos digitales aportados por el Socio A</strong> (código fuente del sitio y del sistema de registro, e identidad visual) permanecen bajo su autoría, y se otorga a la asociación una <strong>licencia de uso plena y sin costo</strong> mientras el acuerdo esté vigente.</li>
+    <li>Ambos socios deben tener, en todo momento, <strong>copia de todas las credenciales</strong> de los activos de la asociación, registradas en el Anexo C. Ningún socio puede tener acceso exclusivo a un activo del negocio.</li>
+    <li>Cambiar una contraseña, un número de recuperación o un método de acceso sin comunicarlo al otro socio dentro de las 24 horas constituye falta grave.</li>
+  </ol>
+
+  <h2>Cláusula décima tercera — Confidencialidad</h2>
+  <p>Los socios se obligan a mantener en reserva, durante la vigencia del acuerdo y por <strong>veinticuatro (24) meses posteriores</strong> a la salida de cualquiera de ellos: los costos de adquisición y la estructura de costos; la identidad, los contactos y las condiciones de los proveedores; los márgenes de utilidad; la base de datos de clientes y leads; y las condiciones comerciales pactadas. Esta información no se comparte con terceros, competidores, ni se usa en beneficio propio fuera de la asociación.</p>
+
+  <h2>Cláusula décima cuarta — Dedicación y no competencia</h2>
+  <p>Mientras el acuerdo esté vigente, ningún socio podrá comercializar equipo, instrumental o insumos odontológicos por fuera de la asociación, ni por sí ni por interpósita persona, ni participar en un emprendimiento del mismo rubro, salvo autorización escrita del otro socio. Ambos pueden desarrollar libremente actividades ajenas a este rubro.</p>
+
+  <h2>Cláusula décima quinta — Retiro voluntario de un socio</h2>
+  <ol class="romanos">
+    <li>Cualquier socio puede retirarse del negocio en cualquier momento, sin expresar causa, comunicándolo por escrito al otro con una anticipación mínima de <strong>treinta (30) días calendario</strong>.</li>
+    <li>El retiro solo se perfecciona con la <strong>firma del «Acta de Retiro» del Anexo A</strong>, en la que el socio saliente declara su voluntad de salir, reconoce lo que se le liquida y asume expresamente las prohibiciones de la cláusula décima sexta. <strong>Sin acta firmada no hay retiro válido</strong>, y el socio sigue obligado por todas las cláusulas de este acuerdo.</li>
+    <li>Durante los 30 días de preaviso, el socio saliente <strong>debe cumplir normalmente sus tareas</strong>, cerrar las ventas comprometidas, entregar los pedidos pendientes y capacitar al otro socio o a quien este designe en todo lo necesario para continuar la operación.</li>
+    <li><strong>Liquidación.</strong> Al socio saliente se le paga: (a) su parte de las utilidades ya generadas y no repartidas; (b) su parte proporcional del inventario y del fondo de reinversión, valorizados a costo; y (c) el saldo no amortizado de los aportes en dinero que haya hecho. Se descuenta todo monto que adeude a la caja. El pago se realiza dentro de <span class="lineablanco corta"></span> días o en <span class="lineablanco corta"></span> cuotas mensuales, según se acuerde en el acta.</li>
+    <li><strong>Continuidad.</strong> El negocio continúa en cabeza del socio que permanece, con todos los activos de la asociación enumerados en la cláusula décima segunda, incluidos el número de WhatsApp comercial, las redes, el dominio y la base de clientes. El socio saliente entrega la totalidad de las credenciales, archivos, mercadería y dinero del negocio en su poder dentro de las <strong>72 horas</strong> de firmada el acta.</li>
+    <li>Si el socio saliente es el Socio A, este mantiene la autoría de los activos digitales de su aporte, y otorga al socio que continúa una licencia de uso por <span class="lineablanco corta"></span> meses para no interrumpir la operación, en las condiciones que se pacten en el acta.</li>
+    <li>El socio saliente <strong>deja de percibir utilidades</strong> generadas después de la fecha del acta, y deja de tener obligaciones sobre las operaciones posteriores.</li>
+  </ol>
+
+  <h2>Cláusula décima sexta — Prohibición de interferencia y sabotaje</h2>
+  <p>Durante la vigencia del acuerdo, y por <strong>doce (12) meses posteriores</strong> al retiro de un socio, queda expresamente prohibido a ambos, y en especial al socio saliente, <strong>interferir, dañar, obstruir o sabotear el negocio en curso de cualquier modo</strong>. Se entienden comprendidas, de manera enunciativa y no limitativa, las siguientes conductas:</p>
+  <ol>
+    <li><strong>Desviar clientes o leads:</strong> contactar a clientes, leads o interesados del negocio para ofrecerles el mismo producto por cuenta propia o de un tercero.</li>
+    <li><strong>Apropiarse de la base de datos:</strong> copiar, extraer, conservar, vender o entregar a terceros la lista de clientes, leads, contactos, cotizaciones o historial de conversaciones.</li>
+    <li><strong>Secuestrar accesos:</strong> cambiar, retener u ocultar contraseñas, números de recuperación, correos, códigos de verificación o cualquier credencial del negocio; transferir el número de WhatsApp comercial a otro equipo; o vincular las cuentas del negocio a un dispositivo o correo personal exclusivo.</li>
+    <li><strong>Destruir o alterar información:</strong> borrar, modificar u ocultar publicaciones, fotografías, catálogo, registros de venta, inventario, planillas de costos, código fuente, respaldos o cualquier archivo del negocio.</li>
+    <li><strong>Dar de baja activos:</strong> cancelar el dominio, el hosting, las cuentas de redes, la línea telefónica, los servicios contratados o dejarlos vencer deliberadamente.</li>
+    <li><strong>Revelar información confidencial:</strong> divulgar costos, márgenes, proveedores, condiciones de compra o estrategia comercial a terceros, competidores o clientes.</li>
+    <li><strong>Interferir con proveedores:</strong> contactar al proveedor o importador para excluir al otro socio, negociar por separado, condicionar el suministro, pedir precios diferenciados o inducirlo a cortar la relación con el negocio.</li>
+    <li><strong>Difamar:</strong> hacer afirmaciones falsas, denigrantes o que induzcan a error sobre el negocio, sus productos o el otro socio, ante clientes, proveedores, colegas del rubro, redes sociales o grupos.</li>
+    <li><strong>Usar la marca y el material:</strong> emplear el nombre comercial, logotipo, fotografías, textos, fichas de producto, catálogo, sitio web o material publicitario del negocio para fines propios o de terceros.</li>
+    <li><strong>Suplantar al negocio:</strong> crear cuentas, perfiles, sitios o números de contacto con el mismo nombre o con un nombre confundiblemente similar, o presentarse ante clientes como representante del negocio.</li>
+    <li><strong>Retener bienes o dinero:</strong> quedarse con mercadería, equipos, herramientas, material de exhibición o dinero cobrado a clientes.</li>
+    <li><strong>Abandonar operaciones en curso:</strong> dejar sin atender pedidos confirmados, entregas comprometidas, garantías vigentes o pagos pendientes a proveedores.</li>
+    <li><strong>Denunciar o reportar falsamente:</strong> reportar cuentas, publicaciones, anuncios, el sitio web o el número comercial ante plataformas o autoridades sin fundamento real.</li>
+    <li><strong>Obstruir la continuidad:</strong> negarse a entregar información, procedimientos o credenciales necesarias para operar; o condicionar esa entrega a exigencias no previstas en este acuerdo.</li>
+    <li><strong>Actuar a través de terceros:</strong> ejecutar cualquiera de las conductas anteriores por medio de familiares, amistades, empleados o cualquier persona interpuesta.</li>
+  </ol>
+  <p>Estas prohibiciones <strong>rigen con independencia del estado de la relación personal</strong> entre los socios y de que existan reclamos económicos pendientes entre ellos, los que se resuelven por la vía de la cláusula décima novena y nunca por la vía de los hechos.</p>
+
+  <h2>Cláusula décima séptima — Incumplimiento y consecuencias</h2>
+  <ol class="romanos">
+    <li>Verificada cualquiera de las conductas de la cláusula décima sexta, el socio infractor <strong>pierde el derecho a percibir los saldos de liquidación pendientes</strong> a su favor, los que quedan afectados a reparar el daño causado.</li>
+    <li>Además, el socio infractor pagará al socio afectado una <strong>penalidad de Bs <span class="lineablanco corta"></span></strong> por cada conducta verificada, sin perjuicio de la reparación del daño efectivamente probado.</li>
+    <li>El socio afectado queda facultado a <strong>iniciar las acciones legales</strong> que correspondan, y este documento, con firmas reconocidas, constituye prueba del compromiso asumido.</li>
+    <li>El incumplimiento reiterado de las tareas y objetivos de la cláusula octava, verificado en dos revisiones mensuales consecutivas y notificado por escrito, faculta al socio cumplidor a exigir el retiro del socio incumplidor conforme a la cláusula décima quinta.</li>
+  </ol>
+
+  <h2>Cláusula décima octava — Ausencia temporal</h2>
+  <p>Si un socio se ve impedido de cumplir sus tareas por más de treinta (30) días corridos por enfermedad, viaje, estudios u otra causa justificada, el otro socio podrá asumir su área para no detener el negocio. En ese caso, se acuerda por escrito un ajuste temporal del reparto de utilidades proporcional al trabajo asumido, que se revierte al reincorporarse el socio ausente.</p>
+
+  <h2>Cláusula décima novena — Solución de controversias</h2>
+  <p>Toda diferencia se resuelve, en este orden: <strong>(1)</strong> conversación directa entre los socios dentro de los siete (7) días; <strong>(2)</strong> si no hay acuerdo, mediación de una persona de confianza mutua designada de común acuerdo, cuyo nombre puede consignarse aquí: <span class="lineablanco"></span>; <strong>(3)</strong> agotadas las anteriores, la vía conciliatoria o judicial que corresponda en la ciudad de <span class="lineablanco"></span>, Bolivia. Mientras dure la controversia, <strong>el negocio sigue operando con normalidad</strong> y ninguno de los socios puede paralizarlo.</p>
+
+  <h2>Cláusula vigésima — Modificaciones y anexos</h2>
+  <p>Este acuerdo solo puede modificarse por documento escrito y firmado por ambos socios, que se agrega como anexo numerado y correlativo. Forman parte inseparable del acuerdo el <strong>Anexo A</strong> (Acta de Retiro), el <strong>Anexo B</strong> (Objetivos del período) y el <strong>Anexo C</strong> (Inventario de aportes, activos y accesos).</p>
+
+  <h2>Cláusula vigésima primera — Declaración final</h2>
+  <p>Los socios declaran haber leído íntegramente este documento, comprender su contenido y alcance, y firmarlo de manera libre y voluntaria, sin vicio de consentimiento alguno, en dos (2) ejemplares de un mismo tenor y a un solo efecto, quedando uno en poder de cada socio.</p>
+
+  <div class="firmas">
+    <div class="firma">
+      <div class="campo alto"></div>
+      <div class="etiqueta">Firma — Socio A</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Nombre completo</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Cédula de Identidad</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Celular</div>
+      <div class="huella">Huella digital</div>
+    </div>
+    <div class="firma">
+      <div class="campo alto"></div>
+      <div class="etiqueta">Firma — Socio B</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Nombre completo</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Cédula de Identidad</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Celular</div>
+      <div class="huella">Huella digital</div>
+    </div>
+  </div>
+
+  <div class="firmas">
+    <div class="firma">
+      <div class="campo alto"></div>
+      <div class="etiqueta">Testigo 1 — Firma, nombre y C.I.</div>
+    </div>
+    <div class="firma">
+      <div class="campo alto"></div>
+      <div class="etiqueta">Testigo 2 — Firma, nombre y C.I.</div>
+    </div>
+  </div>
+
+  <p style="margin-top:22px">Lugar y fecha: <span class="lineablanco"></span>, <span class="lineablanco corta"></span> de <span class="lineablanco corta"></span> de 20<span class="lineablanco corta"></span>.</p>
+
+  <div class="nota">
+    <strong>Recomendación.</strong> Este es un documento privado entre partes. Para que tenga mayor fuerza probatoria, conviene hacer <strong>reconocimiento de firmas y rúbricas ante Notario de Fe Pública</strong>: es un trámite corto y económico, y convierte al documento en instrumento con fecha cierta. No sustituye asesoría legal profesional; antes de firmar, conviene que un abogado lo revise, en especial los montos de penalidad y los plazos de no competencia.
+  </div>
+
+  <div class="pie">Acuerdo de asociación accidental · Página <span class="lineablanco corta"></span> · Rúbrica Socio A <span class="lineablanco corta"></span> · Rúbrica Socio B <span class="lineablanco corta"></span></div>
+
+</div>
+
+<div class="hoja anexo">
+  <div class="membrete">
+    <div class="marca">Anexo A · Acta de retiro</div>
+    <div class="folio">Se firma únicamente al momento del retiro</div>
+  </div>
+
+  <h1>Acta de Retiro de Socio</h1>
+  <p class="subtitulo">Anexo A del Acuerdo de Asociación Accidental suscrito el <span class="lineablanco corta"></span></p>
+
+  <p>En la ciudad de <span class="lineablanco"></span>, a los <span class="lineablanco corta"></span> días del mes de <span class="lineablanco corta"></span> de 20<span class="lineablanco corta"></span>, comparecen:</p>
+
+  <table>
+    <tr><th style="width:26%">Socio que se retira</th><td>Nombre: <span class="lineablanco larga"></span><br><br>C.I. Nº <span class="lineablanco"></span> · Celular <span class="lineablanco"></span></td></tr>
+    <tr><th>Socio que continúa</th><td>Nombre: <span class="lineablanco larga"></span><br><br>C.I. Nº <span class="lineablanco"></span> · Celular <span class="lineablanco"></span></td></tr>
+  </table>
+
+  <h2>Primero — Declaración de retiro</h2>
+  <p>El socio arriba identificado <strong>declara su voluntad libre de retirarse</strong> de la asociación accidental a partir del <span class="lineablanco corta"></span> de <span class="lineablanco corta"></span> de 20<span class="lineablanco corta"></span>, cumplido el preaviso de treinta (30) días establecido en la cláusula décima quinta del acuerdo, o dispensado este de común acuerdo.</p>
+
+  <h2>Segundo — Liquidación</h2>
+  <table>
+    <tr><th style="width:70%">Concepto</th><th>Monto (Bs)</th></tr>
+    <tr><td>Utilidades generadas y no repartidas a su favor</td><td class="vacia"></td></tr>
+    <tr><td>Parte proporcional del inventario valorizado a costo</td><td></td></tr>
+    <tr><td>Parte proporcional del fondo de reinversión</td><td></td></tr>
+    <tr><td>Saldo no amortizado de aportes en dinero</td><td></td></tr>
+    <tr><td>(–) Montos adeudados a la caja del negocio</td><td></td></tr>
+    <tr><td>(–) Mercadería, equipos o dinero no devueltos</td><td></td></tr>
+    <tr><th>Total a liquidar</th><th></th></tr>
+  </table>
+  <p>Forma de pago: <span class="lineablanco larga"></span></p>
+  <p>Con el pago del monto consignado, el socio que se retira <strong>declara no tener nada más que reclamar</strong> por concepto alguno derivado de la asociación, y el socio que continúa declara lo propio respecto de aquel.</p>
+
+  <h2>Tercero — Entrega de activos y accesos</h2>
+  <p>El socio que se retira entrega, dentro de las 72 horas, y deja constancia de ello marcando cada ítem:</p>
+  <table>
+    <tr><th style="width:8%">✔</th><th>Ítem entregado</th><th style="width:22%">Observaciones</th></tr>
+    <tr><td class="vacia"></td><td>Credenciales de sitio web, dominio y hosting</td><td></td></tr>
+    <tr><td class="vacia"></td><td>Acceso al número de WhatsApp comercial y desvinculación de sus dispositivos</td><td></td></tr>
+    <tr><td class="vacia"></td><td>Cuentas de redes sociales y correo del negocio</td><td></td></tr>
+    <tr><td class="vacia"></td><td>Base de datos de clientes, leads y planillas de venta</td><td></td></tr>
+    <tr><td class="vacia"></td><td>Mercadería, equipos y material de exhibición en su poder</td><td></td></tr>
+    <tr><td class="vacia"></td><td>Dinero cobrado a clientes y no depositado</td><td></td></tr>
+    <tr><td class="vacia"></td><td>Archivos, fotografías y material comercial</td><td></td></tr>
+  </table>
+
+  <h2>Cuarto — Compromiso de no interferencia</h2>
+  <p>El socio que se retira <strong>declara conocer y asumir expresamente las prohibiciones de la cláusula décima sexta</strong> del acuerdo, que se dan aquí por íntegramente reproducidas, y se obliga a no interferir, dañar, obstruir ni sabotear el negocio en curso de ningún modo, por sí ni por interpósita persona, durante los doce (12) meses siguientes a la fecha de esta acta, y a mantener la confidencialidad por veinticuatro (24) meses. Reconoce que su incumplimiento habilita la penalidad y las acciones legales previstas en la cláusula décima séptima.</p>
+
+  <h2>Quinto — Continuidad del negocio</h2>
+  <p>El negocio continúa operando en cabeza del socio que permanece, con todos los activos de la asociación. El socio que se retira no conserva participación, injerencia, derecho de decisión ni derecho a utilidades futuras.</p>
+
+  <div class="firmas">
+    <div class="firma">
+      <div class="campo alto"></div>
+      <div class="etiqueta">Socio que se retira — Firma</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Nombre y C.I.</div>
+      <div class="huella">Huella digital</div>
+    </div>
+    <div class="firma">
+      <div class="campo alto"></div>
+      <div class="etiqueta">Socio que continúa — Firma</div>
+      <div class="campo"></div>
+      <div class="etiqueta">Nombre y C.I.</div>
+      <div class="huella">Huella digital</div>
+    </div>
+  </div>
+</div>
+
+<div class="hoja anexo">
+  <div class="membrete">
+    <div class="marca">Anexo B · Objetivos del período</div>
+    <div class="folio">Se revisa en reunión mensual</div>
+  </div>
+
+  <h1>Objetivos y Tareas del Período</h1>
+  <p class="subtitulo">Período: del <span class="lineablanco corta"></span> al <span class="lineablanco corta"></span></p>
+
+  <h2>Metas comunes del período</h2>
+  <table>
+    <tr><th style="width:46%">Meta</th><th style="width:18%">Indicador</th><th style="width:18%">Objetivo</th><th style="width:18%">Resultado</th></tr>
+    <tr><td>Ventas del mes</td><td>Unidades</td><td></td><td class="vacia"></td></tr>
+    <tr><td>Ingreso del mes</td><td>Bs</td><td></td><td></td></tr>
+    <tr><td>Utilidad neta del mes</td><td>Bs</td><td></td><td></td></tr>
+    <tr><td>Leads atendidos</td><td>Cantidad</td><td></td><td></td></tr>
+    <tr><td>Tasa de cierre</td><td>%</td><td></td><td></td></tr>
+    <tr><td>Tiempo de respuesta promedio</td><td>Horas</td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2>Tareas comprometidas — Socio A (técnica, logística, abastecimiento)</h2>
+  <table>
+    <tr><th style="width:60%">Tarea</th><th style="width:20%">Fecha límite</th><th style="width:20%">Estado</th></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+  </table>
+
+  <h2>Tareas comprometidas — Socio B (comercial y posventa)</h2>
+  <table>
+    <tr><th style="width:60%">Tarea</th><th style="width:20%">Fecha límite</th><th style="width:20%">Estado</th></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+  </table>
+
+  <h2>Pedidos de apoyo (cláusula octava)</h2>
+  <table>
+    <tr><th style="width:32%">Quién pide</th><th style="width:44%">En qué necesita apoyo</th><th style="width:24%">Resuelto el</th></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+  </table>
+
+  <div class="firmas">
+    <div class="firma"><div class="campo alto"></div><div class="etiqueta">Socio A — Firma y fecha</div></div>
+    <div class="firma"><div class="campo alto"></div><div class="etiqueta">Socio B — Firma y fecha</div></div>
+  </div>
+</div>
+
+<div class="hoja anexo">
+  <div class="membrete">
+    <div class="marca">Anexo C · Aportes, activos y accesos</div>
+    <div class="folio">Se actualiza con cada nuevo aporte</div>
+  </div>
+
+  <h1>Inventario de Aportes, Activos y Accesos</h1>
+  <p class="subtitulo">Actualizado al <span class="lineablanco corta"></span> de <span class="lineablanco corta"></span> de 20<span class="lineablanco corta"></span></p>
+
+  <h2>C.1 — Aportes en dinero</h2>
+  <table>
+    <tr><th style="width:20%">Fecha</th><th style="width:30%">Socio</th><th style="width:25%">Monto (Bs)</th><th style="width:25%">Destino</th></tr>
+    <tr><td class="vacia"></td><td></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2>C.2 — Activos fijos afectados al negocio</h2>
+  <table>
+    <tr><th style="width:34%">Bien</th><th style="width:22%">Aportado por</th><th style="width:22%">Valor (Bs)</th><th style="width:22%">Vida útil (meses)</th></tr>
+    <tr><td class="vacia"></td><td></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2>C.3 — Activos digitales</h2>
+  <p>Se valorizan a <strong>costo de reposición</strong>: lo que costaría encargar hoy el mismo trabajo a un tercero, respaldado idealmente con dos cotizaciones de mercado.</p>
+  <table>
+    <tr><th style="width:34%">Activo</th><th style="width:22%">Autor / aportante</th><th style="width:22%">Valor de reposición (Bs)</th><th style="width:22%">Amortización (meses)</th></tr>
+    <tr><td>Sitio web y catálogo digital</td><td></td><td></td><td></td></tr>
+    <tr><td>Sistema de registro de clientes</td><td></td><td></td><td></td></tr>
+    <tr><td>Identidad visual y logotipo</td><td></td><td></td><td></td></tr>
+    <tr><td>Fotografía de producto</td><td></td><td></td><td></td></tr>
+    <tr><td>Portafolio y catálogo comercial</td><td></td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2>C.4 — Cuentas, accesos y credenciales del negocio</h2>
+  <p>Ambos socios deben tener copia de todo lo listado aquí. Las contraseñas no se escriben en esta hoja: se guardan en el gestor o sobre acordado, y aquí solo se registra dónde están.</p>
+  <table>
+    <tr><th style="width:34%">Activo o cuenta</th><th style="width:33%">Identificador</th><th style="width:33%">Dónde está la credencial</th></tr>
+    <tr><td>WhatsApp comercial</td><td></td><td></td></tr>
+    <tr><td>Dominio y hosting</td><td></td><td></td></tr>
+    <tr><td>Correo del negocio</td><td></td><td></td></tr>
+    <tr><td>Instagram / Facebook / TikTok</td><td></td><td></td></tr>
+    <tr><td>Cuenta o billetera de la caja</td><td></td><td></td></tr>
+    <tr><td>Repositorio de código y archivos</td><td></td><td></td></tr>
+    <tr><td class="vacia"></td><td></td><td></td></tr>
+  </table>
+
+  <h2>C.5 — Marca propia</h2>
+  <p>Denominación acordada: <span class="lineablanco"></span> · Titularidad: conjunta, 50% cada socio · Estado del registro: <span class="lineablanco"></span></p>
+
+  <div class="firmas">
+    <div class="firma"><div class="campo alto"></div><div class="etiqueta">Socio A — Firma y fecha</div></div>
+    <div class="firma"><div class="campo alto"></div><div class="etiqueta">Socio B — Firma y fecha</div></div>
+  </div>
+</div>
+
+</body>
+</html>

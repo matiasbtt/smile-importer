@@ -1,0 +1,908 @@
+<meta charset="utf-8">
+<title>Costo Aterrizado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --ground:#EFF1F0;
+    --surface:#FFFFFF;
+    --surface-2:#F6F8F7;
+    --ink:#101A16;
+    --ink-2:#3D4B45;
+    --muted:#66746D;
+    --rule:#DCE2DF;
+    --rule-strong:#C3CCC7;
+    --accent:#27604F;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DEEAE4;
+    --bien:#2F7F5D;
+    --bien-soft:#DFF0E7;
+    --ojo:#8A6410;
+    --ojo-soft:#F6EBD2;
+    --mal:#A63A2C;
+    --mal-soft:#F7E2DE;
+    --sombra:0 1px 2px rgba(16,26,22,.05),0 8px 24px rgba(16,26,22,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0A0A0A;
+      --surface:#121816;
+      --surface-2:#182120;
+      --ink:#E9EDEB;
+      --ink-2:#C2CCC8;
+      --muted:#94A29C;
+      --rule:#26302C;
+      --rule-strong:#36443F;
+      --accent:#5FB795;
+      --accent-ink:#06120E;
+      --accent-soft:#1B3A31;
+      --bien:#57C08F;
+      --bien-soft:#123227;
+      --ojo:#D9A441;
+      --ojo-soft:#33280F;
+      --mal:#E07A6A;
+      --mal-soft:#3A1D18;
+      --sombra:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.28);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0A0A0A;
+    --surface:#121816;
+    --surface-2:#182120;
+    --ink:#E9EDEB;
+    --ink-2:#C2CCC8;
+    --muted:#94A29C;
+    --rule:#26302C;
+    --rule-strong:#36443F;
+    --accent:#5FB795;
+    --accent-ink:#06120E;
+    --accent-soft:#1B3A31;
+    --bien:#57C08F;
+    --bien-soft:#123227;
+    --ojo:#D9A441;
+    --ojo-soft:#33280F;
+    --mal:#E07A6A;
+    --mal-soft:#3A1D18;
+    --sombra:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.28);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:15px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .envoltura{max-width:1220px;margin:0 auto;padding:26px 20px 64px}
+
+  .eyebrow{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 10px;
+  }
+  h1{
+    font-size:clamp(26px,3.6vw,38px);
+    line-height:1.08;
+    letter-spacing:-.025em;
+    font-weight:700;
+    margin:0 0 8px;
+    text-wrap:balance;
+  }
+  .sub{margin:0;color:var(--ink-2);max-width:64ch}
+  .aviso{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin:16px 0 0;
+    padding:7px 12px;
+    background:var(--ojo-soft);
+    color:var(--ojo);
+    border-radius:999px;
+    font-size:12.5px;
+    font-weight:600;
+  }
+  .aviso::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+
+  .veredicto{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--rule);
+    border:1px solid var(--rule);
+    border-radius:12px;
+    overflow:hidden;
+    margin:28px 0 30px;
+    box-shadow:var(--sombra);
+  }
+  .ficha{background:var(--surface);padding:16px 18px}
+  .ficha .rot{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:block;
+    margin-bottom:8px;
+  }
+  .ficha .cifra{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:clamp(20px,2.5vw,27px);
+    font-weight:700;
+    letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+    display:block;
+    line-height:1.1;
+  }
+  .ficha .pie{font-size:12px;color:var(--muted);margin-top:6px;display:block}
+  .ficha.destaca .cifra{color:var(--accent)}
+
+  .pastilla{
+    display:inline-block;
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.04em;
+    padding:2px 8px;
+    border-radius:5px;
+    margin-top:8px;
+  }
+  .pastilla.bien{background:var(--bien-soft);color:var(--bien)}
+  .pastilla.ojo{background:var(--ojo-soft);color:var(--ojo)}
+  .pastilla.mal{background:var(--mal-soft);color:var(--mal)}
+
+  .tablero{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:24px;align-items:start}
+
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--rule);
+    border-radius:12px;
+    margin-bottom:16px;
+    overflow:hidden;
+  }
+  .panel > h2{
+    font-size:12px;
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin:0;
+    padding:13px 16px;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--rule);
+  }
+  .panel .cuerpo{padding:14px 16px 16px}
+  .panel .nota{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+
+  .campo{display:flex;align-items:center;gap:10px;padding:5px 0}
+  .campo label{flex:1;font-size:13.5px;color:var(--ink-2)}
+  .campo .unidad{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:11px;
+    color:var(--muted);
+    width:26px;
+    text-align:right;
+    flex:none;
+  }
+  input[type=number],select{
+    width:104px;
+    flex:none;
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:14px;
+    font-variant-numeric:tabular-nums;
+    text-align:right;
+    padding:6px 9px;
+    color:var(--ink);
+    background:var(--surface-2);
+    border:1px solid var(--rule-strong);
+    border-radius:7px;
+  }
+  select{width:100%;text-align:left}
+  input[type=number]:focus,select:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+    border-color:transparent;
+  }
+  input[type=number]:hover{border-color:var(--muted)}
+  .campo.fuerte input{border-color:var(--accent);background:var(--accent-soft)}
+
+  .resultado{
+    background:var(--surface);
+    border:1px solid var(--rule);
+    border-radius:12px;
+    padding:20px 22px 22px;
+    margin-bottom:16px;
+    box-shadow:var(--sombra);
+  }
+  .resultado > h2{
+    font-size:17px;
+    font-weight:700;
+    letter-spacing:-.015em;
+    margin:0 0 4px;
+  }
+  .resultado > .desc{font-size:13.5px;color:var(--muted);margin:0 0 18px;max-width:62ch}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .desliz{overflow-x:auto}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:left}
+  th{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:500;
+  }
+  td.num,th.num{
+    text-align:right;
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  tr.total td{border-top:2px solid var(--rule-strong);border-bottom:none;font-weight:700;padding-top:11px}
+  tr.total td.num{font-size:15px}
+  td:first-child,th:first-child{padding-left:0}
+  td:last-child,th:last-child{padding-right:0}
+
+  .barras{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+  .fila-barra{display:grid;grid-template-columns:132px minmax(0,1fr);align-items:center;gap:12px;padding:3px 0}
+  .fila-barra .et{font-size:12.5px;color:var(--ink-2);text-align:right;line-height:1.25}
+  .pista{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:9px;min-width:0}
+  .marco{min-width:0}
+  .barra{
+    height:15px;
+    background:var(--accent);
+    border-radius:0 4px 4px 0;
+    min-width:2px;
+  }
+  .barra.tenue{background:var(--rule-strong)}
+  .valor-barra{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:12px;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink-2);
+    white-space:nowrap;
+  }
+  .valor-barra .pct{color:var(--muted)}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-top:16px}
+  .duo > div{background:var(--surface-2);padding:14px 16px}
+  .duo .rot{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:block;
+    margin-bottom:7px;
+  }
+  .duo .cifra{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:22px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    display:block;
+    letter-spacing:-.02em;
+  }
+  .duo .pie{font-size:12px;color:var(--muted);margin-top:4px;display:block}
+
+  .quiebre{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    padding:16px 18px;
+    border-radius:10px;
+    background:var(--surface-2);
+    border:1px solid var(--rule);
+    margin-top:8px;
+  }
+  .quiebre .num-grande{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:34px;
+    font-weight:700;
+    line-height:1;
+    letter-spacing:-.03em;
+    color:var(--accent);
+    font-variant-numeric:tabular-nums;
+    flex:none;
+  }
+  .quiebre p{margin:0;font-size:13.5px;color:var(--ink-2)}
+  .quiebre p + p{margin-top:6px;color:var(--muted);font-size:12.5px}
+
+  .sync{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:11px;
+    color:var(--muted);
+    margin:18px 0 0;
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .sync::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--muted);flex:none}
+  .sync.vivo::before{background:var(--bien)}
+
+  footer{
+    margin-top:34px;
+    padding-top:18px;
+    border-top:1px solid var(--rule);
+    font-size:12.5px;
+    color:var(--muted);
+    max-width:76ch;
+  }
+  footer strong{color:var(--ink-2)}
+
+  @media (max-width:920px){
+    .tablero{grid-template-columns:1fr}
+    .veredicto{grid-template-columns:1fr 1fr}
+    .fila-barra{grid-template-columns:112px minmax(0,1fr);gap:9px}
+  }
+  @media (max-width:560px){
+    .veredicto{grid-template-columns:1fr}
+    .duo{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:#fff}
+    .panel,.resultado,.veredicto{box-shadow:none;break-inside:avoid}
+    .tablero{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="envoltura">
+
+  <header>
+    <p class="eyebrow">Smile Importer · herramienta interna</p>
+    <h1>Costo aterrizado y precio piso</h1>
+    <p class="sub">Cuánto deja de verdad cada equipo vendido: con el modelo de comisión de hoy, y trayendo mercadería propia. Todo se recalcula al escribir.</p>
+    <p class="aviso">Viene con un ejemplo cargado. Reemplazá cada número por cotizaciones reales antes de decidir nada.</p>
+  </header>
+
+  <section class="veredicto" aria-label="Resumen">
+    <div class="ficha">
+      <span class="rot">Costo aterrizado</span>
+      <span class="cifra" id="v-aterrizado">—</span>
+      <span class="pie">por unidad, importando</span>
+    </div>
+    <div class="ficha">
+      <span class="rot">Deja hoy</span>
+      <span class="cifra" id="v-contribA">—</span>
+      <span class="pie">por venta, con comisión</span>
+    </div>
+    <div class="ficha destaca">
+      <span class="rot">Dejaría importando</span>
+      <span class="cifra" id="v-contribB">—</span>
+      <span class="pastilla bien" id="v-delta">—</span>
+    </div>
+    <div class="ficha">
+      <span class="rot">Capital del lote</span>
+      <span class="cifra" id="v-capital">—</span>
+      <span class="pie" id="v-capital-pie">—</span>
+    </div>
+  </section>
+
+  <div class="tablero">
+
+    <div>
+      <div class="panel">
+        <h2>Producto y precio</h2>
+        <div class="cuerpo">
+          <div class="campo"><label for="producto">Referencia</label></div>
+          <select id="producto" aria-label="Referencia del catálogo">
+            <option value="1450" selected>E-14 · Endomotor RUITODENTAL</option>
+            <option value="1650">E-01 · Endomotor Y-SMART</option>
+            <option value="1500">E-05 · Calentador de resina</option>
+            <option value="1450">E-11 · Lupas 3.5x</option>
+            <option value="850">E-09 · Elevadores atraumáticos</option>
+            <option value="760">E-10 · Cámara intraoral</option>
+            <option value="650">E-06 · Turbina de alta velocidad</option>
+            <option value="0">Otro producto</option>
+          </select>
+          <div class="campo fuerte" style="margin-top:10px">
+            <label for="precioVenta">Precio de venta al cliente</label>
+            <input type="number" id="precioVenta" value="1450" min="0" step="10">
+            <span class="unidad">Bs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Modelo actual · comisión</h2>
+        <div class="cuerpo">
+          <p class="nota">Lo que hoy paga y cobra el proveedor, y qué parte de esa diferencia les toca.</p>
+          <div class="campo">
+            <label for="costoProv">Costo que declara el proveedor</label>
+            <input type="number" id="costoProv" value="890" min="0" step="10"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="precioLista">Su precio de lista</label>
+            <input type="number" id="precioLista" value="1400" min="0" step="10"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="pctComision">Comisión que les corresponde</label>
+            <input type="number" id="pctComision" value="50" min="0" max="100" step="5"><span class="unidad">%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Importación propia</h2>
+        <div class="cuerpo">
+          <p class="nota">Los datos del despachante y del proveedor chino van acá. Si un concepto no aplica, dejalo en cero.</p>
+          <div class="campo">
+            <label for="fobUnit">Precio unitario en origen (FOB)</label>
+            <input type="number" id="fobUnit" value="60" min="0" step="5"><span class="unidad">$</span>
+          </div>
+          <div class="campo fuerte">
+            <label for="lote">Unidades del lote</label>
+            <input type="number" id="lote" value="20" min="1" step="1"><span class="unidad">u</span>
+          </div>
+          <div class="campo">
+            <label for="flete">Flete internacional del lote</label>
+            <input type="number" id="flete" value="300" min="0" step="10"><span class="unidad">$</span>
+          </div>
+          <div class="campo">
+            <label for="seguroPct">Seguro sobre el FOB</label>
+            <input type="number" id="seguroPct" value="2" min="0" step="0.5"><span class="unidad">%</span>
+          </div>
+          <div class="campo">
+            <label for="gaPct">Gravamen arancelario sobre CIF</label>
+            <input type="number" id="gaPct" value="10" min="0" step="1"><span class="unidad">%</span>
+          </div>
+          <div class="campo">
+            <label for="ivaPct">IVA de importación</label>
+            <input type="number" id="ivaPct" value="14.94" min="0" step="0.01"><span class="unidad">%</span>
+          </div>
+          <div class="campo">
+            <label for="despachante">Despachante y gastos de despacho</label>
+            <input type="number" id="despachante" value="160" min="0" step="10"><span class="unidad">$</span>
+          </div>
+          <div class="campo">
+            <label for="transpInterno">Transporte interno hasta la ciudad</label>
+            <input type="number" id="transpInterno" value="60" min="0" step="10"><span class="unidad">$</span>
+          </div>
+          <div class="campo">
+            <label for="pasajes">Pasajes y viáticos del viaje</label>
+            <input type="number" id="pasajes" value="0" min="0" step="50"><span class="unidad">$</span>
+          </div>
+          <div class="campo">
+            <label for="bancoPct">Comisión bancaria y cambio</label>
+            <input type="number" id="bancoPct" value="3" min="0" step="0.5"><span class="unidad">%</span>
+          </div>
+          <div class="campo">
+            <label for="mermaPct">Merma y fallas del lote</label>
+            <input type="number" id="mermaPct" value="3" min="0" step="1"><span class="unidad">%</span>
+          </div>
+          <div class="campo fuerte">
+            <label for="tc">Tipo de cambio al que conseguís los dólares</label>
+            <input type="number" id="tc" value="6.96" min="0.01" step="0.05"><span class="unidad">Bs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Costos variables por venta</h2>
+        <div class="cuerpo">
+          <p class="nota">Solo lo que aparece cuando se vende una unidad. La publicidad y el internet no van acá: son fijos.</p>
+          <div class="campo">
+            <label for="entrega">Entrega al cliente</label>
+            <input type="number" id="entrega" value="20" min="0" step="5"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="empaque">Empaque y etiqueta</label>
+            <input type="number" id="empaque" value="8" min="0" step="1"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="cobroPct">Comisión de cobro (tarjeta o pasarela)</label>
+            <input type="number" id="cobroPct" value="0" min="0" step="0.5"><span class="unidad">%</span>
+          </div>
+          <div class="campo">
+            <label for="garantiaPct">Reserva de garantía sobre el costo</label>
+            <input type="number" id="garantiaPct" value="3" min="0" step="1"><span class="unidad">%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Costos fijos del mes</h2>
+        <div class="cuerpo">
+          <p class="nota">Se pagan aunque no se venda nada.</p>
+          <div class="campo">
+            <label for="publicidad">Publicidad</label>
+            <input type="number" id="publicidad" value="300" min="0" step="50"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="internet">Internet y datos</label>
+            <input type="number" id="internet" value="100" min="0" step="10"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="hosting">Dominio y hosting (anual ÷ 12)</label>
+            <input type="number" id="hosting" value="30" min="0" step="5"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="movilidad">Movilidad y visitas</label>
+            <input type="number" id="movilidad" value="150" min="0" step="10"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="depFijos">Depreciación de equipos</label>
+            <input type="number" id="depFijos" value="100" min="0" step="10"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="valorDigital">Valor de los activos digitales</label>
+            <input type="number" id="valorDigital" value="18000" min="0" step="500"><span class="unidad">Bs</span>
+          </div>
+          <div class="campo">
+            <label for="mesesDigital">Amortizados en</label>
+            <input type="number" id="mesesDigital" value="36" min="1" step="6"><span class="unidad">m</span>
+          </div>
+          <div class="campo fuerte">
+            <label for="ventasMes">Ventas esperadas por mes</label>
+            <input type="number" id="ventasMes" value="6" min="1" step="1"><span class="unidad">u</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <section class="resultado">
+        <h2>Qué deja cada venta</h2>
+        <p class="desc">El <strong>margen de contribución</strong> es lo que queda de una venta para pagar la estructura del mes. Todavía no es ganancia: la ganancia empieza cuando la suma del mes supera a los costos fijos.</p>
+        <div class="desliz">
+          <table>
+            <thead>
+              <tr><th>Por unidad</th><th class="num">Comisión (hoy)</th><th class="num">Importando</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Precio de venta</td><td class="num" id="t-precioA">—</td><td class="num" id="t-precioB">—</td></tr>
+              <tr><td>(–) Costo de la mercadería</td><td class="num" id="t-mercA">—</td><td class="num" id="t-mercB">—</td></tr>
+              <tr><td>Ingreso bruto que queda para ustedes</td><td class="num" id="t-ingA">—</td><td class="num" id="t-ingB">—</td></tr>
+              <tr><td>(–) Costos variables</td><td class="num" id="t-varA">—</td><td class="num" id="t-varB">—</td></tr>
+              <tr class="total"><td>Margen de contribución</td><td class="num" id="t-conA">—</td><td class="num" id="t-conB">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="barras" style="margin-top:18px" id="g-comparacion"></div>
+      </section>
+
+      <section class="resultado">
+        <h2>De qué está hecho el costo aterrizado</h2>
+        <p class="desc">Todo lo que hay que desembolsar para tener el lote en la mano, en bolivianos. La mercadería casi nunca es la mitad del costo — ahí está el error de calcular el precio sobre el precio de China.</p>
+        <div class="barras" id="g-composicion"></div>
+        <div class="duo">
+          <div>
+            <span class="rot">Costo del lote</span>
+            <span class="cifra" id="d-lote">—</span>
+            <span class="pie" id="d-lote-pie">—</span>
+          </div>
+          <div>
+            <span class="rot">Por unidad vendible</span>
+            <span class="cifra" id="d-unidad">—</span>
+            <span class="pie" id="d-unidad-pie">—</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="resultado">
+        <h2>El mes</h2>
+        <p class="desc">Cuántas unidades hay que vender para cubrir la estructura, y qué queda después.</p>
+        <div class="desliz">
+          <table>
+            <thead>
+              <tr><th>Por mes</th><th class="num">Comisión (hoy)</th><th class="num">Importando</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Margen de contribución por unidad</td><td class="num" id="m-conA">—</td><td class="num" id="m-conB">—</td></tr>
+              <tr><td>Costos fijos del mes</td><td class="num" id="m-fijosA">—</td><td class="num" id="m-fijosB">—</td></tr>
+              <tr><td><strong>Punto de equilibrio</strong></td><td class="num" id="m-peA">—</td><td class="num" id="m-peB">—</td></tr>
+              <tr class="total"><td>Utilidad del mes</td><td class="num" id="m-utA">—</td><td class="num" id="m-utB">—</td></tr>
+              <tr><td>Por socio</td><td class="num" id="m-socA">—</td><td class="num" id="m-socB">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sync" style="margin-top:14px" id="m-lectura">—</p>
+      </section>
+
+      <section class="resultado">
+        <h2>Precio piso</h2>
+        <p class="desc">El costo completo de poner una unidad en la mano del cliente, con la parte de estructura que le toca. Por debajo del piso, la venta cuesta plata.</p>
+        <div class="desliz">
+          <table>
+            <thead><tr><th>Importando, por unidad</th><th class="num">Bs</th></tr></thead>
+            <tbody>
+              <tr><td>Costo aterrizado</td><td class="num" id="p-aterr">—</td></tr>
+              <tr><td>Costos variables</td><td class="num" id="p-var">—</td></tr>
+              <tr><td>Estructura asignada (fijos ÷ ventas del mes)</td><td class="num" id="p-fijo">—</td></tr>
+              <tr class="total"><td>Costo total por unidad</td><td class="num" id="p-total">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="duo">
+          <div>
+            <span class="rot">Precio piso (+25%)</span>
+            <span class="cifra" id="p-piso">—</span>
+            <span class="pie">no se vende por debajo</span>
+          </div>
+          <div>
+            <span class="rot">Precio de lista sugerido (+80%)</span>
+            <span class="cifra" id="p-lista">—</span>
+            <span class="pie" id="p-lista-pie">—</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="resultado">
+        <h2>El tipo de cambio que decide todo</h2>
+        <p class="desc">El costo en dólares es estable; a cuánto conseguís los dólares, no. Este es el tipo de cambio en el que importar deja exactamente lo mismo que seguir cobrando comisión.</p>
+        <div class="quiebre">
+          <span class="num-grande" id="q-tc">—</span>
+          <div>
+            <p id="q-texto">—</p>
+            <p id="q-nota">—</p>
+          </div>
+        </div>
+      </section>
+
+      <p class="sync" id="estado-sync">Guardando solo en este dispositivo</p>
+    </div>
+  </div>
+
+  <footer>
+    <strong>Cómo se calcula.</strong> CIF = FOB + flete + seguro. Gravamen = CIF × tasa. IVA de importación = (CIF + gravamen) × 14,94%. El costo del lote se divide entre las unidades vendibles (lote menos merma) y se convierte a bolivianos al tipo de cambio que se cargue arriba. Las tasas de gravamen y el umbral del despachante <strong>hay que confirmarlos con una agencia despachante de aduana</strong>: cambian según la partida arancelaria del producto. Los dispositivos médicos además pueden requerir registro sanitario ante AGEMED.
+  </footer>
+</div>
+
+<script>
+(function(){
+  const CAMPOS = ["precioVenta","costoProv","precioLista","pctComision","fobUnit","lote","flete","seguroPct","gaPct","ivaPct","despachante","transpInterno","pasajes","bancoPct","mermaPct","tc","entrega","empaque","cobroPct","garantiaPct","publicidad","internet","hosting","movilidad","depFijos","valorDigital","mesesDigital","ventasMes"];
+  const $ = id => document.getElementById(id);
+  const val = id => { const n = parseFloat($(id).value); return isFinite(n) ? n : 0; };
+
+  const bs = n => "Bs " + Math.round(n).toLocaleString("es-BO");
+  const bs1 = n => "Bs " + n.toLocaleString("es-BO",{minimumFractionDigits:0,maximumFractionDigits:0});
+  const usd = n => "$ " + n.toLocaleString("es-BO",{maximumFractionDigits:0});
+  const un = n => n.toLocaleString("es-BO",{minimumFractionDigits:1,maximumFractionDigits:1});
+
+  function calcular(){
+    const precio = val("precioVenta");
+    const costoProv = val("costoProv"), lista = val("precioLista"), com = val("pctComision")/100;
+    const fobUnit = val("fobUnit"), lote = Math.max(1, val("lote")), flete = val("flete");
+    const seguroPct = val("seguroPct")/100, gaPct = val("gaPct")/100, ivaPct = val("ivaPct")/100;
+    const despachante = val("despachante"), transp = val("transpInterno"), pasajes = val("pasajes");
+    const bancoPct = val("bancoPct")/100, merma = Math.min(0.9, val("mermaPct")/100), tc = Math.max(0.01, val("tc"));
+
+    const fobTotal = fobUnit * lote;
+    const seguro = fobTotal * seguroPct;
+    const cif = fobTotal + flete + seguro;
+    const ga = cif * gaPct;
+    const iva = (cif + ga) * ivaPct;
+    const banco = fobTotal * bancoPct;
+    const loteUSD = cif + ga + iva + despachante + transp + pasajes + banco;
+    const vendibles = lote * (1 - merma);
+    const unidadUSD = loteUSD / vendibles;
+    const aterrizado = unidadUSD * tc;
+    const capital = loteUSD * tc;
+
+    const entrega = val("entrega"), empaque = val("empaque");
+    const cobroPct = val("cobroPct")/100, garPct = val("garantiaPct")/100;
+    const varComunes = entrega + empaque + precio * cobroPct;
+    const varA = varComunes + costoProv * garPct;
+    const varB = varComunes + aterrizado * garPct;
+
+    const ingA = (lista - costoProv) * com + (precio - lista);
+    const ingB = precio - aterrizado;
+    const conA = ingA - varA;
+    const conB = ingB - varB;
+
+    const fijos = val("publicidad") + val("internet") + val("hosting") + val("movilidad") + val("depFijos") + (val("valorDigital") / Math.max(1, val("mesesDigital")));
+    const ventas = Math.max(1, val("ventasMes"));
+    const peA = conA > 0 ? fijos / conA : Infinity;
+    const peB = conB > 0 ? fijos / conB : Infinity;
+    const utA = conA * ventas - fijos;
+    const utB = conB * ventas - fijos;
+
+    const costoTotalUnidad = aterrizado + varB + fijos / ventas;
+
+    // Tipo de cambio en que conB == conA
+    const tcQuiebre = unidadUSD > 0 ? (precio - varComunes - conA) / ((1 + garPct) * unidadUSD) : 0;
+
+    return {precio,costoProv,lista,fobTotal,flete,seguro,cif,ga,iva,banco,despachante,transp,pasajes,
+            loteUSD,lote,vendibles,unidadUSD,aterrizado,capital,tc,varA,varB,ingA,ingB,conA,conB,
+            fijos,ventas,peA,peB,utA,utB,costoTotalUnidad,tcQuiebre};
+  }
+
+  function barras(cont, items, opciones){
+    const max = Math.max(...items.map(i => i.valor), 1);
+    const total = opciones && opciones.total ? opciones.total : items.reduce((a,b) => a + b.valor, 0);
+    cont.innerHTML = "";
+    items.forEach(item => {
+      const fila = document.createElement("div");
+      fila.className = "fila-barra";
+      const et = document.createElement("div");
+      et.className = "et";
+      et.textContent = item.etiqueta;
+      const pista = document.createElement("div");
+      pista.className = "pista";
+      const marco = document.createElement("div");
+      marco.className = "marco";
+      const barra = document.createElement("div");
+      barra.className = "barra" + (item.tenue ? " tenue" : "");
+      barra.style.width = Math.max(2, (item.valor / max) * 100) + "%";
+      marco.appendChild(barra);
+      const v = document.createElement("span");
+      v.className = "valor-barra";
+      const pct = total > 0 ? Math.round(item.valor / total * 100) : 0;
+      v.innerHTML = bs1(item.valor) + (opciones && opciones.sinPct ? "" : ' <span class="pct">· ' + pct + "%</span>");
+      pista.appendChild(marco);
+      pista.appendChild(v);
+      fila.appendChild(et);
+      fila.appendChild(pista);
+      cont.appendChild(fila);
+    });
+  }
+
+  function pintar(){
+    const r = calcular();
+
+    $("v-aterrizado").textContent = bs(r.aterrizado);
+    $("v-contribA").textContent = bs(r.conA);
+    $("v-contribB").textContent = bs(r.conB);
+    $("v-capital").textContent = bs(r.capital);
+    $("v-capital-pie").textContent = r.lote + " unidades · " + usd(r.loteUSD);
+
+    const delta = $("v-delta");
+    if (r.conA > 0 && r.conB > 0){
+      const x = r.conB / r.conA;
+      delta.textContent = (x >= 1 ? "×" + x.toFixed(1) + " que hoy" : "peor que hoy: ×" + x.toFixed(1));
+      delta.className = "pastilla " + (x >= 1.8 ? "bien" : x >= 1.05 ? "ojo" : "mal");
+    } else if (r.conB <= 0){
+      delta.textContent = "pierde plata";
+      delta.className = "pastilla mal";
+    } else {
+      delta.textContent = "—";
+      delta.className = "pastilla ojo";
+    }
+
+    $("t-precioA").textContent = bs(r.precio);
+    $("t-precioB").textContent = bs(r.precio);
+    $("t-mercA").textContent = "la paga él";
+    $("t-mercB").textContent = bs(r.aterrizado);
+    $("t-ingA").textContent = bs(r.ingA);
+    $("t-ingB").textContent = bs(r.ingB);
+    $("t-varA").textContent = bs(r.varA);
+    $("t-varB").textContent = bs(r.varB);
+    $("t-conA").textContent = bs(r.conA);
+    $("t-conB").textContent = bs(r.conB);
+
+    barras($("g-comparacion"), [
+      {etiqueta:"Comisión (hoy)", valor: Math.max(0, r.conA), tenue:true},
+      {etiqueta:"Importando", valor: Math.max(0, r.conB)}
+    ], {sinPct:true});
+
+    const comp = [
+      {etiqueta:"Mercadería (FOB)", valor:r.fobTotal * r.tc},
+      {etiqueta:"IVA importación", valor:r.iva * r.tc},
+      {etiqueta:"Flete internacional", valor:r.flete * r.tc},
+      {etiqueta:"Gravamen arancelario", valor:r.ga * r.tc},
+      {etiqueta:"Despachante", valor:r.despachante * r.tc},
+      {etiqueta:"Transporte interno", valor:r.transp * r.tc},
+      {etiqueta:"Comisión bancaria", valor:r.banco * r.tc},
+      {etiqueta:"Seguro", valor:r.seguro * r.tc},
+      {etiqueta:"Pasajes y viáticos", valor:r.pasajes * r.tc}
+    ].filter(i => i.valor > 0).sort((a,b) => b.valor - a.valor);
+    barras($("g-composicion"), comp, {total:r.capital});
+
+    $("d-lote").textContent = bs(r.capital);
+    $("d-lote-pie").textContent = usd(r.loteUSD) + " a Bs " + r.tc.toFixed(2) + " por dólar";
+    $("d-unidad").textContent = bs(r.aterrizado);
+    $("d-unidad-pie").textContent = un(r.vendibles) + " unidades vendibles de " + r.lote;
+
+    $("m-conA").textContent = bs(r.conA);
+    $("m-conB").textContent = bs(r.conB);
+    $("m-fijosA").textContent = bs(r.fijos);
+    $("m-fijosB").textContent = bs(r.fijos);
+    $("m-peA").textContent = isFinite(r.peA) ? Math.ceil(r.peA) + " u/mes" : "no llega";
+    $("m-peB").textContent = isFinite(r.peB) ? Math.ceil(r.peB) + " u/mes" : "no llega";
+    $("m-utA").textContent = bs(r.utA);
+    $("m-utB").textContent = bs(r.utB);
+    $("m-socA").textContent = bs(r.utA / 2);
+    $("m-socB").textContent = bs(r.utB / 2);
+
+    const lectura = $("m-lectura");
+    if (r.utA < 0 && r.utB > 0){
+      lectura.textContent = "Con " + r.ventas + " ventas al mes, el modelo de comisión no llega a cubrir la estructura; importando sí.";
+      lectura.className = "sync";
+    } else if (r.utA >= 0 && r.utB > r.utA){
+      lectura.textContent = "Con las mismas " + r.ventas + " ventas al mes, importar deja " + bs(r.utB - r.utA) + " más por mes.";
+      lectura.className = "sync vivo";
+    } else {
+      lectura.textContent = "Con estos números, importar no mejora el resultado del mes. Revisá el tipo de cambio y el tamaño del lote.";
+      lectura.className = "sync";
+    }
+
+    $("p-aterr").textContent = bs(r.aterrizado);
+    $("p-var").textContent = bs(r.varB);
+    $("p-fijo").textContent = bs(r.fijos / r.ventas);
+    $("p-total").textContent = bs(r.costoTotalUnidad);
+    $("p-piso").textContent = bs(r.costoTotalUnidad * 1.25);
+    $("p-lista").textContent = bs(r.costoTotalUnidad * 1.80);
+    const margenActual = r.costoTotalUnidad > 0 ? (r.precio / r.costoTotalUnidad - 1) * 100 : 0;
+    $("p-lista-pie").textContent = "el precio actual está " + Math.round(margenActual) + "% sobre el costo";
+
+    const q = $("q-tc");
+    q.textContent = r.tcQuiebre > 0 ? "Bs " + r.tcQuiebre.toFixed(2) : "—";
+    if (r.tcQuiebre > 0 && r.tc < r.tcQuiebre){
+      $("q-texto").textContent = "Mientras consigas dólares por debajo de Bs " + r.tcQuiebre.toFixed(2) + ", importar conviene. Hoy los estás poniendo a Bs " + r.tc.toFixed(2) + ".";
+      $("q-nota").textContent = "Tenés " + Math.round((r.tcQuiebre / r.tc - 1) * 100) + "% de margen antes de que el negocio propio deje de tener sentido frente a la comisión.";
+    } else if (r.tcQuiebre > 0){
+      $("q-texto").textContent = "A Bs " + r.tc.toFixed(2) + " por dólar, importar deja menos que seguir cobrando comisión.";
+      $("q-nota").textContent = "El punto de quiebre está en Bs " + r.tcQuiebre.toFixed(2) + ". Por encima de ahí conviene el modelo actual, o subir el precio de venta.";
+    } else {
+      $("q-texto").textContent = "Cargá los datos de la importación para calcular el punto de quiebre.";
+      $("q-nota").textContent = "";
+    }
+  }
+
+  // ── Persistencia ────────────────────────────────────────────────
+  const CLAVE = "smile-costos-v1";
+  let db = null, escribiendo = null;
+
+  function leerEstado(){
+    const o = {};
+    CAMPOS.forEach(c => { o[c] = $(c).value; });
+    return o;
+  }
+  function aplicarEstado(o){
+    if (!o) return;
+    CAMPOS.forEach(c => {
+      if (o[c] === undefined) return;
+      if (document.activeElement === $(c)) return;
+      $(c).value = o[c];
+    });
+    pintar();
+  }
+
+  function guardar(){
+    const datos = leerEstado();
+    try { localStorage.setItem(CLAVE, JSON.stringify(datos)); } catch(e){}
+    if (!db) return;
+    clearTimeout(escribiendo);
+    escribiendo = setTimeout(() => {
+      db.doc("config/parametros").set({datos, actualizado: Date.now()}).catch(() => {});
+    }, 700);
+  }
+
+  try {
+    const guardado = localStorage.getItem(CLAVE);
+    if (guardado) aplicarEstado(JSON.parse(guardado));
+  } catch(e){}
+
+  CAMPOS.forEach(c => $(c).addEventListener("input", () => { pintar(); guardar(); }));
+  $("producto").addEventListener("change", e => {
+    const p = parseFloat(e.target.value);
+    if (p > 0){ $("precioVenta").value = p; pintar(); guardar(); }
+  });
+
+  pintar();
+
+  if (window.claude && typeof window.claude.use === "function"){
+    window.claude.use("db").then(ns => {
+      if (!ns) return;
+      db = ns;
+      const est = document.getElementById("estado-sync");
+      est.textContent = "Sincronizado — los dos socios ven los mismos números";
+      est.className = "sync vivo";
+      db.doc("config/parametros").onSnapshot(snap => {
+        if (!snap || !snap.exists) return;
+        const d = snap.data();
+        if (d && d.datos) aplicarEstado(d.datos);
+      }, () => {});
+    }).catch(() => {});
+  }
+})();
+</script>
