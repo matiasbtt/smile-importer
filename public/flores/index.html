@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Lámina generativa: flores de papel que brotan, se abren, se marchitan y se vuelven papel — con los errores de la IA a la vista. Incluye el kit de rodaje para Higgsfield.">
+<meta property="og:title" content="Herbario Alucinado">
+<meta property="og:description" content="Flores de papel generadas en tiempo real. El error es el estilo.">
+<meta property="og:type" content="website">
+<style>html{color-scheme:dark}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Herbario Alucinado</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Spectral:ital,wght@0,300;0,400;1,300&display=swap">
+<style>
+  :root{
+    --void:#0B1418;
+    --deep:#10222A;
+    --line:#1E3742;
+    --paper:#EDE6D8;
+    --paper-dim:#C9BFA9;
+    --mist:#7E959D;
+    --glacier:#7FB3AE;
+    --flare:#E2513A;
+    --ink:#141A1C;
+    --u:clamp(14px,1.4vw,20px);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--void);
+    color:var(--paper);
+    font-family:Spectral,Georgia,serif;
+    font-weight:300;
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--flare);color:var(--void)}
+  a{color:var(--glacier)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--u)}
+  .narrow{max-width:64ch}
+
+  /* ── Cabecera ───────────────────────────────── */
+  .top{
+    display:flex;flex-wrap:wrap;gap:12px 28px;align-items:baseline;
+    padding:26px 0 18px;border-bottom:1px solid var(--line);
+  }
+  .mark{
+    font-family:'Bodoni Moda',Didot,'Times New Roman',serif;
+    font-size:26px;letter-spacing:.01em;margin:0;font-weight:500;
+  }
+  .mark em{font-style:italic;color:var(--paper-dim)}
+  .kicker{
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist);
+    margin-left:auto;
+  }
+
+  /* ── Escenario ──────────────────────────────── */
+  .stage{
+    position:relative;margin-top:18px;
+    aspect-ratio:16/10;max-height:min(72vh,700px);
+    border:1px solid var(--line);
+    background:radial-gradient(120% 90% at 50% 42%,#16303A 0%,#0D1B22 48%,#080F13 100%);
+    overflow:hidden;
+  }
+  .stage canvas{display:block;width:100%;height:100%}
+  .hud{
+    position:absolute;inset:0;pointer-events:none;
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:10.5px;letter-spacing:.09em;color:var(--glacier);
+    text-transform:uppercase;
+  }
+  .hud b{font-weight:500;color:var(--paper)}
+  .hud .tl{position:absolute;top:14px;left:16px}
+  .hud .tr{position:absolute;top:14px;right:16px;text-align:right}
+  .hud .br{position:absolute;bottom:14px;right:16px;text-align:right;color:var(--flare)}
+  .hud .bl{position:absolute;bottom:12px;left:16px;max-width:min(46ch,60%)}
+  .especie{
+    font-family:'Bodoni Moda',Didot,serif;font-style:italic;font-size:clamp(22px,3vw,34px);
+    line-height:1.1;letter-spacing:.005em;color:var(--paper);text-transform:none;
+    margin:0 0 2px;
+  }
+  .latin{color:var(--mist);text-transform:none;letter-spacing:.05em;font-size:10.5px}
+  .nota{color:var(--flare);text-transform:none;letter-spacing:.02em;font-size:11px;margin-top:7px;
+    font-family:'JetBrains Mono',monospace;line-height:1.5}
+  .barra{position:absolute;left:0;bottom:0;height:2px;background:var(--flare);width:0;opacity:.85}
+
+  /* ── Controles ──────────────────────────────── */
+  .ctl{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+    padding:12px 0 0;
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--mist);
+  }
+  .ctl button{
+    font:inherit;letter-spacing:.11em;text-transform:uppercase;
+    background:transparent;color:var(--paper);
+    border:1px solid var(--line);padding:8px 14px;cursor:pointer;
+    transition:border-color .2s,color .2s,background .2s;
+  }
+  .ctl button:hover{border-color:var(--glacier);color:var(--glacier)}
+  .ctl button:focus-visible,.copia:focus-visible{outline:2px solid var(--flare);outline-offset:2px}
+  .ctl .sep{flex:1}
+
+  /* ── Secciones ──────────────────────────────── */
+  section{padding:64px 0 8px}
+  h2{
+    font-family:'Bodoni Moda',Didot,serif;font-weight:400;font-size:clamp(28px,3.6vw,42px);
+    line-height:1.12;margin:0 0 6px;text-wrap:balance;
+  }
+  h2 em{font-style:italic;color:var(--flare)}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--mist);margin:0 0 16px;
+  }
+  p{margin:0 0 18px}
+  .lead{font-size:20px;line-height:1.55;color:var(--paper)}
+  .dim{color:var(--paper-dim)}
+
+  /* lista de delatores */
+  .tells{list-style:none;padding:0;margin:26px 0 0;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 34px;
+    border-top:1px solid var(--line);}
+  .tells li{padding:14px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:2.2em 1fr;gap:12px;align-items:baseline}
+  .tells .n{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--flare);letter-spacing:.08em}
+  .tells .t{font-size:15.5px;line-height:1.5}
+  .tells .t b{font-weight:400;color:var(--paper);display:block;font-family:'Bodoni Moda',serif;font-size:17px}
+  .tells .t span{color:var(--paper-dim);font-size:14.5px}
+
+  /* kit de rodaje */
+  .aviso{
+    border-left:2px solid var(--flare);padding:2px 0 2px 18px;margin:0 0 30px;
+    color:var(--paper-dim);font-size:16px;
+  }
+  .anchor{
+    border:1px solid var(--line);background:var(--deep);
+    padding:18px 18px 14px;margin:0 0 34px;
+  }
+  .anchor h3,.plano h3{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--glacier);margin:0 0 10px;font-weight:500;
+  }
+  pre{
+    margin:0;max-width:80ch;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;line-height:1.7;
+    color:var(--paper);white-space:pre-wrap;word-break:break-word;
+  }
+  .copia{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    background:transparent;border:1px solid var(--line);color:var(--mist);
+    padding:6px 11px;cursor:pointer;margin-top:12px;
+  }
+  .copia:hover{border-color:var(--glacier);color:var(--glacier)}
+  .planos{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+  .plano{background:var(--void);padding:22px 20px;display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr);gap:6px 26px}
+  .plano .meta{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;color:var(--mist);letter-spacing:.06em}
+  .plano .meta .tc{color:var(--flare);display:block;font-size:12px}
+  .plano .meta .dur{display:block}
+  .plano .cuerpo{min-width:0}
+  .plano h4{
+    font-family:'Bodoni Moda',Didot,serif;font-weight:400;font-style:italic;
+    font-size:21px;margin:0 0 4px;line-height:1.2;
+  }
+  .plano .musica{font-size:14.5px;color:var(--paper-dim);margin:0 0 14px}
+  @media(max-width:640px){
+    .plano{grid-template-columns:1fr;gap:10px}
+    .stage{aspect-ratio:4/5}
+    .hud .tr,.hud .tl{font-size:9.5px}
+  }
+  .tabla{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:12.5px;margin-top:8px}
+  .tabla th{text-align:left;font-weight:500;color:var(--mist);letter-spacing:.12em;text-transform:uppercase;font-size:10.5px;padding:0 18px 10px 0;border-bottom:1px solid var(--line)}
+  .tabla td{padding:10px 18px 10px 0;border-bottom:1px solid var(--line);color:var(--paper);vertical-align:top}
+  .tabla td:last-child{color:var(--paper-dim);font-family:Spectral,serif;font-size:14.5px}
+  .scrollx{overflow-x:auto}
+  footer{
+    margin-top:70px;border-top:1px solid var(--line);padding:26px 0 60px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.09em;
+    color:var(--mist);text-transform:uppercase;
+    display:flex;flex-wrap:wrap;gap:10px 28px;
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="mark">Herbario <em>Alucinado</em></h1>
+    <span class="kicker">lámina viva · generada en tiempo real</span>
+  </header>
+
+  <div class="stage" id="escena">
+    <canvas id="lienzo"></canvas>
+    <div class="hud">
+      <div class="tl">semilla <b id="hSeed">—</b><br>paso <b id="hPaso">—</b></div>
+      <div class="tr" id="hCuenta">pétalos —</div>
+      <div class="bl">
+        <p class="especie" id="hNombre">—</p>
+        <div class="latin" id="hLatin">—</div>
+        <div class="nota" id="hNota"></div>
+      </div>
+      <div class="br" id="hFase">brote</div>
+      <div class="barra" id="hBarra"></div>
+    </div>
+  </div>
+
+  <div class="ctl">
+    <button id="btnPausa" type="button">pausar</button>
+    <button id="btnSalto" type="button">otra flor</button>
+    <button id="btnSemilla" type="button">nueva semilla</button>
+    <span class="sep"></span>
+    <span id="hCiclo">ciclo 1</span>
+  </div>
+
+  <section>
+    <p class="eyebrow">La idea</p>
+    <h2>Que se <em>note</em> la máquina.</h2>
+    <div class="narrow">
+      <p class="lead">Una flor brota, se abre, se marchita y se vuelve papel. Después otra, y otra: margarita, girasol, rosa, amapola, tulipán, loto, diente de león, orquídea, crisantemo, cerezo, clavel, lirio. Todo cortado en cartulina y repasado a lápiz.</p>
+      <p class="dim">Nada de esto intenta pasar por una foto ni por una acuarela. La cosa que dibuja no vio nunca un girasol: vio millones de imágenes de girasoles y se quedó con un promedio raro. Entonces cuenta mal los pétalos, imprime el color tres píxeles corrido del contorno, duda a mitad del brote entre una rosa y una amapola, y a veces se inventa una especie que no existe y le pone nombre en latín.</p>
+      <p class="dim">En vez de tapar eso, la lámina lo declara: el margen dice la semilla, el paso de difusión, cuántos pétalos creyó dibujar y cuántos dibujó. El error es el estilo. Cada vez que abrís esta página la flor es otra — no hay video grabado, hay una máquina dibujando ahora.</p>
+    </div>
+
+    <ul class="tells">
+      <li><span class="n">01</span><span class="t"><b>Registro corrido</b><span>El color se imprime desplazado del contorno de tinta, como una risografía mal calzada.</span></span></li>
+      <li><span class="n">02</span><span class="t"><b>Conteo imposible</b><span>El margen declara 21 pétalos y en la lámina hay 22. Ninguno de los dos se corrige.</span></span></li>
+      <li><span class="n">03</span><span class="t"><b>Duda de especie</b><span>A media apertura la geometría deriva hacia otra flor durante un compás y vuelve.</span></span></li>
+      <li><span class="n">04</span><span class="t"><b>Pétalo fantasma</b><span>Uno se dibuja dos veces, corrido y a medio opacar: el modelo lo pensó dos veces.</span></span></li>
+      <li><span class="n">05</span><span class="t"><b>Sombra desobediente</b><span>La sombra de la flor cae hacia un lado que ninguna luz de la escena explica.</span></span></li>
+      <li><span class="n">06</span><span class="t"><b>Costura de espejo</b><span>Media flor es el reflejo exacto de la otra media, con la costura a la vista.</span></span></li>
+      <li><span class="n">07</span><span class="t"><b>Latente sin resolver</b><span>Entre flor y flor quedan bloques de ruido que se van revelando, con el paso contado.</span></span></li>
+      <li><span class="n">08</span><span class="t"><b>Flor dentro de la flor</b><span>El disco central es, mirado de cerca, otra flor completa más chica.</span></span></li>
+      <li><span class="n">09</span><span class="t"><b>Marchitar al revés</b><span>Los pétalos caídos vuelven a subir un segundo antes de terminar de caer.</span></span></li>
+      <li><span class="n">10</span><span class="t"><b>Especie no catalogada</b><span>Cada tanto brota una flor que no existe, con su nombre en latín inventado.</span></span></li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="eyebrow">Kit de rodaje · Higgsfield</p>
+    <h2>Ocho planos para <em>Motion Picture Soundtrack</em></h2>
+    <p class="aviso">No puedo entrar a Higgsfield desde acá: no tengo la herramienta conectada, así que el video no está renderizado. Lo que sigue es el rodaje entero listo para pegar — ancla de estilo, ocho planos con su prompt de imagen y su prompt de animación, movimiento de cámara y duración, cuadrados contra la estructura de la canción. Los tiempos son aproximados: ajustalos contra tu copia del tema.</p>
+
+    <div class="anchor">
+      <h3>Ancla de estilo — pegar al principio de todos los prompts</h3>
+      <pre id="ancla">Cut-paper flower diorama, hand-drawn on top: matte cardstock petals with deckled torn edges, visible fold creases, pencil contour lines slightly off-register from the flat color fill (2–3 px risograph misregistration), hard offset paper shadows on a deep ink-blue void. Botanical-plate composition, single flower centered, shallow depth. Palette: cream paper #EDE6D8, faded sage and ochre, one burnt vermilion #E2513A accent, ink-blue background #0B1418. Deliberately synthetic: petal counts that do not resolve, one ghosted duplicate petal, a shadow falling the wrong way, faint latent-noise blocks at the edges of frame, tiny monospace annotation marks. 35mm grain, no photorealism, no glossy render, no text logos.</pre>
+      <button class="copia" data-copia="ancla" type="button">copiar ancla</button>
+    </div>
+
+    <div class="planos">
+
+      <div class="plano">
+        <div class="meta"><span class="tc">00:00</span><span class="dur">22 s · 3 tomas</span>armónio solo</div>
+        <div class="cuerpo">
+          <h4>La semilla en la mesa</h4>
+          <p class="musica">Entra el armonio, sin voz. Nada se mueve todavía salvo el aire.</p>
+          <pre id="p1">IMAGEN: [ancla] Extreme macro, a single paper seed lying on an empty ink-blue surface, one shaft of cold light, dust motes of torn paper, vast negative space above it.
+ANIMACIÓN: very slow push in on the seed, dust drifting upward against gravity, the paper surface breathing almost imperceptibly. No cuts, no camera shake.
+CÁMARA: Dolly In lenta (o Slow Push In). Velocidad mínima.</pre>
+          <button class="copia" data-copia="p1" type="button">copiar plano 01</button>
+        </div>
+      </div>
+
+      <div class="plano">
+        <div class="meta"><span class="tc">00:22</span><span class="dur">22 s · 2 tomas</span>entra la voz</div>
+        <div class="cuerpo">
+          <h4>Brote — margarita</h4>
+          <p class="musica">Primera estrofa. El tallo aparece con la primera sílaba.</p>
+          <pre id="p2">IMAGEN: [ancla] A paper stem rising from the seed, two folded cardstock leaves half-unfurled, a tight daisy bud at the top still closed, pencil hatching at the base of the stem.
+ANIMACIÓN: the stem grows upward drawing itself like a pencil line, leaves unfold one after the other with paper stiffness, the bud swells. Camera tilts up following the growth.
+CÁMARA: Tilt Up / Crane Up suave, siguiendo la punta del tallo.</pre>
+          <button class="copia" data-copia="p2" type="button">copiar plano 02</button>
+        </div>
+      </div>
+
+      <div class="plano">
+        <div class="meta"><span class="tc">00:44</span><span class="dur">21 s · 2 tomas</span>estrofa</div>
+        <div class="cuerpo">
+          <h4>Apertura — girasol</h4>
+          <p class="musica">La flor se abre entera en un solo plano, sin corte.</p>
+          <pre id="p3">IMAGEN: [ancla] A cut-paper sunflower opening, two rings of ochre ray petals unfurling outward, dark brown disc of phyllotaxis paper seeds at the center, one petal drawn twice and ghosted at 40% opacity.
+ANIMACIÓN: petals unfurl ring by ring with a slight overshoot and settle, the disc seeds pop into place in a golden-angle spiral, camera orbits a few degrees to the left. The ghost petal lags one beat behind the real one.
+CÁMARA: Orbit / Arc Left muy corto (10–15°).</pre>
+          <button class="copia" data-copia="p3" type="button">copiar plano 03</button>
+        </div>
+      </div>
+
+      <div class="plano">
+        <div class="meta"><span class="tc">01:05</span><span class="dur">20 s · 3 tomas</span>segunda estrofa</div>
+        <div class="cuerpo">
+          <h4>La duda — rosa que era amapola</h4>
+          <p class="musica">El plano de la mentira: acá se ve que es una máquina.</p>
+          <pre id="p4">IMAGEN: [ancla] A paper rose mid-spiral, but three of its petals belong to a poppy — thin crinkled silk-paper petals with a black center bleeding in, the two species fighting inside one flower, a visible mirror seam down the vertical axis.
+ANIMACIÓN: the flower morphs between rose and poppy and back, petal count changing on the fly, the mirror seam sliding across the frame, one frame of latent noise blocks resolving. Impossible topology, no natural transition.
+CÁMARA: Crash Zoom In corto y frenado, o Snap Zoom. Un solo golpe.</pre>
+          <button class="copia" data-copia="p4" type="button">copiar plano 04</button>
+        </div>
+      </div>
+
+      <div class="plano">
+        <div class="meta"><span class="tc">01:25</span><span class="dur">20 s · 2 tomas</span>estrofa baja</div>
+        <div class="cuerpo">
+          <h4>Marchitar — tulipán y clavel</h4>
+          <p class="musica">Los pétalos empiezan a soltarse. Cámara quieta, todo el movimiento es caída.</p>
+          <pre id="p5">IMAGEN: [ancla] A drooping paper tulip losing its color toward bare cream cardstock, edges browning like scorched paper, two petals already detached and mid-air, flat, showing their blank paper back.
+ANIMACIÓN: petals detach one by one and fall flipping like dropped paper — colored front, blank cream back — slow, in a heavy silent air. The stem bends. Camera locked off.
+CÁMARA: Estática (Locked Off). Nada de movimiento.</pre>
+          <button class="copia" data-copia="p5" type="button">copiar plano 05</button>
+        </div>
+      </div>
+
+      <div class="plano">
+        <div class="meta"><span class="tc">01:45</span><span class="dur">20 s · 1 toma</span>arpas y coro</div>
+        <div class="cuerpo">
+          <h4>El campo entero</h4>
+          <p class="musica">El swell más grande del tema. Único plano abierto de toda la pieza.</p>
+          <pre id="p6">IMAGEN: [ancla] Wide shot, hundreds of paper flowers of every species — daisies, sunflowers, roses, poppies, lotuses, dandelions, orchids, chrysanthemums, cherry blossom, carnations, lilies — standing in a dark field, each casting a hard offset shadow in a different direction, receding into ink-blue void.
+ANIMACIÓN: continuous pull back revealing more and more of the field, the flowers swaying out of phase with each other, shadows disagreeing about where the light is. Slow, no cut.
+CÁMARA: Dolly Out / Pull Back largo y continuo.</pre>
+          <button class="copia" data-copia="p6" type="button">copiar plano 06</button>
+        </div>
+      </div>
+
+      <div class="plano">
+        <div class="meta"><span class="tc">02:05</span><span class="dur">30 s · 2 tomas</span>casi silencio</div>
+        <div class="cuerpo">
+          <h4>Latente</h4>
+          <p class="musica">La parte más vacía. La imagen se queda sin resolver a propósito.</p>
+          <pre id="p7">IMAGEN: [ancla] A flower caught half-generated: blocks of colored latent noise in the shape of petals, only the outer ring resolved into clean cut paper, a monospace step counter etched faintly in the corner of the frame.
+ANIMACIÓN: the noise blocks resolve into petals in discrete steps, not smoothly — 8 visible denoising jumps — then un-resolve back into noise at the end. Absolutely still camera.
+CÁMARA: Estática. Sin interpolación suave entre pasos.</pre>
+          <button class="copia" data-copia="p7" type="button">copiar plano 07</button>
+        </div>
+      </div>
+
+      <div class="plano">
+        <div class="meta"><span class="tc">02:35</span><span class="dur">44 s · 3 tomas</span>coda final</div>
+        <div class="cuerpo">
+          <h4>Ascenso — el papel sube</h4>
+          <p class="musica">Hasta el fade. Cierre de la pieza: la gravedad se da vuelta.</p>
+          <pre id="p8">IMAGEN: [ancla] All the fallen paper petals suspended in the air rising instead of falling, a column of cut-paper flowers of every species stacking upward into the dark, the last daisy at the very top almost white.
+ANIMACIÓN: every petal drifts upward and out of the top of frame, flipping slowly, the camera tilts up and keeps rising past them into empty ink-blue, the last frame is bare paper grain. Reverse gravity, dreamlike, no cut.
+CÁMARA: Tilt Up + Crane Up continuo hasta el vacío. Terminar en negro-papel.</pre>
+          <button class="copia" data-copia="p8" type="button">copiar plano 08</button>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="eyebrow" style="margin-top:44px">Cómo armarlo</p>
+    <div class="scrollx">
+      <table class="tabla">
+        <thead><tr><th>Paso</th><th>Qué hacer</th></tr></thead>
+        <tbody>
+          <tr><td>Formato</td><td>16:9 para la web, y una pasada aparte en 9:16 para redes — no recortes el 16:9, los planos están compuestos al centro y se rompen.</td></tr>
+          <tr><td>Stills primero</td><td>Generá las 8 imágenes ancla antes de animar nada. Elegí una sola y fijá su semilla; reusála en las otras siete para que el papel sea el mismo papel.</td></tr>
+          <tr><td>Encadenado</td><td>Usá el último cuadro de cada plano como imagen de entrada del siguiente. Así el corte no se nota y la flor parece una sola que se va transformando.</td></tr>
+          <tr><td>Duración</td><td>Los clips salen de 4–5 s. Cada plano de la lista necesita 2–3 tomas encadenadas; están anotadas en el margen.</td></tr>
+          <tr><td>Velocidad</td><td>Rendereá todo y después bajalo a 80–85 % en el editor. El tema respira a ~52 pulsaciones por minuto y la IA por defecto anima demasiado rápido.</td></tr>
+          <tr><td>Transiciones</td><td>Corte seco en 01:05 y 02:35. El resto, disolvencias largas de 1,5 s. Ninguna transición de plantilla.</td></tr>
+          <tr><td>Música</td><td>«Motion Picture Soundtrack» (Radiohead, <em>Kid A</em>, 2000) sirve de guía de montaje, pero si el video se publica hace falta licencia. Para la web, o lo dejás mudo, o encargás una pieza propia: armonio, arpa y coro, misma estructura.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>Herbario Alucinado</span>
+    <span>lámina generativa · canvas 2D, sin assets</span>
+    <span>cada carga es una flor distinta</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ═══ azar reproducible y ruido ═══════════════════════════ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const frac=x=>x-Math.floor(x);
+const h1=(i,s)=>frac(Math.sin(i*127.1+s*311.7)*43758.5453);
+function n1(x,s){const i=Math.floor(x),f=x-i,u=f*f*(3-2*f);return h1(i,s)+(h1(i+1,s)-h1(i,s))*u}
+const fbm=(x,s)=>n1(x,s)*.56+n1(x*2.13,s+7)*.29+n1(x*4.31,s+13)*.15;
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const inv=(v,a,b)=>clamp((v-a)/(b-a),0,1);
+const salida=t=>1-Math.pow(1-t,3);
+const suave=t=>t*t*(3-2*t);
+
+/* ═══ color ═══════════════════════════════════════════════ */
+const rgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const css=(c,a)=>'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+(a===undefined?1:a)+')';
+const mez=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
+const PAPEL=rgb('#EDE6D8'), DORSO=rgb('#D6CBB4'), SECO=rgb('#B49B77'), TINTA=rgb('#0E1518');
+
+/* ═══ especies ════════════════════════════════════════════ */
+const ESPECIES=[
+ {nom:'Margarita', lat:'Bellis perennis', alto:.60, tallo:'#61795A', hojas:2,
+  anillos:[{n:21,largo:1,ancho:.085,tipo:'lengua',rizo:.10,r0:.14}],
+  pet:['#F4EEE1'], dorso:'#DCD2BC', centro:{tipo:'disco',r:.15,col:'#E3A63A',punto:'#8B5B18'}},
+
+ {nom:'Girasol', lat:'Helianthus annuus', alto:.58, tallo:'#5C7345', hojas:2,
+  anillos:[{n:22,largo:1,ancho:.10,tipo:'pala',rizo:.06,r0:.29},{n:16,largo:.82,ancho:.09,tipo:'pala',rizo:.14,r0:.27,desf:.5}],
+  pet:['#E4A92F','#D8952A'], dorso:'#B9812A', centro:{tipo:'semillas',r:.30,col:'#3E2A18',punto:'#6B4A28'}},
+
+ {nom:'Rosa', lat:'Rosa gallica', alto:.56, tallo:'#4F6A4A', hojas:3,
+  anillos:[{n:13,largo:1,ancho:.19,tipo:'copa',rizo:.30,r0:.10},{n:11,largo:.78,ancho:.18,tipo:'copa',rizo:.42,r0:.08,desf:.4},
+           {n:8,largo:.55,ancho:.17,tipo:'copa',rizo:.55,r0:.05,desf:.2},{n:5,largo:.34,ancho:.15,tipo:'copa',rizo:.7,r0:.02,desf:.7}],
+  pet:['#B8352E','#C9483C','#D25B47'], dorso:'#8E2A25', centro:{tipo:'ninguno'}},
+
+ {nom:'Amapola', lat:'Papaver rhoeas', alto:.62, tallo:'#6E7C4E', hojas:1,
+  anillos:[{n:5,largo:1,ancho:.36,tipo:'seda',rizo:.16,r0:.06,volado:.42}],
+  pet:['#D6402C','#C4331F'], dorso:'#9E2A1C', centro:{tipo:'disco',r:.16,col:'#1A1614',punto:'#4A423A'}},
+
+ {nom:'Tulipán', lat:'Tulipa gesneriana', alto:.66, tallo:'#5A7A52', hojas:2,
+  anillos:[{n:6,largo:1,ancho:.24,tipo:'copa',rizo:-.22,r0:.03},{n:3,largo:.86,ancho:.21,tipo:'copa',rizo:-.30,r0:.02,desf:.5}],
+  pet:['#C2417C','#AE3168'], dorso:'#8E2653', centro:{tipo:'ninguno'}},
+
+ {nom:'Loto', lat:'Nelumbo nucifera', alto:.44, tallo:'#5E7A63', hojas:2,
+  anillos:[{n:12,largo:1,ancho:.14,tipo:'pala',rizo:.20,r0:.16},{n:10,largo:.76,ancho:.13,tipo:'pala',rizo:.30,r0:.13,desf:.5},
+           {n:8,largo:.52,ancho:.12,tipo:'pala',rizo:.42,r0:.10,desf:.25}],
+  pet:['#E7A9B6','#DE94A6','#F0C0C6'], dorso:'#C57F91', centro:{tipo:'disco',r:.13,col:'#D9C45A',punto:'#8F7A22'}},
+
+ {nom:'Diente de león', lat:'Taraxacum officinale', alto:.64, tallo:'#6B7F58', hojas:1,
+  anillos:[{n:44,largo:1,ancho:.022,tipo:'aguja',rizo:.05,r0:.06,vilano:1}],
+  pet:['#E9E4D6','#DCD5C4'], dorso:'#CFC7B2', centro:{tipo:'disco',r:.07,col:'#9C8F73',punto:'#6B6350'}},
+
+ {nom:'Orquídea', lat:'Phalaenopsis amabilis', alto:.54, tallo:'#5B6E52', hojas:1,
+  anillos:[{n:5,largo:1,ancho:.26,tipo:'copa',rizo:.12,r0:.05,asim:.34}],
+  pet:['#F1E7E9','#E3D3DA'], dorso:'#C9B2BE', centro:{tipo:'labelo',r:.20,col:'#8E4E86',punto:'#E0B93F'}},
+
+ {nom:'Crisantemo', lat:'Chrysanthemum morifolium', alto:.52, tallo:'#586B49', hojas:2,
+  anillos:[{n:24,largo:1,ancho:.045,tipo:'aguja',rizo:.22,r0:.20},{n:20,largo:.80,ancho:.045,tipo:'aguja',rizo:.34,r0:.17,desf:.5},
+           {n:16,largo:.60,ancho:.042,tipo:'aguja',rizo:.46,r0:.13,desf:.25},{n:12,largo:.40,ancho:.04,tipo:'aguja',rizo:.6,r0:.08,desf:.75}],
+  pet:['#C8802A','#B36A22','#DA9A3C'], dorso:'#93571C', centro:{tipo:'disco',r:.09,col:'#7A3F1A',punto:'#C08A3A'}},
+
+ {nom:'Cerezo', lat:'Prunus serrulata', alto:.50, tallo:'#7A5B4A', hojas:1,
+  anillos:[{n:5,largo:1,ancho:.30,tipo:'muesca',rizo:.14,r0:.10}],
+  pet:['#F6DDE2','#EFCBD5'], dorso:'#D9AFBB', centro:{tipo:'estambres',r:.13,col:'#E7C9A0',punto:'#B23C55'}},
+
+ {nom:'Clavel', lat:'Dianthus caryophyllus', alto:.58, tallo:'#67805E', hojas:2,
+  anillos:[{n:16,largo:1,ancho:.14,tipo:'copa',rizo:.18,r0:.13,volado:.55},{n:14,largo:.78,ancho:.13,tipo:'copa',rizo:.3,r0:.10,desf:.5,volado:.55},
+           {n:11,largo:.55,ancho:.12,tipo:'copa',rizo:.44,r0:.07,desf:.2,volado:.55}],
+  pet:['#D2427E','#BE3369','#E06195'], dorso:'#9E2A56', centro:{tipo:'ninguno'}},
+
+ {nom:'Lirio', lat:'Lilium bulbiferum', alto:.60, tallo:'#5D7448', hojas:2,
+  anillos:[{n:6,largo:1,ancho:.15,tipo:'pala',rizo:.34,r0:.08},{n:3,largo:.92,ancho:.14,tipo:'pala',rizo:.40,r0:.06,desf:.5}],
+  pet:['#E0762B','#D06423'], dorso:'#A94E1B', centro:{tipo:'estambres',r:.10,col:'#C9932F',punto:'#5A2E12'}},
+
+ {nom:'Especie no catalogada', lat:'Helianthus × papaveracea', inventada:1, alto:.57, tallo:'#4F7060', hojas:2,
+  anillos:[{n:9,largo:1,ancho:.30,tipo:'seda',rizo:.2,r0:.08,volado:.5},{n:19,largo:.66,ancho:.05,tipo:'aguja',rizo:.4,r0:.16,desf:.3}],
+  pet:['#3F8C86','#D95436','#E0B23F'], dorso:'#2C625E', centro:{tipo:'semillas',r:.17,col:'#22403E',punto:'#7FB3AE'}}
+];
+ESPECIES.forEach(e=>{e.petRGB=e.pet.map(rgb);e.dorsoRGB=rgb(e.dorso);e.talloRGB=rgb(e.tallo);
+  if(e.centro.col){e.centro.colRGB=rgb(e.centro.col);e.centro.puntoRGB=rgb(e.centro.punto)}});
+
+/* ═══ geometría de pétalo ═════════════════════════════════ */
+function perfil(tipo,s){
+  switch(tipo){
+    case 'lengua': return Math.pow(Math.sin(Math.PI*Math.pow(s,.78)),.55);
+    case 'pala':   return Math.pow(Math.sin(Math.PI*s),.72)*(1-.18*s);
+    case 'copa':   return Math.pow(s+.06,.42)*Math.pow(1-s*.88,.62);
+    case 'seda':   return Math.pow(Math.sin(Math.PI*Math.pow(s,.58)),.46);
+    case 'aguja':  return Math.pow(1-s,.55)*Math.pow(s+.15,.25);
+    case 'muesca': return Math.pow(Math.sin(Math.PI*Math.pow(s,.72)),.5)*(s>.9?1-(s-.9)*6:1);
+    default:       return Math.sin(Math.PI*s);
+  }
+}
+function puntosPetalo(cfg,sem){
+  const N=24,izq=[],der=[];
+  for(let i=0;i<=N;i++){
+    const s=i/N;
+    let w=perfil(cfg.tipo,s)*cfg.ancho;
+    const deckle=1+(fbm(s*9+sem*3.1,sem)-.5)*.22;
+    const vol=cfg.volado?1+(fbm(s*17+sem*5.7,sem+31)-.5)*cfg.volado:1;
+    const cx=cfg.rizo*s*s*.55+(fbm(s*3+sem,sem+11)-.5)*.05;
+    const y=-s*cfg.largo;
+    der.push([cx+w*deckle*vol,y]);
+    izq.push([cx-w*deckle*vol*(cfg.asim?1-cfg.asim:1),y]);
+  }
+  return der.concat(izq.reverse());
+}
+const traza=(c,p)=>{c.beginPath();c.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++)c.lineTo(p[i][0],p[i][1]);c.closePath()};
+
+/* ═══ construcción de una flor ════════════════════════════ */
+let contador=0;
+function nuevaFlor(semilla,indice){
+  const r=mulberry32(semilla);
+  const esp=ESPECIES[indice%ESPECIES.length];
+  const rival=ESPECIES[(indice*7+3)%ESPECIES.length];
+  const espejo=r()<.22, fantasma=r()<.55, duda=r()<.5, interior=r()<.18, reves=r()<.35;
+  const petalos=[];
+  esp.anillos.forEach((an,ai)=>{
+    const nn=an.n+(ai===0&&r()<.5?1:0);
+    for(let i=0;i<nn;i++){
+      let k=i/nn;
+      if(espejo)k=(i<nn/2?i:nn-i)/nn;
+      const ang=k*Math.PI*2+(an.desf||0)*Math.PI*2/nn+(espejo?0:(r()-.5)*.06);
+      const sem=espejo?k*97+ai*13:r()*100;
+      const cfg={largo:an.largo,ancho:an.ancho,tipo:an.tipo,rizo:an.rizo*(1+(r()-.5)*.3),volado:an.volado,asim:an.asim&&r()<.4?an.asim:0};
+      petalos.push({
+        ang,r0:an.r0,pts:puntosPetalo(cfg,sem),
+        alt:duda?puntosPetalo({largo:an.largo,ancho:rival.anillos[0].ancho,tipo:rival.anillos[0].tipo,rizo:rival.anillos[0].rizo,volado:rival.anillos[0].volado},sem):null,
+        col:esp.petRGB[(ai+i)%esp.petRGB.length],
+        colAlt:rival.petRGB[0],
+        vilano:an.vilano,anillo:ai,
+        abre:(ai*.22+(i%5)*.05+r()*.12),
+        cae:.60+ai*.03+r()*.26,
+        giro:(r()-.5)*1.1
+      });
+    }
+  });
+  const dibujados=petalos.length;
+  const declarados=dibujados+(r()<.5?-1:1)*(1+(r()<.25?1:0));
+  const notas=[];
+  notas.push('nota del modelo: declaré '+declarados+' pétalos y dibujé '+dibujados+'.');
+  if(duda)notas.push('dudé entre '+esp.nom.toLowerCase()+' y '+rival.nom.toLowerCase()+' a mitad de la apertura.');
+  if(espejo)notas.push('la mitad derecha es el espejo exacto de la izquierda.');
+  if(fantasma)notas.push('un pétalo quedó dibujado dos veces.');
+  if(interior)notas.push('el centro contiene otra flor completa.');
+  if(esp.inventada)notas.push('esta especie no existe: la compuse con partes de dos familias.');
+  return {esp,rival,petalos,dibujados,declarados,espejo,fantasma,duda,interior,reves,
+    idxFantasma:(Math.floor(r()*petalos.length)||0),
+    sombraAng:r()*Math.PI*2, semilla, nota:notas[Math.floor(r()*notas.length)],
+    residuo:'"'+esp.nom.toLowerCase()+', papel cortado, ..." --seed '+semilla.toString(16).slice(0,6),
+    resX:.09+r()*.16, resY:.17+r()*.12, t:0};
+}
+
+/* ═══ lienzo ══════════════════════════════════════════════ */
+const lienzo=document.getElementById('lienzo'), c=lienzo.getContext('2d');
+let W=1,H=1,DPR=1,R=1,CX=0,CY=0,BX=0,BY=0,grano=null;
+
+function medir(){
+  const caja=lienzo.getBoundingClientRect();
+  DPR=Math.min(2,window.devicePixelRatio||1);
+  W=Math.max(1,caja.width); H=Math.max(1,caja.height);
+  lienzo.width=Math.round(W*DPR); lienzo.height=Math.round(H*DPR);
+  R=Math.min(W*.25,H*.27);
+  CX=W*.5; CY=H*.42; BX=W*.5+R*.10; BY=H*.97;
+}
+function hacerGrano(){
+  const g=document.createElement('canvas');g.width=g.height=140;
+  const gc=g.getContext('2d'),d=gc.createImageData(140,140);
+  for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;
+    d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=Math.random()*38}
+  gc.putImageData(d,0,0);grano=c.createPattern(g,'repeat');
+}
+
+/* ═══ estado ══════════════════════════════════════════════ */
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DUR=15000, LAT=1900;
+let semillaBase=(Math.random()*0xffffff)|0;
+let ciclo=1, flor=nuevaFlor(semillaBase,0), t=reduce?.5:.42, latente=0, corriendo=!reduce;
+let papeles=[], ultimo=0, revesActivo=0;
+
+/* ═══ dibujo de piezas ════════════════════════════════════ */
+function figura(pts,relleno,alfa,sx,sy,ox,oy){
+  c.save(); if(ox||oy)c.translate(ox/sx,oy/sy);
+  traza(c,pts); c.fillStyle=css(relleno,alfa); c.fill(); c.restore();
+}
+function contorno(pts,sx,sy,fuerza){
+  const lw=1.45/((Math.abs(sx)+Math.abs(sy))*.5);
+  c.lineWidth=lw; c.lineJoin='round';
+  traza(c,pts); c.strokeStyle='rgba(12,19,22,'+(.62*fuerza)+')'; c.stroke();
+  c.save(); c.translate(lw*.7,lw*.6); traza(c,pts); c.strokeStyle='rgba(12,19,22,'+(.26*fuerza)+')'; c.stroke(); c.restore();
+}
+
+function dibujarTallo(crec,marchito){
+  if(crec<=.01)return;
+  const esp=flor.esp, largo=esp.alto, cpx=CX+R*.34*Math.sin(flor.semilla), n=22;
+  const pts=[],der=[],izq=[];
+  for(let i=0;i<=n;i++){
+    const s=i/n*crec, u=1-s;
+    const x=u*u*BX+2*u*s*cpx+s*s*CX;
+    const y=u*u*BY+2*u*s*(BY+CY)*.5+s*s*(CY+R*.08);
+    const yb=y+marchito*R*.10*s*s;
+    const w=R*(.030-.016*s)*(1-.15*marchito);
+    const ang=Math.atan2(CY-BY,CX-BX);
+    der.push([x+Math.cos(ang+Math.PI/2)*w*0+w,yb]); izq.push([x-w,yb]);
+    pts.push([x,yb]);
+  }
+  const cuerpo=der.concat(izq.reverse());
+  const col=mez(esp.talloRGB,SECO,marchito*.7);
+  c.save(); c.translate(6,8); traza(c,cuerpo); c.fillStyle='rgba(6,11,14,.30)'; c.fill(); c.restore();
+  traza(c,cuerpo); c.fillStyle=css(PAPEL,.9); c.fill();
+  c.save(); c.translate(2.4,-1.8); traza(c,cuerpo); c.fillStyle=css(col,.94); c.fill(); c.restore();
+  c.lineWidth=1.3; traza(c,cuerpo); c.strokeStyle='rgba(12,19,22,.5)'; c.stroke();
+
+  for(let h=0;h<flor.esp.hojas;h++){
+    const s=.30+h*.26, i=Math.min(n,Math.round(s*n*crec));
+    if(s>crec)continue;
+    const p=pts[i], lado=h%2?1:-1, ap=inv(crec,s,s+.22);
+    c.save(); c.translate(p[0],p[1]); c.rotate(lado*(1.15+marchito*.5));
+    const sx=R*.74*ap*lado, sy=R*.74*ap;
+    c.scale(sx,sy);
+    const hp=puntosPetalo({largo:.62,ancho:.16,tipo:'copa',rizo:.3},h*17+3);
+    figura(hp,[6,11,14],.28,sx,sy,6,8);
+    figura(hp,PAPEL,.92,sx,sy,0,0);
+    figura(hp,mez(col,SECO,marchito*.8),.93,sx,sy,2.4,-1.8);
+    contorno(hp,sx,sy,1);
+    c.restore();
+  }
+}
+
+function dibujarCentro(o,marchito){
+  const ce=flor.esp.centro; if(!ce||ce.tipo==='ninguno')return;
+  const rr=ce.r*R*o, col=mez(ce.colRGB,SECO,marchito*.6);
+  if(rr<1)return;
+  if(flor.interior){
+    c.save(); c.translate(CX,CY);
+    for(let i=0;i<9;i++){
+      c.save(); c.rotate(i/9*Math.PI*2);
+      const sx=rr*.9,sy=rr*.9, mp=puntosPetalo({largo:1,ancho:.16,tipo:'lengua',rizo:.1},i*7);
+      c.scale(sx,sy); figura(mp,PAPEL,.95,sx,sy,0,0); contorno(mp,sx,sy,.7); c.restore();
+    }
+    c.beginPath();c.arc(0,0,rr*.34,0,7);c.fillStyle=css(col,.95);c.fill();
+    c.restore(); return;
+  }
+  const circ=[];for(let i=0;i<40;i++){const a=i/40*Math.PI*2;
+    circ.push([CX+Math.cos(a)*rr*(1+(fbm(i*.4,flor.semilla)-.5)*.12),CY+Math.sin(a)*rr*(1+(fbm(i*.4+9,flor.semilla)-.5)*.12)])}
+  c.save();c.translate(5,7);traza(c,circ);c.fillStyle='rgba(6,11,14,.34)';c.fill();c.restore();
+  traza(c,circ);c.fillStyle=css(PAPEL,.95);c.fill();
+  c.save();c.translate(2.2,-1.6);traza(c,circ);c.fillStyle=css(col,.95);c.fill();c.restore();
+  c.lineWidth=1.4;traza(c,circ);c.strokeStyle='rgba(12,19,22,.55)';c.stroke();
+
+  if(ce.tipo==='semillas'){
+    const n=Math.round(120*o), phi=2.39996;
+    for(let i=0;i<n;i++){
+      const rad=Math.sqrt(i/n)*rr*.94, a=i*phi;
+      c.beginPath();c.arc(CX+Math.cos(a)*rad,CY+Math.sin(a)*rad,Math.max(.7,rr*.045),0,7);
+      c.fillStyle=css(ce.puntoRGB,.55+.35*Math.sin(i));c.fill();
+    }
+  }else if(ce.tipo==='disco'){
+    for(let i=0;i<16;i++){const a=i/16*Math.PI*2;
+      c.beginPath();c.arc(CX+Math.cos(a)*rr*.6,CY+Math.sin(a)*rr*.6,Math.max(.7,rr*.075),0,7);
+      c.fillStyle=css(ce.puntoRGB,.5);c.fill()}
+  }else if(ce.tipo==='estambres'){
+    for(let i=0;i<10;i++){const a=i/10*Math.PI*2+.3;
+      c.beginPath();c.moveTo(CX,CY);c.lineTo(CX+Math.cos(a)*rr*2.1,CY+Math.sin(a)*rr*2.1);
+      c.lineWidth=1.2;c.strokeStyle=css(ce.puntoRGB,.6);c.stroke();
+      c.beginPath();c.arc(CX+Math.cos(a)*rr*2.1,CY+Math.sin(a)*rr*2.1,rr*.16,0,7);
+      c.fillStyle=css(ce.puntoRGB,.8);c.fill()}
+  }else if(ce.tipo==='labelo'){
+    c.beginPath();c.ellipse(CX,CY+rr*.5,rr*.7,rr*.5,0,0,7);c.fillStyle=css(ce.puntoRGB,.85);c.fill();
+  }
+}
+
+function dibujarPetalos(){
+  const apert=inv(t,.20,.54);
+  const dudaF=flor.duda?Math.max(0,Math.sin(Math.PI*inv(t,.28,.375))):0;
+  const resp=Math.sin(t*Math.PI*2*3)*.012;
+  flor.petalos.forEach((p,idx)=>{
+    if(p.ido)return;
+    const o=suave(clamp((apert-p.abre*.45)/Math.max(.2,1-p.abre*.45),0,1));
+    if(o<=.002)return;
+    const w=inv(t,p.cae,p.cae+.15);
+    if(w>=1){
+      p.ido=true; soltarPapel(p,o); return;
+    }
+    const usaAlt=p.alt&&dudaF>.05&&idx%2===0;
+    const pts=usaAlt?p.alt:p.pts;
+    let col=mez(p.col,flor.esp.dorsoRGB,w*.35);
+    col=mez(col,SECO,w*.75);
+    if(usaAlt)col=mez(col,p.colAlt,dudaF*.75);
+    const esc=R*(.14+.86*o)*(1-.13*w)*(1+resp);
+    const sx=esc*(.26+.74*o), sy=esc;
+    const droop=w*.85*((Math.sin(p.ang)>=0?1:-1))*(.35+.65*Math.abs(Math.sin(p.ang)));
+    c.save();
+    c.translate(CX,CY);
+    c.rotate(p.ang+p.giro*(1-o)+droop);
+    c.translate(0,-p.r0*R*o);
+    c.scale(sx,sy);
+    figura(pts,[6,11,14],.30,sx,sy,7,9);
+    figura(pts,PAPEL,.95,sx,sy,0,0);
+    figura(pts,col,.93,sx,sy,2.8,-2.1);
+    contorno(pts,sx,sy,1);
+    c.beginPath();c.moveTo(0,-.04);c.lineTo(0,-.92);
+    c.lineWidth=1.1/((sx+sy)*.5);c.strokeStyle='rgba(12,19,22,.18)';c.stroke();
+    if(p.vilano){
+      c.save();c.translate(0,-1);
+      for(let k=0;k<5;k++){const a=-.6+k*.3;
+        c.beginPath();c.moveTo(0,0);c.lineTo(Math.sin(a)*.14,-Math.cos(a)*.14);
+        c.lineWidth=.9/((sx+sy)*.5);c.strokeStyle='rgba(237,230,216,.5)';c.stroke()}
+      c.restore();
+    }
+    c.restore();
+    if(flor.fantasma&&idx===flor.idxFantasma&&o>.5){
+      c.save();c.globalAlpha=.34;
+      c.translate(CX+11,CY-7);
+      c.rotate(p.ang+p.giro*(1-o)+droop+.06);
+      c.translate(0,-p.r0*R*o);c.scale(sx*.98,sy*.98);
+      figura(pts,col,.8,sx,sy,0,0);contorno(pts,sx,sy,.6);
+      c.restore();c.globalAlpha=1;
+    }
+  });
+}
+
+function soltarPapel(p,o){
+  const a=p.ang, esc=R*(.14+.86*o);
+  papeles.push({
+    x:CX+Math.sin(a)*p.r0*R*o,
+    y:CY-Math.cos(a)*p.r0*R*o,
+    vx:(Math.random()-.5)*16+Math.sin(a)*10, vy:8+Math.random()*14,
+    rot:a, vr:(Math.random()-.5)*.7, flip:Math.random()*6, vflip:.5+Math.random()*.9,
+    pts:p.pts, col:mez(p.col,SECO,.55), esc, vida:0
+  });
+  if(papeles.length>70)papeles.splice(0,papeles.length-70);
+}
+
+function dibujarPapeles(dt){
+  const sube=(ciclo%5===0)?-1:1;
+  const dir=revesActivo>0?-1:1;
+  for(let i=papeles.length-1;i>=0;i--){
+    const q=papeles[i];
+    if(corriendo){
+      q.vy+=sube*26*dt*dir; q.vx+=Math.sin(q.vida*1.4+q.rot)*10*dt;
+      q.x+=q.vx*dt*dir; q.y+=q.vy*dt*dir;
+      q.rot+=q.vr*dt; q.flip+=q.vflip*dt; q.vida+=dt;
+    }
+    if(q.y>H+R||q.y<-R*1.6||q.x<-R*2||q.x>W+R*2){papeles.splice(i,1);continue}
+    const f=Math.cos(q.flip), sx=q.esc*f, sy=q.esc;
+    if(Math.abs(sx)<.4)continue;
+    c.save();c.translate(q.x,q.y);c.rotate(q.rot);c.scale(sx,sy);
+    const cara=f>0?q.col:DORSO;
+    figura(q.pts,[6,11,14],.22,sx,sy,5,7);
+    figura(q.pts,PAPEL,.95,sx,sy,0,0);
+    figura(q.pts,cara,f>0?.9:.55,sx,sy,2.2,-1.6);
+    contorno(q.pts,sx,sy,.85);
+    c.restore();
+  }
+}
+
+function dibujarLatente(k){
+  const r=mulberry32(flor.semilla+Math.floor(k*24));
+  const n=Math.round(190*(1-k*.86));
+  const pal=flor.esp.petRGB;
+  for(let i=0;i<n;i++){
+    const bx=CX+(r()-.5)*R*2.5, by=CY+(r()-.5)*R*2.5;
+    const s=R*(.05+r()*.13);
+    c.fillStyle=css(pal[i%pal.length],.10+r()*.4*(1-k*.5));
+    c.fillRect(bx,by,s,s*(.6+r()*.8));
+  }
+}
+
+/* ═══ cuadro completo ═════════════════════════════════════ */
+const FASES=[[0,'brote'],[.20,'apertura'],[.54,'plenitud'],[.62,'marchitar'],[.80,'papel']];
+function nombreFase(){let n='brote';for(const f of FASES)if(t>=f[0])n=f[1];return n}
+
+function cuadro(dt){
+  c.setTransform(DPR,0,0,DPR,0,0);
+  c.clearRect(0,0,W,H);
+
+  const crec=suave(inv(t,.01,.20));
+  const marchito=inv(t,.60,.88);
+
+  /* sombra de suelo que no obedece a ninguna luz */
+  const sa=flor.sombraAng, ap=inv(t,.20,.54);
+  c.save();
+  c.translate(CX+Math.cos(sa)*R*.9,CY+R*1.5+Math.sin(sa)*R*.25);
+  c.rotate(sa*.3);
+  c.beginPath();c.ellipse(0,0,R*.85*ap,R*.16*ap,0,0,7);
+  c.fillStyle='rgba(4,9,12,.5)';c.fill();
+  c.restore();
+
+  dibujarTallo(crec,marchito);
+  dibujarPetalos();
+  dibujarCentro(suave(inv(t,.19,.46))*(1-marchito*.35),marchito);
+
+  /* costura de espejo */
+  if(flor.espejo&&ap>.25){
+    c.save();c.globalAlpha=.5;
+    c.beginPath();c.moveTo(CX,CY-R*1.35);c.lineTo(CX,CY+R*1.35);
+    c.lineWidth=1;c.strokeStyle='rgba(226,81,58,.55)';c.setLineDash([6,7]);c.stroke();
+    c.setLineDash([]);c.restore();
+  }
+
+  dibujarPapeles(dt);
+  if(latente>0)dibujarLatente(1-latente/LAT);
+
+  /* residuo de prompt */
+  c.save();
+  c.font='500 11px "JetBrains Mono", ui-monospace, monospace';
+  c.fillStyle='rgba(127,179,174,.16)';
+  c.fillText(flor.residuo,W*flor.resX,H*flor.resY);
+  c.fillText('paso '+(1+Math.floor(t*23))+'/24 · ruido residual 0.0'+(2+Math.floor(t*7)),W*flor.resX,H*flor.resY+16);
+  c.restore();
+
+  /* grano de papel sobre todo */
+  if(grano){c.save();c.globalAlpha=.055;c.fillStyle=grano;c.fillRect(0,0,W,H);c.restore()}
+}
+
+/* ═══ HUD ═════════════════════════════════════════════════ */
+const $=id=>document.getElementById(id);
+let hudT=0;
+function hud(){
+  $('hSeed').textContent='0x'+(flor.semilla>>>0).toString(16).slice(0,6);
+  $('hPaso').textContent=latente>0?Math.max(1,Math.round((1-latente/LAT)*24))+'/24 · denoise':(1+Math.floor(t*23))+'/24';
+  $('hCuenta').innerHTML='pétalos declarados <b>'+flor.declarados+'</b><br>dibujados <b>'+flor.dibujados+'</b>';
+  $('hNombre').textContent=flor.esp.nom;
+  $('hLatin').textContent=flor.esp.lat+(flor.esp.inventada?' · no existe':'');
+  $('hNota').textContent=flor.nota;
+  $('hFase').textContent=latente>0?'latente':nombreFase();
+  $('hBarra').style.width=(t*100).toFixed(1)+'%';
+  $('hCiclo').textContent='ciclo '+ciclo+(ciclo%5===0?' · el papel sube':'');
+}
+
+/* ═══ bucle ═══════════════════════════════════════════════ */
+function siguiente(){
+  ciclo++;
+  flor=nuevaFlor((semillaBase+ciclo*7919)|0,ciclo-1);
+  t=0; revesActivo=0;
+}
+function tic(ahora){
+  if(!ultimo)ultimo=ahora;
+  let dt=Math.min(.05,(ahora-ultimo)/1000); ultimo=ahora;
+  if(corriendo){
+    if(latente>0){
+      latente-=dt*1000;
+      if(latente<=0){latente=0}
+    }else{
+      t+=dt*1000/DUR;
+      if(flor.reves&&t>.86&&t<.90)revesActivo=1;else revesActivo=0;
+      if(t>=1){t=1;siguiente();latente=LAT}
+    }
+  }
+  cuadro(dt);
+  hudT+=dt; if(hudT>.12){hudT=0;hud()}
+  requestAnimationFrame(tic);
+}
+
+/* ═══ arranque y controles ════════════════════════════════ */
+function arrancar(){
+  medir(); hacerGrano(); hud();
+  if(reduce){cuadro(0);}
+  else requestAnimationFrame(tic);
+}
+let redim;
+window.addEventListener('resize',()=>{clearTimeout(redim);redim=setTimeout(()=>{medir();if(reduce)cuadro(0)},150)});
+
+$('btnPausa').addEventListener('click',e=>{
+  if(reduce){cuadro(0);return}
+  corriendo=!corriendo; e.target.textContent=corriendo?'pausar':'reanudar';
+});
+$('btnSalto').addEventListener('click',()=>{
+  papeles=[]; siguiente(); latente=reduce?0:LAT;
+  if(reduce){t=.5;cuadro(0)} hud();
+});
+$('btnSemilla').addEventListener('click',()=>{
+  semillaBase=(Math.random()*0xffffff)|0; papeles=[]; ciclo=0; siguiente();
+  latente=reduce?0:LAT; if(reduce){t=.5;cuadro(0)} hud();
+});
+
+document.querySelectorAll('.copia').forEach(b=>{
+  b.addEventListener('click',async()=>{
+    const txt=document.getElementById(b.dataset.copia).textContent;
+    const orig=b.textContent;
+    try{await navigator.clipboard.writeText(txt);b.textContent='copiado';}
+    catch(err){b.textContent='no se pudo copiar';}
+    setTimeout(()=>{b.textContent=orig},1600);
+  });
+});
+
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{medir();if(reduce)cuadro(0)});
+arrancar();
+})();
+</script>
+</body>
+</html>
