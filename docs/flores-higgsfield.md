@@ -4,8 +4,9 @@ Guion de rodaje de la pieza de flores de papel, cuadrado contra
 **«Motion Picture Soundtrack»** (Radiohead, *Kid A*, 2000). Los tiempos son
 aproximados: ajustalos contra tu copia del tema.
 
-La versión navegable, con botones de copiado, está en `/flores/`
-(`public/flores/index.html`).
+La pieza ya montada está en `/flores/` (`public/flores/flores-herbario.mp4`,
+50 s en bucle) y el motor que la dibuja, en `docs/flores/`. Este guion es para
+volver a filmarla en alta resolución, plano por plano.
 
 ## Ancla de estilo — va al principio de todos los prompts
 
