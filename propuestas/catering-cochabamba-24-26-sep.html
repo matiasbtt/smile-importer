@@ -1,0 +1,780 @@
+<title>Catering Curso Cochabamba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..900&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#F6F2F4; --surface:#FFFFFF; --surface-2:#EFE7EC; --sunk:#FBF8FA;
+  --ink:#241220; --ink-2:#5C4655; --ink-3:#8A7684;
+  --line:#E2D7DE; --line-strong:#C6B5C0;
+  --morado:#6B2352; --morado-soft:#F1E4EC; --on-morado:#FFFFFF;
+  --locoto:#B8342A; --choclo:#A97512; --verde:#2E6F52;
+  --shadow:0 1px 2px rgba(36,18,32,.05), 0 8px 24px -16px rgba(36,18,32,.28);
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#150F15; --surface:#1D161F; --surface-2:#281E29; --sunk:#191219;
+    --ink:#F0E7ED; --ink-2:#B8A7B5; --ink-3:#8B7B89;
+    --line:#372B37; --line-strong:#544455;
+    --morado:#D8A0C4; --morado-soft:#2E1D2A; --on-morado:#1A1018;
+    --locoto:#F08B7F; --choclo:#DFAE58; --verde:#74C79C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#150F15; --surface:#1D161F; --surface-2:#281E29; --sunk:#191219;
+  --ink:#F0E7ED; --ink-2:#B8A7B5; --ink-3:#8B7B89;
+  --line:#372B37; --line-strong:#544455;
+  --morado:#D8A0C4; --morado-soft:#2E1D2A; --on-morado:#1A1018;
+  --locoto:#F08B7F; --choclo:#DFAE58; --verde:#74C79C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Karla","Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.55; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px; margin:0 auto; padding:0 20px 80px}
+
+h1,h2,h3,h4{font-family:"Fraunces",Georgia,"Times New Roman",serif; text-wrap:balance; margin:0}
+h1{font-size:clamp(34px,6vw,58px); font-weight:900; line-height:1.02; letter-spacing:-.015em}
+h2{font-size:clamp(24px,3.4vw,32px); font-weight:800; line-height:1.12}
+h3{font-size:20px; font-weight:700; line-height:1.2}
+h4{font-size:16px; font-weight:700}
+p{margin:0}
+a{color:var(--morado)}
+:focus-visible{outline:2px solid var(--morado); outline-offset:2px; border-radius:4px}
+
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2)}
+.faint{color:var(--ink-3)}
+.small{font-size:13.5px; line-height:1.5}
+.tiny{font-size:12px; line-height:1.45}
+
+/* aguayo — franja tejida, sólo en cortes mayores */
+.aguayo{display:flex; height:5px; border-radius:99px; overflow:hidden; gap:0}
+.aguayo i{display:block; height:100%}
+.aguayo i:nth-child(1){flex:5; background:var(--morado)}
+.aguayo i:nth-child(2){flex:2; background:var(--choclo)}
+.aguayo i:nth-child(3){flex:1; background:var(--paper)}
+.aguayo i:nth-child(4){flex:3; background:var(--locoto)}
+.aguayo i:nth-child(5){flex:1; background:var(--paper)}
+.aguayo i:nth-child(6){flex:2; background:var(--verde)}
+.aguayo i:nth-child(7){flex:6; background:var(--morado)}
+
+/* ---------- hero ---------- */
+header.hero{padding:52px 0 34px; display:flex; flex-direction:column; gap:22px}
+.hero-top{display:flex; flex-wrap:wrap; gap:14px; align-items:baseline; justify-content:space-between}
+.hero-lede{max-width:60ch; font-size:17.5px; color:var(--ink-2)}
+.hero-lede strong{color:var(--ink); font-weight:600}
+
+.facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.fact{padding:16px 18px 16px 0; border-right:1px solid var(--line)}
+.fact:last-child{border-right:0}
+.fact dt{margin:0 0 5px} .fact dd{margin:0; font-size:19px; font-weight:600}
+
+/* ---------- secciones ---------- */
+section{padding-top:52px}
+.sec-head{display:flex; flex-direction:column; gap:8px; margin-bottom:24px; max-width:68ch}
+.sec-head p{color:var(--ink-2)}
+
+/* ---------- calculadora ---------- */
+.calc{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.calc-controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:22px; padding:22px 24px; border-bottom:1px solid var(--line)}
+.ctrl{display:flex; flex-direction:column; gap:9px}
+.chips{display:flex; flex-wrap:wrap; gap:7px}
+.chip{
+  font:inherit; font-size:13.5px; font-weight:600; cursor:pointer;
+  background:transparent; color:var(--ink-2);
+  border:1px solid var(--line-strong); border-radius:99px; padding:6px 13px;
+  transition:background .12s, color .12s, border-color .12s;
+}
+.chip:hover{border-color:var(--morado); color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--morado); border-color:var(--morado); color:var(--on-morado)}
+
+.field{display:flex; align-items:center; gap:8px; border:1px solid var(--line-strong); border-radius:8px; padding:6px 11px; background:var(--sunk); max-width:180px}
+.field span{font-size:13px; color:var(--ink-3); font-family:"IBM Plex Mono",monospace}
+.field input{
+  font-family:"IBM Plex Mono",monospace; font-size:16px; font-weight:600; font-variant-numeric:tabular-nums;
+  border:0; background:transparent; color:var(--ink); width:100%; padding:2px 0; min-width:0;
+}
+.field input:focus{outline:none}
+.field:focus-within{border-color:var(--morado); box-shadow:0 0 0 3px var(--morado-soft)}
+
+.calc-out{display:grid; grid-template-columns:repeat(auto-fit,minmax(158px,1fr)); background:var(--line)}
+.out{background:var(--surface); padding:18px 20px 20px; display:flex; flex-direction:column; gap:4px}
+.out .v{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:26px; font-weight:600; letter-spacing:-.02em; line-height:1.15}
+.out.hi{background:var(--morado-soft)}
+.out.hi .v{color:var(--morado)}
+.pill{
+  display:inline-flex; align-items:center; gap:6px; align-self:flex-start; margin-top:3px;
+  font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+  padding:3px 9px; border-radius:99px;
+}
+.pill.good{background:color-mix(in srgb, var(--verde) 16%, transparent); color:var(--verde)}
+.pill.warn{background:color-mix(in srgb, var(--locoto) 16%, transparent); color:var(--locoto)}
+.calc-foot{padding:13px 24px; border-top:1px solid var(--line); background:var(--sunk); color:var(--ink-3)}
+
+/* ---------- días ---------- */
+.days{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:18px}
+.day{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); display:flex; flex-direction:column}
+.day-head{padding:16px 20px 14px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+.day-head .d{font-family:"Fraunces",serif; font-size:21px; font-weight:800}
+.day-body{padding:6px 20px 18px; display:flex; flex-direction:column}
+.serv{display:grid; grid-template-columns:58px 1fr; gap:14px; padding:15px 0; border-bottom:1px dashed var(--line)}
+.serv:last-child{border-bottom:0}
+.serv .hr{font-family:"IBM Plex Mono",monospace; font-size:12.5px; font-weight:600; color:var(--morado); padding-top:2px; font-variant-numeric:tabular-nums}
+.serv .tag{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:4px}
+.serv ul{margin:5px 0 0; padding-left:16px; color:var(--ink-2); font-size:14px; line-height:1.5}
+.serv li{margin-bottom:2px}
+.serv .plato{font-weight:600; font-size:15.5px}
+.cost-line{margin-top:7px; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+
+/* ---------- tablas ---------- */
+.tw{overflow-x:auto; border:1px solid var(--line); border-radius:var(--r); background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:14.5px}
+th,td{padding:11px 16px; text-align:left; border-bottom:1px solid var(--line)}
+thead th{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); background:var(--sunk); white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; white-space:nowrap}
+tr.total td{background:var(--sunk); font-weight:700; border-top:2px solid var(--line-strong)}
+tr.sub td{background:var(--sunk); font-weight:600}
+td .sub2{display:block; color:var(--ink-3); font-size:12.5px; margin-top:2px}
+
+/* ---------- comparación de mercado ---------- */
+.bars{display:flex; flex-direction:column; gap:2px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:22px 24px}
+.bar{display:grid; grid-template-columns:minmax(150px,1.1fr) 1fr; gap:16px; align-items:center; padding:11px 0; border-bottom:1px dashed var(--line)}
+.bar:last-child{border-bottom:0}
+.bar .who{font-size:14px; line-height:1.35}
+.bar .who b{font-weight:600}
+.bar .track{position:relative; height:26px; display:flex; align-items:center}
+.bar .fill{height:16px; border-radius:3px; background:var(--surface-2); border:1px solid var(--line-strong)}
+.bar .fill.us{background:var(--morado); border-color:var(--morado)}
+.bar .fill.floor{background:repeating-linear-gradient(45deg,var(--surface-2),var(--surface-2) 4px,var(--paper) 4px,var(--paper) 8px)}
+.bar .lab{position:absolute; font-family:"IBM Plex Mono",monospace; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--ink-2)}
+.bar.usrow .who b{color:var(--morado)}
+.scale{display:flex; justify-content:space-between; padding-top:10px; margin-top:6px; border-top:1px solid var(--line)}
+.scale span{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3)}
+
+/* ---------- listas ---------- */
+.cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(268px,1fr)); gap:18px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:20px 22px; display:flex; flex-direction:column; gap:11px}
+.card ul{margin:0; padding-left:18px; color:var(--ink-2); font-size:14.5px; line-height:1.6}
+.card li{margin-bottom:5px}
+.card li b{color:var(--ink); font-weight:600}
+.card.flag{border-left:3px solid var(--locoto)}
+.card.note{background:var(--morado-soft); border-color:transparent}
+
+.steps{display:flex; flex-direction:column; gap:0}
+.step{display:grid; grid-template-columns:104px 1fr; gap:18px; padding:15px 0; border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step .when{font-family:"IBM Plex Mono",monospace; font-size:12.5px; font-weight:600; color:var(--morado); font-variant-numeric:tabular-nums}
+.step .what{color:var(--ink-2); font-size:14.5px}
+.step .what b{color:var(--ink); font-weight:600}
+
+footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px}
+
+@media (max-width:640px){
+  .fact{border-right:0; border-bottom:1px solid var(--line); padding-right:0}
+  .fact:last-child{border-bottom:0}
+  .bar{grid-template-columns:1fr; gap:6px}
+  .step{grid-template-columns:1fr; gap:4px}
+  .serv{grid-template-columns:50px 1fr; gap:10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="aguayo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-top">
+    <p class="eyebrow">Propuesta de servicio de alimentación · Cochabamba</p>
+    <p class="eyebrow">24 · 25 · 26 de septiembre</p>
+  </div>
+  <h1>Tres días de mesa<br>para el curso</h1>
+  <p class="hero-lede">Desayuno, refrigerio y almuerzo servidos en sala durante los tres días del curso. Cocina cochabambina de todos los días, hecha con producto de mercado y presentada como catering. Este documento trae el <strong>menú completo</strong>, el <strong>costo real por persona</strong>, el <strong>precio sugerido</strong> y la <strong>comparación con lo que cobra el mercado local</strong>.</p>
+  <dl class="facts">
+    <div class="fact"><dt class="eyebrow">Duración</dt><dd>3 días</dd></div>
+    <div class="fact"><dt class="eyebrow">Servicios por día</dt><dd>3</dd></div>
+    <div class="fact"><dt class="eyebrow">Precio sugerido</dt><dd class="num">Bs 52 <span class="faint small">p/persona/día</span></dd></div>
+    <div class="fact"><dt class="eyebrow">Margen objetivo</dt><dd class="num">42,7 %</dd></div>
+  </dl>
+</header>
+
+<section id="calculadora">
+  <div class="sec-head">
+    <p class="eyebrow">Lo primero</p>
+    <h2>Cuánto se gana, según cuánta gente venga</h2>
+    <p>Todavía no hay número confirmado de asistentes, así que el cálculo está armado para moverse. Cambiá las personas, el plan y el precio y todo se recalcula. El costo fijo (gas, taxi, ayudante) se reparte entre más gente, por eso el margen sube cuando el grupo crece.</p>
+  </div>
+
+  <div class="calc">
+    <div class="calc-controls">
+      <div class="ctrl">
+        <label class="eyebrow" for="plan-completo">Plan contratado</label>
+        <div class="chips" id="planes" role="group" aria-label="Plan contratado">
+          <button class="chip" type="button" id="plan-completo" data-plan="completo" aria-pressed="true">Completo</button>
+          <button class="chip" type="button" data-plan="manana" aria-pressed="false">Desayuno + refrigerio</button>
+          <button class="chip" type="button" data-plan="almuerzo" aria-pressed="false">Solo almuerzo</button>
+        </div>
+      </div>
+      <div class="ctrl">
+        <label class="eyebrow" for="pax">Personas por día</label>
+        <div class="chips" id="paxchips" role="group" aria-label="Personas por día">
+          <button class="chip" type="button" data-pax="20" aria-pressed="false">20</button>
+          <button class="chip" type="button" data-pax="30" aria-pressed="true">30</button>
+          <button class="chip" type="button" data-pax="40" aria-pressed="false">40</button>
+          <button class="chip" type="button" data-pax="50" aria-pressed="false">50</button>
+        </div>
+        <div class="field"><span>pax</span><input id="pax" type="number" min="8" max="300" step="1" value="30" inputmode="numeric"></div>
+      </div>
+      <div class="ctrl">
+        <label class="eyebrow" for="precio">Precio de venta · persona / día</label>
+        <div class="field"><span>Bs</span><input id="precio" type="number" min="1" max="400" step="1" value="52" inputmode="numeric"></div>
+        <p class="tiny faint">Sugerido para este plan: <span class="num" id="sugerido">Bs 52</span></p>
+      </div>
+    </div>
+
+    <div class="calc-out">
+      <div class="out">
+        <p class="eyebrow">Costo real · pers/día</p>
+        <p class="v num" id="o-costo">Bs 29,79</p>
+        <p class="tiny faint">insumos + gas, taxi y ayudante</p>
+      </div>
+      <div class="out">
+        <p class="eyebrow">Ganancia · pers/día</p>
+        <p class="v num" id="o-gpp">Bs 22,21</p>
+        <p class="tiny faint">precio menos costo</p>
+      </div>
+      <div class="out hi">
+        <p class="eyebrow">Ganancia · 3 días</p>
+        <p class="v num" id="o-util">Bs 1.998</p>
+        <p class="tiny faint">sobre <span class="num" id="o-ingreso">Bs 4.680</span> facturados</p>
+      </div>
+      <div class="out">
+        <p class="eyebrow">Margen</p>
+        <p class="v num" id="o-margen">42,7 %</p>
+        <span class="pill good" id="o-pill">Sano</span>
+      </div>
+    </div>
+    <p class="calc-foot small" id="o-nota">Con 30 personas: se compran <span class="num">Bs 1.911</span> de insumos y se pagan <span class="num">Bs 675</span> de costos fijos en los tres días.</p>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="sec-head">
+    <p class="eyebrow">El menú</p>
+    <h2>Los tres días</h2>
+    <p>Variado en la mesa, repetido en la olla: los tres días comparten la misma base de compra (arroz, papa, cebolla, tomate, huevo, pollo) y cambian la preparación. Eso es lo que hace que un menú de tres días sea barato sin que nadie note que se repite.</p>
+  </div>
+
+  <div class="days">
+
+    <article class="day">
+      <div class="day-head">
+        <span class="d">Jueves 24</span>
+        <span class="eyebrow">Día 1</span>
+      </div>
+      <div class="day-body">
+        <div class="serv">
+          <div class="hr">08:00</div>
+          <div>
+            <p class="tag">Desayuno</p>
+            <p class="plato">Api morado con pastel de queso</p>
+            <ul>
+              <li>Api caliente de maíz morado con canela y clavo</li>
+              <li>Pastel de queso frito, espolvoreado</li>
+              <li>Porción de fruta de estación</li>
+              <li>Café, té y leche a libre servicio</li>
+            </ul>
+            <p class="cost-line">costo Bs 3,20 · el desayuno más barato de los tres</p>
+          </div>
+        </div>
+        <div class="serv">
+          <div class="hr">10:30</div>
+          <div>
+            <p class="tag">Refrigerio</p>
+            <p class="plato">Salteña de pollo</p>
+            <ul>
+              <li>Salteña horneada de pollo, papa y arveja</li>
+              <li>Refresco de mocochinchi bien frío</li>
+            </ul>
+            <p class="cost-line">costo Bs 4,30</p>
+          </div>
+        </div>
+        <div class="serv">
+          <div class="hr">12:45</div>
+          <div>
+            <p class="tag">Almuerzo</p>
+            <p class="plato">Pollo dorado al horno</p>
+            <ul>
+              <li>Entrada: sopa de maní con papa y fideo</li>
+              <li>Presa de pollo al horno, arroz graneado, papa dorada y ensalada criolla</li>
+              <li>Postre: flan de vainilla con caramelo</li>
+              <li>Refresco de limón</li>
+            </ul>
+            <p class="cost-line">costo Bs 12,70</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <div class="day-head">
+        <span class="d">Viernes 25</span>
+        <span class="eyebrow">Día 2</span>
+      </div>
+      <div class="day-body">
+        <div class="serv">
+          <div class="hr">08:00</div>
+          <div>
+            <p class="tag">Desayuno</p>
+            <p class="plato">Sándwich de huevo y queso</p>
+            <ul>
+              <li>Marraqueta con huevo revuelto y queso criollo</li>
+              <li>Jugo natural de estación (papaya o piña)</li>
+              <li>Café, té y leche a libre servicio</li>
+            </ul>
+            <p class="cost-line">costo Bs 5,40</p>
+          </div>
+        </div>
+        <div class="serv">
+          <div class="hr">10:30</div>
+          <div>
+            <p class="tag">Refrigerio</p>
+            <p class="plato">Horneados de queso</p>
+            <ul>
+              <li>Empanada de queso y cuñapé, recién salidos</li>
+              <li>Refresco de linaza</li>
+            </ul>
+            <p class="cost-line">costo Bs 4,00</p>
+          </div>
+        </div>
+        <div class="serv">
+          <div class="hr">12:45</div>
+          <div>
+            <p class="tag">Almuerzo</p>
+            <p class="plato">Silpancho cochabambino</p>
+            <ul>
+              <li>Entrada: crema de zapallo con crotones</li>
+              <li>Carne martajada apanada, arroz, papa, huevo frito y ensalada de tomate, cebolla y locoto</li>
+              <li>Postre: arroz con leche a la canela</li>
+              <li>Refresco de canela</li>
+            </ul>
+            <p class="cost-line">costo Bs 13,20 · el plato estrella del servicio</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <div class="day-head">
+        <span class="d">Sábado 26</span>
+        <span class="eyebrow">Día 3</span>
+      </div>
+      <div class="day-body">
+        <div class="serv">
+          <div class="hr">08:00</div>
+          <div>
+            <p class="tag">Desayuno</p>
+            <p class="plato">Yogurt con granola y fruta</p>
+            <ul>
+              <li>Vaso de yogurt con granola tostada y fruta picada</li>
+              <li>Porción de queque casero de plátano</li>
+              <li>Café, té y leche a libre servicio</li>
+            </ul>
+            <p class="cost-line">costo Bs 5,70 · el más liviano, para el último día</p>
+          </div>
+        </div>
+        <div class="serv">
+          <div class="hr">10:30</div>
+          <div>
+            <p class="tag">Refrigerio</p>
+            <p class="plato">Sándwich triple de pollo</p>
+            <ul>
+              <li>Pan de molde con pollo desmenuzado y mayonesa</li>
+              <li>Jugo de frutas natural</li>
+            </ul>
+            <p class="cost-line">costo Bs 3,80</p>
+          </div>
+        </div>
+        <div class="serv">
+          <div class="hr">12:45</div>
+          <div>
+            <p class="tag">Almuerzo</p>
+            <p class="plato">Ají de pollo</p>
+            <ul>
+              <li>Entrada: sopa de verduras con fideo</li>
+              <li>Ají de pollo con papa, arveja y arroz graneado</li>
+              <li>Postre: gelatina de frutas con crema</li>
+              <li>Refresco de mocochinchi</li>
+            </ul>
+            <p class="cost-line">costo Bs 11,40 · se cocina todo en una olla</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="costeo">
+  <div class="sec-head">
+    <p class="eyebrow">Costeo</p>
+    <h2>Qué cuesta cada plato</h2>
+    <p>Costo de insumos por persona, con precios de mercado de Cochabamba (La Cancha / Calatayud) e incluyendo descartables. No incluye gas, transporte ni mano de obra: eso va aparte, más abajo.</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th class="n">Día 1</th>
+          <th class="n">Día 2</th>
+          <th class="n">Día 3</th>
+          <th class="n">Promedio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Desayuno<span class="sub2">bebida caliente, sólido y fruta</span></td>
+          <td class="n">3,20</td><td class="n">5,40</td><td class="n">5,70</td><td class="n">4,77</td>
+        </tr>
+        <tr>
+          <td>Refrigerio<span class="sub2">horneado o sándwich + refresco</span></td>
+          <td class="n">4,30</td><td class="n">4,00</td><td class="n">3,80</td><td class="n">4,03</td>
+        </tr>
+        <tr>
+          <td>Almuerzo<span class="sub2">sopa, plato, postre, refresco y descartables</span></td>
+          <td class="n">12,70</td><td class="n">13,20</td><td class="n">11,40</td><td class="n">12,43</td>
+        </tr>
+        <tr class="total">
+          <td>Insumos por persona / día</td>
+          <td class="n">20,20</td><td class="n">22,60</td><td class="n">20,90</td><td class="n">21,23</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small faint" style="margin-top:10px">Insumos por persona para los tres días completos: <b class="num">Bs 63,70</b>.</p>
+
+  <div class="cols" style="margin-top:26px">
+    <div class="card">
+      <p class="eyebrow">Costos fijos por día de servicio</p>
+      <div class="tw" style="border:0">
+        <table style="min-width:0">
+          <tbody>
+            <tr><td>Garrafa de gas</td><td class="n">Bs 30</td></tr>
+            <tr><td>Transporte ida y vuelta con ollas</td><td class="n">Bs 60</td></tr>
+            <tr><td>Ayudante de cocina y servicio</td><td class="n">Bs 120</td></tr>
+            <tr><td>Hielo, agua, limpieza</td><td class="n">Bs 15</td></tr>
+            <tr class="total"><td>Total por día</td><td class="n">Bs 225</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tiny faint">Son fijos: cuestan lo mismo para 20 que para 50 personas. Por eso el margen mejora con grupos grandes.</p>
+    </div>
+    <div class="card note">
+      <p class="eyebrow">El dato que cambia todo</p>
+      <p class="small">Si Dalma cocina sin ayudante, esos <b class="num">Bs 120</b> por día no se pagan: son <b class="num">Bs 360</b> extra de ganancia en los tres días. Pero con 40 o más personas, servir sola tres comidas al día no es realista. Conviene dejar el ayudante en el costo y tratar el ahorro como colchón, no como plan.</p>
+    </div>
+    <div class="card">
+      <p class="eyebrow">Merma e imprevistos</p>
+      <p class="small">Se suma un <b>5 %</b> sobre insumos por lo que siempre pasa: se quema una tanda, sube el tomate esa semana, llegan tres personas más sin avisar. Con 30 personas son <b class="num">Bs 96</b> en los tres días.</p>
+    </div>
+  </div>
+</section>
+
+<section id="precios">
+  <div class="sec-head">
+    <p class="eyebrow">Precios</p>
+    <h2>Qué cobrar</h2>
+    <p>Tres formas de contratar. El paquete completo conviene al cliente (paga menos que comprando suelto) y a la cocina (un solo viaje, una sola compra, el mismo gas para los tres servicios).</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th class="n">Precio p/pers/día</th>
+          <th class="n">Costo p/pers/día</th>
+          <th class="n">Ganancia</th>
+          <th class="n">Margen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Paquete completo</b><span class="sub2">desayuno + refrigerio + almuerzo</span></td>
+          <td class="n">Bs 52</td><td class="n">29,79</td><td class="n">22,21</td><td class="n">42,7 %</td>
+        </tr>
+        <tr>
+          <td>Media jornada<span class="sub2">desayuno + refrigerio</span></td>
+          <td class="n">Bs 26</td><td class="n">13,39</td><td class="n">12,61</td><td class="n">48,5 %</td>
+        </tr>
+        <tr>
+          <td>Solo almuerzo<span class="sub2">sopa, plato, postre y refresco</span></td>
+          <td class="n">Bs 32</td><td class="n">19,05</td><td class="n">12,95</td><td class="n">40,5 %</td>
+        </tr>
+        <tr class="sub"><td colspan="5">Suelto, si el cliente pide un solo servicio</td></tr>
+        <tr><td>Desayuno solo</td><td class="n">Bs 16</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr><td>Refrigerio solo</td><td class="n">Bs 14</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr><td>Almuerzo solo, sin paquete</td><td class="n">Bs 34</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small faint" style="margin-top:10px">Los tres servicios sueltos suman <b class="num">Bs 64</b>. El paquete completo cuesta <b class="num">Bs 52</b>: son <b class="num">Bs 12</b> menos por persona y por día, un <b>19 % de ahorro</b>. Ese número es el argumento de venta — decilo así al cliente.</p>
+</section>
+
+<section id="mercado">
+  <div class="sec-head">
+    <p class="eyebrow">Comparación</p>
+    <h2>Dónde queda este precio en Cochabamba</h2>
+    <p>Rangos de referencia para jornada completa (desayuno, refrigerio y almuerzo) por persona y por día, en servicios para cursos, talleres y capacitaciones en la ciudad.</p>
+  </div>
+
+  <div class="bars">
+    <div class="bar">
+      <p class="who"><b>Pensión de barrio</b><br><span class="faint tiny">olla común, sin presentación ni servicio en sala</span></p>
+      <div class="track"><div class="fill floor" style="width:22%"></div><span class="lab" style="left:calc(22% + 10px)">Bs 30 – 40</span></div>
+    </div>
+    <div class="bar usrow">
+      <p class="who"><b>Esta propuesta</b><br><span class="faint tiny">menú armado, postre incluido, servido en sala</span></p>
+      <div class="track"><div class="fill us" style="width:29%"></div><span class="lab" style="left:calc(29% + 10px); color:var(--morado); font-weight:600">Bs 52</span></div>
+    </div>
+    <div class="bar">
+      <p class="who"><b>Catering pequeño</b><br><span class="faint tiny">emprendimiento con clientela armada</span></p>
+      <div class="track"><div class="fill" style="width:39%"></div><span class="lab" style="left:calc(39% + 10px)">Bs 55 – 70</span></div>
+    </div>
+    <div class="bar">
+      <p class="who"><b>Catering empresarial</b><br><span class="faint tiny">factura, personal uniformado, montaje</span></p>
+      <div class="track"><div class="fill" style="width:61%"></div><span class="lab" style="left:calc(61% + 10px)">Bs 80 – 110</span></div>
+    </div>
+    <div class="bar">
+      <p class="who"><b>Hotel o salón de eventos</b><br><span class="faint tiny">incluye ambiente, mozos y equipamiento</span></p>
+      <div class="track"><div class="fill" style="width:100%"></div><span class="lab" style="right:8px">Bs 130 – 180</span></div>
+    </div>
+    <div class="scale"><span>Bs 0</span><span>Bs 90</span><span>Bs 180 p/persona/día</span></div>
+  </div>
+
+  <div class="cols" style="margin-top:20px">
+    <div class="card">
+      <p class="eyebrow">Por qué Bs 52 y no Bs 70</p>
+      <p class="small">Es el primer servicio: no hay referencias que mostrar ni clientes que recomienden. Bs 52 entra por debajo de todo catering formal y aun así deja <b>42,7 %</b> de margen. Se compite por precio una vez; después se compite con las fotos de esos tres días.</p>
+    </div>
+    <div class="card">
+      <p class="eyebrow">Por qué no bajar de Bs 45</p>
+      <p class="small">A Bs 45 con 30 personas el margen cae a <b>33,8 %</b>, y con 20 personas a <b>25 %</b> — ahí un solo imprevisto (el gas se acaba, sube la carne) se come la ganancia del día. Bs 45 es el piso, y sólo si el grupo pasa de 35.</p>
+    </div>
+    <div class="card flag">
+      <p class="eyebrow">Ojo con esto</p>
+      <p class="small">Si el cliente pide factura, hay que sumar el <b>13 % de IVA</b> sobre el precio, no descontarlo del margen. Con factura, el paquete completo se cotiza a <b class="num">Bs 59</b>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="compras">
+  <div class="sec-head">
+    <p class="eyebrow">Ejecución</p>
+    <h2>Lista de compras · 30 personas, 3 días</h2>
+    <p>Compra única el martes 23 por la mañana, salvo pan y fruta que se compran cada mañana. Los montos son de mercado, comprando por kilo y no por porción.</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Rubro</th><th>Qué entra</th><th class="n">Costo</th></tr></thead>
+      <tbody>
+        <tr><td><b>Carnes y huevo</b></td><td class="small muted">Pollo 14 kg · pulpa de res 3,3 kg · hueso para sopas 1,5 kg · 97 huevos</td><td class="n">559</td></tr>
+        <tr><td><b>Lácteos</b></td><td class="small muted">Leche 12 L · yogurt 4,5 L · queso criollo 2,5 kg</td><td class="n">227</td></tr>
+        <tr><td><b>Abarrotes</b></td><td class="small muted">Arroz 7 kg · harina 4 kg · aceite 6 L · azúcar 5 kg · maní · maíz morado · almidón de yuca · ají colorado · mocochinchi · linaza · especias</td><td class="n">381</td></tr>
+        <tr><td><b>Verdura y fruta</b></td><td class="small muted">Papa 14,4 kg · fruta 12 kg · zapallo, zanahoria y arveja 8 kg · cebolla 4 kg · tomate 3 kg · locoto y quilquiña</td><td class="n">243</td></tr>
+        <tr><td><b>Panadería</b></td><td class="small muted">60 marraquetas · 3 bolsas de pan de molde · pan molido para apanar</td><td class="n">81</td></tr>
+        <tr><td><b>Descartables</b></td><td class="small muted">90 juegos de plato hondo y playo · 90 cubiertos · 270 vasos · servilletas, film y bolsas</td><td class="n">283</td></tr>
+        <tr class="sub"><td colspan="2">Subtotal de compras</td><td class="n">1.774</td></tr>
+        <tr><td colspan="2" class="small muted">Colchón por variación de precios de mercado (8 %)</td><td class="n">137</td></tr>
+        <tr class="total"><td colspan="2">Presupuesto de compras · 3 días</td><td class="n">Bs 1.911</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small faint" style="margin-top:10px">Los descartables son el sexto rubro más caro y el más fácil de olvidar al cotizar: <b class="num">Bs 283</b>, casi <b class="num">Bs 3,15</b> por persona y por día. Nunca los dejes fuera del precio.</p>
+</section>
+
+<section id="cronograma">
+  <div class="sec-head">
+    <p class="eyebrow">Ejecución</p>
+    <h2>Cómo se produce sin morir en el intento</h2>
+    <p>La regla es que ningún día empiece de cero. Todo lo que aguanta se adelanta la víspera; la mañana queda sólo para lo que se sirve caliente.</p>
+  </div>
+
+  <div class="card">
+    <div class="steps">
+      <div class="step"><div class="when">Mar 23 · AM</div><div class="what"><b>Compra grande.</b> Mercado por la mañana, que es cuando está la verdura buena y barata. Descartables y abarrotes en la misma vuelta.</div></div>
+      <div class="step"><div class="when">Mar 23 · PM</div><div class="what"><b>Adelanto pesado.</b> Remojar maíz morado y mocochinchi. Hornear el queque de plátano. Armar y congelar las salteñas del día 1. Cocer y desmenuzar el pollo del sándwich del día 3. Hacer el flan.</div></div>
+      <div class="step"><div class="when">Cada día · 04:30</div><div class="what"><b>Caliente de la mañana.</b> Api, freído del pastel, huevos o armado del yogurt según el día. El café y el té se cargan en termos.</div></div>
+      <div class="step"><div class="when">Cada día · 06:30</div><div class="what"><b>Salida.</b> Ollas, termos y descartables cargados. Llegar 40 minutos antes de servir, no 15.</div></div>
+      <div class="step"><div class="when">Cada día · 08:00</div><div class="what"><b>Desayuno servido.</b> Mientras se sirve, ya está el refrigerio armado en bandeja tapada.</div></div>
+      <div class="step"><div class="when">Cada día · 09:00</div><div class="what"><b>Cocina del almuerzo.</b> Sopa primero, que aguanta; el plato principal después, para que llegue caliente. La ensalada se corta al final.</div></div>
+      <div class="step"><div class="when">Cada día · 12:45</div><div class="what"><b>Almuerzo servido.</b> Postre listo desde la mañana en conservadora.</div></div>
+      <div class="step"><div class="when">Cada día · 14:30</div><div class="what"><b>Cierre.</b> Recoger, anotar cuánto sobró de cada cosa y ajustar la compra del día siguiente. Esa libreta es lo que hace rentable el segundo evento.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="condiciones">
+  <div class="sec-head">
+    <p class="eyebrow">Antes de cerrar</p>
+    <h2>Qué hay que confirmar y qué hay que acordar</h2>
+  </div>
+  <div class="cols">
+    <div class="card flag">
+      <p class="eyebrow">Preguntas al cliente</p>
+      <ul>
+        <li><b>Cuántas personas exactas</b>, y hasta cuándo puede cambiar el número</li>
+        <li><b>Horarios reales</b> del curso — si el receso es 10:15 y no 10:30, todo se corre</li>
+        <li><b>El local</b>: ¿hay cocina, enchufes, mesa para montar, lugar para lavar?</li>
+        <li><b>Vegetarianos, alergias</b> o alguien que no come cerdo</li>
+        <li><b>Quién lava</b> si se usa vajilla en vez de descartable</li>
+        <li>Si necesitan <b>factura</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="eyebrow">Condiciones comerciales sugeridas</p>
+      <ul>
+        <li><b>50 % de anticipo</b> al confirmar; el resto al terminar el último día</li>
+        <li>Número final <b>confirmado 48 horas antes</b>; después de eso se cobra lo confirmado aunque falten</li>
+        <li>Hasta <b>3 personas extra</b> por día se cubren sin recargo; más que eso se cotiza aparte</li>
+        <li>Precio válido si se contratan <b>los tres días</b>; un solo día se cotiza distinto</li>
+        <li><b>Descartables incluidos.</b> Vajilla real tiene recargo por lavado</li>
+      </ul>
+    </div>
+    <div class="card note">
+      <p class="eyebrow">Para vender esto</p>
+      <p class="small">No mandes una lista de platos por WhatsApp. Mandá el precio por persona, el ahorro del paquete y una foto de un plato bien montado. El cliente no está comparando recetas: está comparando cuánto le sale por persona y si va a quedar bien frente a su curso.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="aguayo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <p class="small muted">Precios de insumos relevados a precio de mercado de Cochabamba, septiembre 2025. Verificar carne, pollo y aceite la semana del servicio: son los tres que más se mueven y los que más pesan en el costo.</p>
+  <p class="tiny faint">Propuesta de servicio de alimentación · Curso del 24, 25 y 26 de septiembre · Cochabamba, Bolivia</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var DIAS = [
+    {desayuno:3.20, refrigerio:4.30, almuerzo:12.70},
+    {desayuno:5.40, refrigerio:4.00, almuerzo:13.20},
+    {desayuno:5.70, refrigerio:3.80, almuerzo:11.40}
+  ];
+  var FIJO_DIA = 225, MERMA = 0.05;
+  var PLANES = {
+    completo: {mods:['desayuno','refrigerio','almuerzo'], f:1.00, precio:52},
+    manana:   {mods:['desayuno','refrigerio'],            f:0.55, precio:26},
+    almuerzo: {mods:['almuerzo'],                          f:0.80, precio:32}
+  };
+
+  var state = {plan:'completo', pax:30, precio:52, precioTocado:false};
+
+  var $ = function(id){ return document.getElementById(id); };
+  var paxInput = $('pax'), precioInput = $('precio');
+
+  function bs(n, dec){
+    return 'Bs ' + n.toLocaleString('es-BO', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+  }
+
+  function calc(){
+    var p = PLANES[state.plan];
+    var insumos3 = 0;
+    DIAS.forEach(function(d){
+      p.mods.forEach(function(m){ insumos3 += d[m]; });
+    });
+    var insumosDia = insumos3 / 3;
+    var fijoDia = FIJO_DIA * p.f;
+    var pax = state.pax;
+    var costoPD = insumosDia + fijoDia / pax + MERMA * insumosDia;
+    var ingreso = pax * state.precio * 3;
+    var costoTotal = pax * insumos3 + fijoDia * 3 + MERMA * pax * insumos3;
+    return {
+      insumos3: insumos3, costoPD: costoPD, ingreso: ingreso, costoTotal: costoTotal,
+      utilidad: ingreso - costoTotal,
+      margen: ingreso > 0 ? (ingreso - costoTotal) / ingreso : 0,
+      gpp: state.precio - costoPD,
+      compras: pax * insumos3, fijos: fijoDia * 3
+    };
+  }
+
+  function render(){
+    var r = calc();
+    $('o-costo').textContent  = bs(r.costoPD, 2);
+    $('o-gpp').textContent    = bs(r.gpp, 2);
+    $('o-util').textContent   = bs(Math.round(r.utilidad), 0);
+    $('o-ingreso').textContent= bs(Math.round(r.ingreso), 0);
+    $('o-margen').textContent = (r.margen * 100).toLocaleString('es-BO', {minimumFractionDigits:1, maximumFractionDigits:1}) + ' %';
+    $('sugerido').textContent = bs(PLANES[state.plan].precio, 0);
+
+    var pill = $('o-pill');
+    if (r.margen >= 0.38)      { pill.className = 'pill good'; pill.textContent = 'Sano'; }
+    else if (r.margen >= 0.30) { pill.className = 'pill good'; pill.textContent = 'Aceptable'; }
+    else if (r.margen >= 0.20) { pill.className = 'pill warn'; pill.textContent = 'Justo'; }
+    else if (r.margen > 0)     { pill.className = 'pill warn'; pill.textContent = 'No conviene'; }
+    else                       { pill.className = 'pill warn'; pill.textContent = 'Pérdida'; }
+
+    $('o-nota').innerHTML = 'Con ' + state.pax + ' personas: se compran <span class="num">' +
+      bs(Math.round(r.compras), 0) + '</span> de insumos y se pagan <span class="num">' +
+      bs(Math.round(r.fijos), 0) + '</span> de costos fijos en los tres días.';
+
+    document.querySelectorAll('#planes .chip').forEach(function(c){
+      c.setAttribute('aria-pressed', String(c.dataset.plan === state.plan));
+    });
+    document.querySelectorAll('#paxchips .chip').forEach(function(c){
+      c.setAttribute('aria-pressed', String(Number(c.dataset.pax) === state.pax));
+    });
+  }
+
+  document.querySelectorAll('#planes .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      state.plan = c.dataset.plan;
+      if (!state.precioTocado) { state.precio = PLANES[state.plan].precio; precioInput.value = state.precio; }
+      render();
+    });
+  });
+  document.querySelectorAll('#paxchips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      state.pax = Number(c.dataset.pax);
+      paxInput.value = state.pax;
+      render();
+    });
+  });
+  paxInput.addEventListener('input', function(){
+    var v = parseInt(paxInput.value, 10);
+    if (!isNaN(v) && v >= 8 && v <= 300) { state.pax = v; render(); }
+  });
+  precioInput.addEventListener('input', function(){
+    var v = parseFloat(precioInput.value);
+    if (!isNaN(v) && v > 0) { state.precio = v; state.precioTocado = true; render(); }
+  });
+
+  render();
+})();
+</script>
