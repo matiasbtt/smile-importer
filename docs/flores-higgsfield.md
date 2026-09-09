@@ -5,8 +5,8 @@ Guion de rodaje de la pieza de flores de papel, cuadrado contra
 aproximados: ajustalos contra tu copia del tema.
 
 La pieza ya montada está en `/flores/` (`public/flores/flores-herbario.mp4`,
-50 s en bucle) y el motor que la dibuja, en `docs/flores/`. Este guion es para
-volver a filmarla en alta resolución, plano por plano.
+1 minuto en bucle) y el motor que la dibuja, en `docs/flores/`. Este guion es
+para volver a filmarla en alta resolución, plano por plano.
 
 ## Ancla de estilo — va al principio de todos los prompts
 
@@ -48,7 +48,12 @@ listos para copiar de a uno.
   siguiente; el corte deja de notarse y parece una sola flor transformándose.
 - **Velocidad**: rendereá y después bajá todo a 80–85 % en el editor. El tema respira
   a ~52 pulsaciones por minuto y los modelos animan de más.
-- **Transiciones**: corte seco en 01:05 y 02:35; el resto, disolvencias de 1,5 s.
+- **Transiciones**: nada de cortes secos ni disolvencias de editor. En cada
+  empalme pedile al modelo que anime la flor de un plano *deformándose y
+  brotando* hacia la forma del plano siguiente (usá el mismo prompt de
+  "morph"/transformación orgánica que uses para el resto de la animación,
+  no un corte). Es lo mismo que hace la versión web: el mecanismo tiene que
+  ser siempre el mismo, sólo cambia qué flor se convierte en cuál.
 - **Música**: el tema sirve de guía de montaje, pero publicar el video con él requiere
   licencia. Para la web: mudo, o una pieza propia con la misma estructura
   (armonio, arpa, coro).
