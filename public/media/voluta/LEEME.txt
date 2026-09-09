@@ -1,0 +1,29 @@
+VIDEOS DE LA FLOR
+=================
+
+Dejar los archivos acá, con estos nombres:
+
+    flor-01.mp4      <- el del hero y el manifiesto
+    flor-02.mp4
+    flor-03.mp4
+    flor-04.mp4
+
+Opcional, como imagen de espera (mismo nombre, .jpg):
+
+    flor-01.jpg  flor-02.jpg  flor-03.jpg  flor-04.jpg
+
+No hay que tocar nada de codigo. El sitio detecta si el archivo esta
+y lo monta solo. Mientras no esten, dibuja la flor en vector y se ve
+terminado igual.
+
+COMO CONVIENE QUE ESTEN
+-----------------------
+- Fondo negro (se compone con blend screen, asi la flor flota).
+- Vertical o cuadrado.
+- Sin audio.
+- Cortos, de 4 a 8 segundos, que cierren en loop.
+
+Que archivo usa cada seccion se cambia en src/data/site.js, en el
+campo "video" de ESCENAS y de cada CAPACIDAD.
+
+Mas detalle en el README, seccion "Material".

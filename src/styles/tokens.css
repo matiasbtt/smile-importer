@@ -1,0 +1,85 @@
+/* ═══════════════════════════════════════════════════════════
+   VOLUTA STUDIOS — tokens
+   Set reducido a propósito: cada token de acá se usa. Los valores
+   sueltos del sistema de referencia que no tenían consumidor real
+   (--section-gap, --card-padding, --element-gap: rangos no válidos
+   en CSS; --text-heading-xs; superficies duplicadas) no se cargan.
+   El teal venía como #15846 — 5 dígitos, hex inválido: es #15846e.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Color ─────────────────────────────────────────────── */
+  --void: #000000;          /* único fondo. No hay paneles ni cards. */
+  --bone: #ffffff;          /* titulares, texto primario */
+  --paper: #f2efe9;         /* cuerpo largo: blanco de papel, no de pantalla */
+  --ash: #9a9a9a;           /* nav inactivo, links fantasma */
+  --silver: #bdbdbd;        /* texto terciario */
+  --iris: #8052ff;          /* acción. Nunca como superficie grande. */
+  --saffron: #ffb829;       /* etiquetas y énfasis */
+  --verdant: #15846e;       /* profundidad: brillo del stage, gradiente del logo */
+
+  /* ── Tipografía ────────────────────────────────────────── */
+  --font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --w-light: 200;           /* cuerpo 18px. Es la firma: no subir a 400. */
+  --w-regular: 400;         /* titulares, de 24 a 113px */
+  --w-semi: 600;            /* nav y etiquetas 12-14px en mayúsculas */
+
+  /* Escala. clamp() en los tres display para que el tracking negativo
+     no rompa la línea en pantallas chicas. */
+  --t-caption: 12px;
+  --t-nav: 14px;
+  --t-body: 18px;
+  --t-h2xs: 24px;
+  --t-sub: clamp(28px, 3.6vw, 36px);
+  --t-h-sm: clamp(32px, 5vw, 42px);
+  --t-h: clamp(36px, 6vw, 48px);
+  --t-h-lg: clamp(44px, 8vw, 78px);
+  --t-display: clamp(52px, 10.5vw, 113px);
+
+  --lh-tight: 1.1;
+  --lh-body: 1.5;
+  --track-nav: 0.35px;
+  --track-display: -0.04em;  /* aplica de 42px para arriba */
+
+  /* ── Espacio (base 6) ──────────────────────────────────── */
+  --s-6: 6px;
+  --s-12: 12px;
+  --s-18: 18px;
+  --s-24: 24px;
+  --s-30: 30px;
+  --s-36: 36px;
+  --s-60: 60px;
+  --s-96: 96px;
+  --s-120: 120px;
+  --gap-section: clamp(var(--s-60), 9vw, var(--s-120));
+
+  /* ── Forma ─────────────────────────────────────────────── */
+  --r: 24px;
+  --r-pill: 9999px;
+  --max-w: 1280px;
+  --gutter: clamp(var(--s-24), 4vw, var(--s-60));
+
+  /* ── Movimiento ────────────────────────────────────────── */
+  /* Una sola curva de salida para todo lo que entra, y una simétrica
+     para lo que se mueve de un estado a otro. Nada de `linear`. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --d-fast: 160ms;   /* feedback directo: hover, press */
+  --d-mid: 280ms;    /* cambio de estado visible */
+  --d-slow: 620ms;   /* entrada en viewport */
+
+  /* ── Papel ─────────────────────────────────────────────── */
+  /* El grano no es decoración: rompe el banding de los degradados
+     del stage sobre negro puro, que en OLED se ve a bandas. */
+  --grain-opacity: 0.055;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-fast: 1ms;
+    --d-mid: 1ms;
+    --d-slow: 1ms;
+  }
+}
