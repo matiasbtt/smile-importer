@@ -1,4 +1,5 @@
-/* Motor de la pieza: 12 planos, cámara viva, transiciones imposibles, bucle exacto. */
+/* Motor de la pieza: 12 planos, cámara viva, una flor se transforma en la
+   siguiente (metamorfosis orgánica, no cortes de edición), bucle exacto. */
 window.HERBARIO=(function(){
 const FRAG=`
 precision highp float;
@@ -23,18 +24,12 @@ vec2 cam(vec2 uv,vec4 c,float loc,vec2 fit){
 }
 vec3 mira(sampler2D tex,vec2 uv,float warp,float gl,float sem){
  vec2 q=uv; float r=length(uv-0.5);
- q+=normalize(uv-0.5+vec2(0.0001))*sin(uT*0.55+sem)*0.0035*smoothstep(0.05,0.7,r);
- vec2 w=vec2(fbm(uv*3.2+vec2(uT*0.06,0.0)+sem),fbm(uv*3.2+vec2(0.0,-uT*0.05)+sem+9.1))-0.5;
+ q+=normalize(uv-0.5+vec2(0.0001))*sin(uT*0.5+sem)*0.0026*smoothstep(0.05,0.7,r);
+ vec2 w=vec2(fbm(uv*3.0+vec2(uT*0.05,0.0)+sem),fbm(uv*3.0+vec2(0.0,-uT*0.045)+sem+9.1))-0.5;
  q+=w*warp*(0.35+0.9*r);
- q+=vec2(sin(uv.y*38.0+uT*1.1+sem),cos(uv.x*31.0-uT*0.85))*0.0009*smoothstep(0.15,0.75,r);
- float banda=floor(uv.y*26.0), gs=floor(uT*7.0);
- float on=step(0.93-gl*0.30,hash(vec2(banda,gs)));
- q.x+=on*(hash(vec2(banda*3.7,gs))-0.5)*0.10*gl;
- vec2 ca=(uv-0.5)*0.0032*(0.5+gl*2.6);
+ vec2 ca=(uv-0.5)*0.0016*(0.4+gl*1.6);
  vec3 c;
  c.r=texture2D(tex,q+ca).r; c.g=texture2D(tex,q).g; c.b=texture2D(tex,q-ca).b;
- c.r=mix(c.r,texture2D(tex,q+vec2(0.014*gl*on,0.0)).r,on*gl);
- c.b=mix(c.b,texture2D(tex,q-vec2(0.010*gl*on,0.0)).b,on*gl);
  return c;
 }
 float motas(vec2 uv){
@@ -48,6 +43,12 @@ float motas(vec2 uv){
  }
  return s;
 }
+
+/* ── metamorfosis: una flor crece/se disuelve dentro de la otra ──
+   Un frente de crecimiento orgánico (radial + ruido angular) nace en un
+   punto distinto por corte y se expande hasta cubrir el cuadro. Cerca del
+   frente el papel se estira, como si una forma tirara de la otra al
+   transformarse — sin cortes, sin bloques, sin flashes. */
 void main(){
  vec2 uv=vUv;
  vec2 uvA=cam(uv,uCamA,uLoc.x,uFitA);
@@ -57,77 +58,38 @@ void main(){
  vec3 flash=vec3(0.0);
 
  if(p>0.0){
-  if(uTr==0){                                   /* doblez de papel */
-   float cr=p*1.16-0.08, d=uv.x-cr;
-   m=1.0-smoothstep(-0.004,0.004,d);
-   dA.x+=pow(max(0.0,1.0-abs(d)*6.0),2.0)*0.07;
-   dB.x-=pow(max(0.0,1.0-abs(d)*8.0),2.0)*0.03;
-   flash+=vec3(0.95,0.92,0.85)*exp(-abs(d)*240.0)*0.75;
-  }else if(uTr==1){                             /* rasgado */
-   float e=fbm(vec2(uv.y*7.0,3.0))*0.22+fbm(vec2(uv.y*23.0,9.0))*0.06;
-   float d=(uv.x*0.92+e)-(p*1.42-0.22);
-   m=1.0-smoothstep(-0.006,0.006,d);
-   dA.x+=exp(-abs(d)*40.0)*0.05;
-   flash+=vec3(0.93,0.89,0.81)*exp(-abs(d)*170.0)*0.6;
-  }else if(uTr==2){                             /* datamosh */
-   vec2 g=floor(uv*vec2(26.0,15.0));
-   float h=hash(g+floor(uT*9.0));
-   vec2 off=(vec2(hash(g+1.3),hash(g+7.7))-0.5)*0.30*p*step(0.32,h);
-   dA+=off; dB+=off*0.35;
-   m=step(hash(g+2.9),p*1.25);
-   glA+=p*1.1; glB+=p*0.5;
-  }else if(uTr==3){                             /* separación de canales */
-   dA.x+=p*0.30; dB.x-=(1.0-p)*0.30;
-   m=smoothstep(0.34,0.66,p);
-   glA+=p*1.4; glB+=(1.0-p)*1.4;
-  }else if(uTr==4){                             /* latente sin resolver */
-   vec2 g=floor(uv*vec2(44.0,26.0));
-   float k=sin(3.14159*p);
-   vec3 rr=vec3(hash(g+floor(uT*13.0)),hash(g+5.1+floor(uT*13.0)),hash(g+9.3+floor(uT*13.0)));
-   m=step(hash(g*1.7),p);
-   flash+=(rr-0.36)*k*0.9;
-  }else if(uTr==5){                             /* atravesar la flor */
-   dA-=(uvA-0.5)*p*0.55;
-   dB+=(uvB-0.5)*(1.0-p)*0.75;
-   m=smoothstep(0.14,0.86,p);
-   flash+=vec3(0.60,0.63,0.70)*pow(sin(3.14159*p),3.0)*0.14;
-  }else if(uTr==6){                             /* barrido al revés */
-   float k=sin(3.14159*p);
-   dA+=vec2(1.0,0.15)*k*0.10*(hash(vec2(floor(uv.y*180.0),floor(uT*24.0)))-0.5);
-   dB+=vec2(-1.0,0.10)*k*0.07*(hash(vec2(floor(uv.y*140.0),floor(uT*24.0)+3.0))-0.5);
-   m=smoothstep(0.28,0.72,p); glA+=k*0.5;
-  }else if(uTr==7){                             /* arrugado */
-   float k=sin(3.14159*p);
-   vec2 cel=uv*5.0; vec2 id=floor(cel),f=fract(cel)-0.5;
-   float cr=abs(f.x)+abs(f.y); vec2 dir=normalize(f+vec2(0.001));
-   dA+=dir*cr*k*0.11*(0.5+hash(id)); dB+=dir*cr*k*0.05;
-   m=smoothstep(0.44,0.56,p);
-   flash+=vec3(1.0,0.97,0.90)*pow(max(0.0,1.0-cr*1.6),6.0)*k*0.28;
-  }else if(uTr==8){                             /* brote desde el centro */
-   vec2 d0=(uv-vec2(0.5,0.62))*vec2(1.7,1.0);
-   float r=length(d0);
-   float e=fbm(vec2(atan(d0.y,d0.x)*2.2,4.0))*0.18;
-   float d=r-p*1.02+e-0.10;
-   m=1.0-smoothstep(-0.02,0.02,d);
-   flash+=vec3(0.85,0.90,0.80)*exp(-abs(d)*85.0)*0.4;
-  }else if(uTr==9){                             /* costura de espejo */
-   float k=sin(3.14159*p);
-   dA.x+=(1.0-2.0*uvA.x)*step(0.5,uv.x)*k;
-   float d=abs(uv.x-0.5)-p*0.52;
-   m=1.0-step(0.0,d);
-   flash+=vec3(0.88,0.32,0.22)*exp(-abs(d)*260.0)*0.55;
-  }else if(uTr==10){                            /* tiras */
-   float s=floor(uv.x*22.0);
-   dA.y+=(hash(vec2(s,11.0))-0.5)*p*1.3;
-   dA.x+=(hash(vec2(s,3.0))-0.5)*p*0.05;
-   m=step(hash(vec2(s,7.0)),p*1.18);
-   glA+=p*0.7;
-  }else{                                        /* colapso: punto de bucle */
-   float k=smoothstep(0.28,0.62,p);
-   glA+=smoothstep(0.0,0.5,p)*3.2;
-   m=smoothstep(0.58,0.70,p);
-   flash+=vec3(1.0,0.99,0.96)*pow(k,2.0)*1.15*(1.0-smoothstep(0.62,0.86,p));
-  }
+  float fi=float(uTr);
+  vec2 org=vec2(0.5,0.46)+(vec2(hash(vec2(fi,1.7)),hash(vec2(fi,5.3)))-0.5)*vec2(0.85,0.6);
+  vec2 asp=vec2(1.12,1.0);
+  vec2 d=(uv-org)*asp;
+  float rad=length(d)+1e-4;
+  vec2 dir=d/rad;
+  float ang=atan(d.y,d.x);
+  float freq=2.6+hash(vec2(fi,9.1))*3.0;
+  float ph=fi*4.1;
+
+  /* cada punto del cuadro tiene su propio umbral de cambio, según qué tan
+     lejos está del origen del brote más un ruido orgánico (no anillos
+     perfectos). A medida que "base" recorre 0→1 durante todo el plano,
+     los puntos van cambiando de a poco, del centro hacia afuera — la
+     transformación queda visible el corte entero, no se resuelve de golpe. */
+  float wobFino=fbm(vec2(ang*freq*0.3183+ph, rad*2.4+ph))-0.5;
+  float wobAncho=fbm(vec2(uv.x*2.1+ph,uv.y*2.1-ph*1.3))-0.5;
+  float wob=wobAncho*0.68+wobFino*0.5;
+  float refRad=0.5;
+  float umbral=clamp(rad/refRad*0.42+wob*0.62, 0.02, 0.98);
+  float base=smoothstep(0.0,1.0,p);
+  float dEdge=base-umbral;
+  float soft=0.07;
+  m=smoothstep(-soft,soft,dEdge);
+
+  float prox=exp(-abs(dEdge)*8.0)*smoothstep(0.0,0.04,p)*smoothstep(1.0,0.96,p);
+  dA+=dir*prox*0.05 + (org-uv)*prox*0.045;
+  dB+=-dir*prox*0.04 + (uv-org)*prox*0.055*step(0.0,dEdge);
+  glA+=prox*0.55; glB+=prox*0.4;
+
+  vec3 tintB=texture2D(uB,org).rgb;
+  flash+=(tintB-0.5)*prox*0.35;
  }
 
  vec3 A=mira(uA,uvA+dA,uWarp.x,glA,0.0);
@@ -135,10 +97,10 @@ void main(){
  vec3 col=mix(A,B,clamp(m,0.0,1.0))+flash;
 
  float lum=dot(col,vec3(0.299,0.587,0.114));
- col+=col*smoothstep(0.62,1.0,lum)*0.38;
+ col+=col*smoothstep(0.62,1.0,lum)*0.34;
  col*=0.94+0.12*fbm(uv*vec2(320.0,90.0));
- col+=vec3(0.95,0.92,0.85)*motas(uv)*0.30;
- col+=(hash(uv*uRes+fract(uT)*97.0)-0.5)*0.055;
+ col+=vec3(0.95,0.92,0.85)*motas(uv)*0.28;
+ col+=(hash(uv*uRes+fract(uT)*97.0)-0.5)*0.05;
  col*=clamp(1.0-1.12*pow(length((uv-0.5)*vec2(1.05,1.0)),2.4),0.0,1.0);
  col=pow(max(col,0.0),vec3(1.06,1.03,1.02));
  col+=vec3(0.008,0.014,0.012)*(1.0-lum);
@@ -146,22 +108,22 @@ void main(){
 }`;
 const VERT=`attribute vec2 a;varying vec2 vUv;void main(){vUv=a*0.5+0.5;gl_Position=vec4(a,0.0,1.0);}`;
 
-/* plano: z0, z1, panX, panY, warp, glitch, transición de salida */
+/* plano: zoom inicial, zoom final, paneo x, paneo y, respiración de papel, aberración */
 const PLANOS=[
- {c:[1.02,1.16, 0.000,-0.020],w:0.0022,g:0.02,tr:0},
- {c:[1.20,1.04, 0.010, 0.020],w:0.0030,g:0.03,tr:1},
- {c:[1.03,1.18,-0.020, 0.000],w:0.0040,g:0.10,tr:2},
- {c:[1.06,1.22, 0.020, 0.010],w:0.0035,g:0.22,tr:3},
- {c:[1.16,1.03, 0.030,-0.010],w:0.0030,g:0.05,tr:4},
- {c:[1.02,1.14,-0.015, 0.015],w:0.0045,g:0.06,tr:5},
- {c:[1.18,1.02, 0.020, 0.010],w:0.0026,g:0.04,tr:6},
- {c:[1.05,1.13, 0.000, 0.020],w:0.0060,g:0.05,tr:7},
- {c:[1.14,1.02,-0.030, 0.000],w:0.0040,g:0.06,tr:8},
- {c:[1.02,1.15, 0.000,-0.025],w:0.0038,g:0.05,tr:9},
- {c:[1.18,1.04, 0.015, 0.010],w:0.0034,g:0.04,tr:10},
- {c:[1.03,1.20, 0.000, 0.000],w:0.0050,g:0.35,tr:11}
+ {c:[1.02,1.16, 0.000,-0.020],w:0.0020,g:0.03},
+ {c:[1.20,1.04, 0.010, 0.020],w:0.0026,g:0.04},
+ {c:[1.03,1.18,-0.020, 0.000],w:0.0032,g:0.07},
+ {c:[1.06,1.22, 0.020, 0.010],w:0.0030,g:0.10},
+ {c:[1.16,1.03, 0.030,-0.010],w:0.0026,g:0.05},
+ {c:[1.02,1.14,-0.015, 0.015],w:0.0036,g:0.06},
+ {c:[1.18,1.02, 0.020, 0.010],w:0.0024,g:0.05},
+ {c:[1.05,1.13, 0.000, 0.020],w:0.0042,g:0.06},
+ {c:[1.14,1.02,-0.030, 0.000],w:0.0032,g:0.06},
+ {c:[1.02,1.15, 0.000,-0.025],w:0.0030,g:0.06},
+ {c:[1.18,1.04, 0.015, 0.010],w:0.0028,g:0.05},
+ {c:[1.03,1.20, 0.000, 0.000],w:0.0040,g:0.12}
 ];
-const PLANO=4.2, TRANS=1.0, N=PLANOS.length, TOTAL=PLANO*N;
+const PLANO=5.0, TRANS=4.5, N=PLANOS.length, TOTAL=PLANO*N;
 
 function compilar(gl,tipo,src){
   const s=gl.createShader(tipo);gl.shaderSource(s,src);gl.compileShader(s);
@@ -227,7 +189,7 @@ function iniciar(canvas,rutas,alListo){
     gl.uniform2f(U.uWarp,A.w,B.w);
     gl.uniform2f(U.uGl,A.g,B.g);
     gl.uniform2f(U.uRes,canvas.width,canvas.height);
-    gl.uniform1f(U.uT,t);gl.uniform1f(U.uP,p);gl.uniform1i(U.uTr,A.tr);
+    gl.uniform1f(U.uT,t);gl.uniform1f(U.uP,p);gl.uniform1i(U.uTr,i);
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
   return {dibujar,TOTAL,PLANO,TRANS,N};
