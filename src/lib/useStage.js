@@ -9,15 +9,20 @@ export function useSmoothScroll() {
   useEffect(() => {
     if (reduced) return;
     let lenis, id, cancelled = false;
-    import('lenis').then(({ default: Lenis }) => {
-      if (cancelled) return;
-      lenis = new Lenis({ duration: 1.1, smoothWheel: true });
-      const raf = (t) => {
-        lenis.raf(t);
+    import('lenis')
+      .then(({ default: Lenis }) => {
+        if (cancelled) return;
+        lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+        const raf = (t) => {
+          lenis.raf(t);
+          id = requestAnimationFrame(raf);
+        };
         id = requestAnimationFrame(raf);
-      };
-      id = requestAnimationFrame(raf);
-    });
+      })
+      // Si el chunk no carga, queda el scroll nativo. Sin este catch
+      // la promesa rechazada sube como error no manejado y ensucia
+      // la consola por una mejora que es opcional.
+      .catch(() => {});
     return () => {
       cancelled = true;
       cancelAnimationFrame(id);
