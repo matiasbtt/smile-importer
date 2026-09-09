@@ -1,29 +1,32 @@
-VIDEOS DE LA FLOR
-=================
+VIDEO DE LA FLOR
+================
 
-Dejar los archivos acá, con estos nombres:
+Dejar el archivo aca, con este nombre:
 
-    flor-01.mp4      <- el del hero y el manifiesto
-    flor-02.mp4
-    flor-03.mp4
-    flor-04.mp4
+    flor-loop.mp4
 
-Opcional, como imagen de espera (mismo nombre, .jpg):
+Opcional, como imagen de espera:
 
-    flor-01.jpg  flor-02.jpg  flor-03.jpg  flor-04.jpg
+    flor-loop.jpg
 
-No hay que tocar nada de codigo. El sitio detecta si el archivo esta
-y lo monta solo. Mientras no esten, dibuja la flor en vector y se ve
-terminado igual.
+No hay que tocar nada de codigo. El sitio detecta si el archivo
+esta y lo monta solo. Mientras no este, dibuja la flor en vector
+respetando la misma composicion, asi que cuando entre el material
+no se mueve nada de la pagina.
 
-COMO CONVIENE QUE ESTEN
------------------------
-- Fondo negro (se compone con blend screen, asi la flor flota).
-- Vertical o cuadrado.
+ES UNA SOLA PIEZA, NO VARIOS CLIPS
+----------------------------------
+El video es la sucesion larga de flores en loop perfecto. Elegir
+una capacidad NO cambia el archivo: cambia el encuadre del plano.
+Cortar el video para intercambiar clips romperia el loop.
+
+QUE ESPERA EL SITIO DEL ARCHIVO
+-------------------------------
+- Cuadrado 1:1.
+- Fondo negro puro, limpio y estatico.
+- Flor chica dentro del cuadro (20-30% del alto), sin tocar los
+  bordes, con mucho negro alrededor.
 - Sin audio.
-- Cortos, de 4 a 8 segundos, que cierren en loop.
-
-Que archivo usa cada seccion se cambia en src/data/site.js, en el
-campo "video" de ESCENAS y de cada CAPACIDAD.
+- Loop perfecto: primer y ultimo fotograma equivalentes.
 
 Mas detalle en el README, seccion "Material".

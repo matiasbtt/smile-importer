@@ -17,7 +17,8 @@ export default function Estudio() {
         </Reveal>
         <Reveal as="p" className="body" i={2}>
           Un equipo chico y estable. La misma gente que define el criterio es la
-          que después lo ejecuta.
+          que después lo ejecuta — y la que decide qué de todo lo que la máquina
+          propone merece existir.
         </Reveal>
 
         <div className="people" style={{ paddingTop: 'var(--s-36)', width: '100%' }}>

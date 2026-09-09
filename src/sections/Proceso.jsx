@@ -9,7 +9,7 @@ export default function Proceso() {
           Proceso
         </Reveal>
         <Reveal as="h2" className="h" i={1} display>
-          Cuatro tiempos.
+          Cómo trabajamos.
         </Reveal>
 
         <div className="steps" style={{ paddingTop: 'var(--s-36)' }}>

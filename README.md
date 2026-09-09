@@ -1,8 +1,16 @@
 # Voluta Studios
 
+Estudio creativo de webs y experiencias digitales con inteligencia artificial.
+
 Sitio de una sola página. Fondo negro en todas las secciones, tipografía
-monolítica y una flor que se mantiene presente a la izquierda, girando en tres
-dimensiones según se avanza y según la opción elegida.
+monolítica y una flor de papel suspendida a la izquierda, que se re-encuadra en
+tres dimensiones según se avanza y según la opción elegida.
+
+> *Nature interpreted, reconstructed and imagined by artificial intelligence.*
+
+La dirección de arte sigue `contexto_proyecto.json` (Drive · **Voluta Proyect**):
+una IA observa flores reales, las reconstruye como esculturas de papel artesanal
+y termina imaginando especies que no existen.
 
 ## Correr el proyecto
 
@@ -22,55 +30,70 @@ Cloudflare Pages o cualquier hosting.
 
 ---
 
-## Material — dónde van los videos
+## Material — dónde va el video
 
-Los archivos van en **`public/media/voluta/`** con estos nombres:
+El archivo va en **`public/media/voluta/`**:
 
 ```
 public/media/voluta/
-├─ flor-01.mp4   (+ flor-01.jpg opcional, como poster)
-├─ flor-02.mp4
-├─ flor-03.mp4
-└─ flor-04.mp4
+├─ flor-loop.mp4    <- la pieza continua
+└─ flor-loop.jpg    <- opcional, primer fotograma como poster
 ```
 
-No hay que tocar código para que aparezcan: el stage verifica si el archivo
-existe y lo monta solo. **Mientras no existan, dibuja la flor en vector** y el
-sitio se ve terminado igual — no queda un hueco negro.
+No hay que tocar código: el stage verifica si el archivo existe y lo monta solo.
+**Mientras no exista, dibuja la flor en vector** respetando la misma
+composición, así que cuando entre el material real no se mueve nada de la
+página.
 
-Qué archivo usa cada sección se define en `src/data/site.js`, en el campo
-`video` de `ESCENAS` y de cada entrada de `CAPACIDADES`.
+### Es una sola pieza, no cuatro clips
 
-### Cómo conviene que estén los videos
+Según el brief, el video es una sucesión larga de flores que se abren de a una,
+en loop perfecto e indefinido. Elegir una capacidad **no cambia el archivo** —
+cortar el video para intercambiar clips rompería el loop, que es la regla
+principal de la pieza. Lo que cambia es el encuadre del plano.
 
-- **Fondo negro.** El plano se compone con `mix-blend-mode: screen`, así que el
-  negro del video se funde con el fondo de la página y la flor queda flotando
-  en lugar de dentro de un rectángulo.
-- **Vertical o cuadrado**, la columna es más alta que ancha.
-- **Sin audio** (van en `muted`, es lo que permite el autoplay).
-- **Cortos y en loop**, 4 a 8 segundos.
+### Qué espera el sitio del archivo
 
-### Los dos modos
+Esto viene del brief (`contexto_proyecto.json` en Drive) y el layout ya está
+construido para recibirlo así:
 
-En `src/data/site.js`, cada video tiene una bandera `scrub`:
-
-| `scrub` | Qué hace | Cuándo usarlo |
-|---|---|---|
-| `false` *(por defecto)* | El video corre en loop y lo que gira en 3D es el plano que lo contiene. | Siempre, salvo que el archivo esté preparado. Funciona con cualquier mp4. |
-| `true` | El scroll pasa los fotogramas, cuadro por cuadro. | Solo con un archivo codificado para eso. |
-
-El modo `scrub` da el efecto más fuerte, pero exige keyframes en todos los
-cuadros. Con un mp4 normal el navegador salta de keyframe a keyframe y se ve a
-tirones. Para preparar un archivo:
-
-```bash
-ffmpeg -i original.mp4 -an -g 1 -crf 24 -vf "scale=1080:-2" flor-01.mp4
-```
-
-`-g 1` es la parte importante (un keyframe por cuadro). `-an` saca el audio.
-El archivo pesa bastante más — conviene solo para el video del hero.
+- **Cuadrado (1:1).** El contenedor es cuadrado y usa `object-fit: contain`,
+  para que ningún pétalo quede cortado nunca.
+- **Fondo negro puro, limpio, estático.** Se compone con `mix-blend-mode:
+  screen`: el negro del video se funde con el de la página y la flor queda
+  flotando, no dentro de un rectángulo.
+- **Flor chica dentro del cuadro**, ~20–30% de la altura, con mucho negro
+  alrededor.
+- **Sin audio** (va en `muted`, es lo que permite el autoplay).
+- **Loop perfecto**: primer y último fotograma visualmente equivalentes.
 
 ---
+
+## Lo que el brief prohíbe, y que por eso no está acá
+
+`contexto_proyecto.json` es explícito sobre lo que no puede aparecer alrededor
+de la flor. Vale dejarlo escrito para que no se reintroduzca sin querer:
+
+| Prohibido | Consecuencia en el código |
+|---|---|
+| Partículas, humo, estrellas | No hay campo de partículas |
+| Halos luminosos, gradientes visibles | No hay capa de resplandor detrás de la flor |
+| Efectos atmosféricos, brillo artificial | No hay capa especular |
+| Film grain, ruido analógico, fondo con textura | No hay grano sobre la página |
+| Recortar la flor | `object-fit: contain`, nunca `cover` |
+
+### La tensión con el 3D
+
+El brief pide **cámara prácticamente estática** y prohíbe rotación y orbitación.
+Eso gobierna cómo se genera el video: la flor puede tener imperfecciones, la
+cámara no.
+
+El movimiento 3D de este sitio es otra capa: gira **el plano que contiene el
+video** dentro de la página, no la cámara que filmó la flor. Aun así los valores
+se mantienen cortos a propósito (|ry| ≤ 8°, deriva lenta, ±3° de puntero) para
+que se lea como un objeto suspendido y no como una tarjeta girando — que es el
+registro contemplativo que pide el proyecto. Si se quiere más presencia, se
+suben los números en `ESCENAS` y `CAPACIDADES.pose` de `src/data/site.js`.
 
 ## Cómo está armado
 
@@ -85,8 +108,6 @@ src/
 ├─ components/
 │  ├─ Stage.jsx       La flor en 3D — el corazón del sitio
 │  ├─ Flower.jsx      La flor en vector (respaldo sin material)
-│  ├─ Motes.jsx       Partículas ambientales
-│  ├─ Grain.jsx       Grano de papel
 │  └─ Nav.jsx
 ├─ sections/          Hero, Manifiesto, Capacidades, Proceso, Estudio, Contacto
 └─ data/site.js       Todo el contenido y los datos pendientes
@@ -98,15 +119,13 @@ No es una imagen a la que se le aplican transformaciones planas. La perspectiva
 vive en el contenedor (`perspective: 1100px`) y las capas están separadas en el
 eje Z de verdad:
 
-```
-resplandor   translateZ(-260px)
-flor / video translateZ(0)
-especular    translateZ(+90px)
-```
+El contenedor tiene `perspective: 1400px` y la escena `transform-style:
+preserve-3d`. La flor en vector suma tres anillos de pétalos, cada uno a su
+propia profundidad en Z, así que al rotar el conjunto el paralaje entre anillos
+sale de la proyección en perspectiva y no de animarlos por separado.
 
-Al rotar el conjunto, cada capa se desplaza a distinta velocidad porque así la
-proyecta la perspectiva — el paralaje no está animado a mano. La flor en vector
-suma tres anillos de pétalos, cada uno a su propia profundidad.
+No hay capas decorativas de profundidad detrás de la flor: el brief las prohíbe
+(ver la tabla de arriba). El volumen sale del plano proyectado, no de adornos.
 
 Tres entradas se suman sobre el mismo eje:
 
@@ -114,7 +133,7 @@ Tres entradas se suman sobre el mismo eje:
 |---|---|
 | **Scroll** | Deriva continua a lo largo de la página. |
 | **Opción** | Salto discreto de encuadre al elegir una capacidad. Llega por resorte. |
-| **Puntero** | Micro-paralaje de ±5°, solo con mouse. |
+| **Puntero** | Micro-paralaje de ±3°, solo con mouse. |
 
 ### Reglas de movimiento
 
@@ -174,6 +193,6 @@ pantalla, para que no se publique sin darse cuenta:
 - [ ] Mail, teléfono y ciudad (`CONTACTO`)
 - [ ] Links de redes (`REDES`)
 - [ ] Nombres, roles y retratos del equipo (`EQUIPO`)
-- [ ] Los videos de la flor (`public/media/voluta/`)
+- [ ] El video de la flor (`public/media/voluta/flor-loop.mp4`)
 - [ ] Textos definitivos de las secciones — los actuales son de trabajo
 - [ ] Favicon y imagen de Open Graph

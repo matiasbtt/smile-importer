@@ -24,8 +24,8 @@ export default function Contacto() {
           Contanos qué<br />hay que resolver.
         </Reveal>
         <Reveal as="p" className="body" i={2}>
-          Escribinos con el problema, no con el pedido de pieza. De ahí sale
-          una conversación más corta y un presupuesto más honesto.
+          Escribinos con el problema, no con el pedido de pieza. De ahí sale una
+          conversación más corta y un presupuesto más honesto.
         </Reveal>
         <Reveal className="row" i={3}>
           <a className="btn btn--primary" href={CONTACTO.mail ? `mailto:${CONTACTO.mail}` : '#contacto'}>
@@ -56,7 +56,7 @@ export default function Contacto() {
             <span className="caption">
               © {new Date().getFullYear()} {ESTUDIO.nombre}
             </span>
-            <span className="caption">{ESTUDIO.claim}</span>
+            <span className="caption">{ESTUDIO.concepto}</span>
           </div>
         </footer>
       </div>

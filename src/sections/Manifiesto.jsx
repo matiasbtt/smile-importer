@@ -8,19 +8,20 @@ export default function Manifiesto() {
       </Reveal>
 
       <Reveal as="h2" className="h-lg" i={1} display>
-        Nada decorativo<br />sobrevive al uso.
+        Observar, recons&shy;truir,<br />imaginar.
       </Reveal>
 
       <Reveal as="p" className="body" i={2}>
-        Lo que se agrega para llenar un espacio se cae en la primera revisión.
-        Lo que resuelve algo se queda. Diseñamos partiendo de esa diferencia:
-        cada elemento de una pieza tiene que poder justificar por qué está.
+        Una inteligencia artificial mira una flor, intenta rehacerla en papel y
+        termina inventando especies que nunca existieron. Ese es el proceso, y
+        también es la forma en que trabajamos: entender algo real, reconstruirlo
+        con las manos, y recién ahí permitirse imaginar.
       </Reveal>
 
       <Reveal as="p" className="body body--muted" i={3}>
-        Por eso el vacío es material de trabajo y no espacio sobrante. El negro
-        de esta página no es un fondo: es lo que hace que lo poco que queda
-        encima tenga peso.
+        Lo artificial está en el material, no en el gesto. Por eso el vacío es
+        material de trabajo y no espacio sobrante: el negro de esta página no es
+        un fondo, es lo que hace que lo poco que queda encima tenga peso.
       </Reveal>
     </section>
   );

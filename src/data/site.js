@@ -1,117 +1,97 @@
 /* ═══════════════════════════════════════════════════════════
    Contenido del sitio.
-   Todo lo que dice PENDIENTE es estructura esperando el dato
-   real (redes, teléfono, mail, nombres del equipo, cifras).
-   Los textos de sección son de trabajo: sirven para ver la
-   composición tipográfica en su medida real, no son la copy
-   final.
+   Alineado con contexto_proyecto.json (Drive · Voluta Proyect).
+
+   Voluta es un estudio creativo que desarrolla webs y
+   experiencias digitales con inteligencia artificial. La idea
+   que lo ordena todo: una IA observa la naturaleza, la
+   reconstruye en papel y termina imaginando especies nuevas.
+
+   Lo que dice PENDIENTE es estructura esperando el dato real.
    ═══════════════════════════════════════════════════════════ */
 
 export const ESTUDIO = {
   nombre: 'Voluta Studios',
-  claim: 'Estudio de diseño y dirección creativa.',
+  claim: 'Estudio creativo de webs y experiencias con inteligencia artificial.',
+  concepto: 'Nature interpreted, reconstructed and imagined by artificial intelligence.',
 };
 
-/* ── Material audiovisual ────────────────────────────────────
-   Los archivos van en public/media/voluta/ con estos nombres.
-   Mientras no existan, el stage dibuja la flor en vector y el
-   sitio se ve completo igual — no hay que tocar nada acá para
-   que funcione, y no hay que tocar nada para que aparezca el
-   video: alcanza con dejar el archivo en su lugar.
+/* ── El video ────────────────────────────────────────────────
+   Una sola pieza continua, en loop indefinido: muchas flores de
+   papel que se abren de a una, en escenas independientes, sobre
+   negro limpio. No son cuatro clips que se intercambian —
+   cambiar de video al elegir una opción cortaría el loop y
+   rompería lo único que el brief marca como regla principal.
 
-   scrub: true solo si el archivo está codificado con keyframes
-   densos. Ver README, sección "Material".
+   Lo que cambia al elegir una opción es el encuadre del plano,
+   no el material.
+
+   Archivo: public/media/voluta/flor-loop.mp4
    ─────────────────────────────────────────────────────────── */
-export const VIDEOS = [
-  { src: '/media/voluta/flor-01.mp4', poster: '/media/voluta/flor-01.jpg', scrub: false },
-  { src: '/media/voluta/flor-02.mp4', poster: '/media/voluta/flor-02.jpg', scrub: false },
-  { src: '/media/voluta/flor-03.mp4', poster: '/media/voluta/flor-03.jpg', scrub: false },
-  { src: '/media/voluta/flor-04.mp4', poster: '/media/voluta/flor-04.jpg', scrub: false },
-];
+export const VIDEO = {
+  src: '/media/voluta/flor-loop.mp4',
+  poster: '/media/voluta/flor-loop.jpg',
+};
 
-/* ── Escenas del stage ──────────────────────────────────────
-   Cada panel y cada capacidad tiene su propio encuadre de la
-   misma flor: giro, inclinación, distancia y el archivo que se
-   muestra. No son estados de una animación — son posiciones de
-   cámara, y por eso se llega a ellas por resorte y no por
-   interpolación lineal.
-
-   |ry| se mantiene por debajo de 30°: de ahí para arriba un
-   plano con perspectiva 1100px se deforma y deja de leerse
-   como volumen.
+/* ── Encuadres ───────────────────────────────────────────────
+   Deliberadamente cortos. El brief pide cámara estable, registro
+   contemplativo y que la pieza no compita con el contenido; una
+   rotación grande la convertiría en una tarjeta girando. Con
+   |ry| <= 8° el plano se lee como un objeto suspendido que
+   respira, que es lo que se buscaba.
    ─────────────────────────────────────────────────────────── */
 export const ESCENAS = {
-  inicio:     { pose: { ry: -14, rx: 6, z: 0, scale: 1 }, video: 0 },
-  manifiesto: { pose: { ry: 16, rx: -5, z: 60, scale: 1.05 }, video: 0 },
+  inicio:     { ry: -5, rx: 2, z: 0, scale: 1 },
+  manifiesto: { ry: 6, rx: -2, z: 26, scale: 1.03 },
 };
 
-/* ── Capacidades: la lista que mueve la flor ────────────────*/
 export const CAPACIDADES = [
+  {
+    id: 'sitios',
+    nombre: 'Sitios y experiencias',
+    texto:
+      'Webs que no parecen plantillas. Diseño y desarrollo en el mismo lugar, con IA en el proceso y no como argumento de venta.',
+    pose: { ry: -8, rx: 3, z: -22, scale: 0.97 },
+  },
+  {
+    id: 'identidad',
+    nombre: 'Identidad generativa',
+    texto:
+      'Sistemas de marca que producen piezas nuevas sin perder la mano. Las reglas se escriben una vez y después generan.',
+    pose: { ry: 7, rx: -3, z: 34, scale: 1.04 },
+  },
   {
     id: 'direccion',
     nombre: 'Dirección de arte',
     texto:
-      'Definimos el criterio visual antes que la pieza. Qué entra, qué no, y por qué — de ahí sale todo lo demás.',
-    pose: { ry: -22, rx: 9, z: -60, scale: 0.94 },
-    video: 0,
+      'El criterio antes que la pieza. La IA propone mucho; lo que define el resultado es qué se descarta.',
+    pose: { ry: -3, rx: -4, z: 14, scale: 1.01 },
   },
   {
-    id: 'identidad',
-    nombre: 'Identidad',
+    id: 'imagen',
+    nombre: 'Imagen y motion',
     texto:
-      'Sistemas de marca que aguantan el uso diario: no un logo, sino las reglas que hacen que todo lo que salga se reconozca.',
-    pose: { ry: 20, rx: -6, z: 70, scale: 1.07 },
-    video: 1,
-  },
-  {
-    id: 'motion',
-    nombre: 'Motion y 3D',
-    texto:
-      'Movimiento con intención. Cada transición explica algo del objeto — de dónde viene, hacia dónde va, qué tan pesado es.',
-    pose: { ry: -8, rx: -11, z: 30, scale: 1.02 },
-    video: 2,
-  },
-  {
-    id: 'digital',
-    nombre: 'Sitios y producto',
-    texto:
-      'Diseño e implementación en el mismo lugar. Lo que se dibuja se puede construir, porque lo construye quien lo dibujó.',
-    pose: { ry: 25, rx: 4, z: -30, scale: 0.97 },
-    video: 3,
-  },
-  {
-    id: 'film',
-    nombre: 'Film',
-    texto:
-      'Dirección y post. Piezas cortas pensadas para vivir en pantalla chica sin perder el encuadre.',
-    pose: { ry: -18, rx: -3, z: 85, scale: 1.1 },
-    video: 0,
+      'Piezas visuales generadas y dirigidas: material propio, coherente entre sí, hecho para vivir dentro de una interfaz.',
+    pose: { ry: 8, rx: 2, z: -12, scale: 0.99 },
   },
 ];
 
 export const PROCESO = [
-  { n: '01', t: 'Lectura', d: 'Entender el problema antes de proponer una forma. Nadie diseña sobre un brief que no cierra.' },
-  { n: '02', t: 'Criterio', d: 'Un principio rector, escrito. Si no se puede defender en una frase, todavía no está.' },
-  { n: '03', t: 'Construcción', d: 'Piezas reales, en su medio real, lo antes posible. El PDF miente; la pantalla no.' },
-  { n: '04', t: 'Entrega', d: 'Sistema, archivos y las reglas para seguir usándolo sin nosotros.' },
+  { n: '01', t: 'Observar', d: 'Entender el problema antes de proponer una forma. Nadie diseña sobre un brief que no cierra.' },
+  { n: '02', t: 'Reconstruir', d: 'Un principio rector, escrito. Si no se puede defender en una frase, todavía no está.' },
+  { n: '03', t: 'Imaginar', d: 'La IA abre el campo de lo posible. El oficio decide qué de eso merece existir.' },
+  { n: '04', t: 'Entregar', d: 'Sistema, archivos y las reglas para seguir usándolo sin nosotros.' },
 ];
 
-/* ── Equipo ─────────────────────────────────────────────────*/
 export const EQUIPO = [
   { rol: 'PENDIENTE', nombre: 'PENDIENTE', foto: null },
   { rol: 'PENDIENTE', nombre: 'PENDIENTE', foto: null },
   { rol: 'PENDIENTE', nombre: 'PENDIENTE', foto: null },
 ];
 
-/* ── Datos de contacto ──────────────────────────────────────
-   Vacío a propósito. El componente marca visualmente cada campo
-   sin cargar, así que no hay forma de publicar sin darse cuenta.
-   ─────────────────────────────────────────────────────────── */
-export const CONTACTO = {
-  mail: null,
-  telefono: null,
-  ciudad: null,
-};
+/* Vacío a propósito: el componente marca cada campo sin cargar,
+   así no hay forma de publicar un dato inventado sin verlo. */
+export const CONTACTO = { mail: null, telefono: null, ciudad: null };
 
 export const REDES = [
   { nombre: 'Instagram', url: null },

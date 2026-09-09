@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useScroll } from 'motion/react';
 
 import Nav from './components/Nav.jsx';
-import Grain from './components/Grain.jsx';
 import Stage from './components/Stage.jsx';
 
 import Hero from './sections/Hero.jsx';
@@ -13,7 +12,7 @@ import Estudio from './sections/Estudio.jsx';
 import Contacto from './sections/Contacto.jsx';
 
 import { useSmoothScroll } from './lib/useStage.js';
-import { CAPACIDADES, ESCENAS, VIDEOS } from './data/site.js';
+import { CAPACIDADES, ESCENAS, VIDEO } from './data/site.js';
 
 const PANELES = ['inicio', 'manifiesto', 'capacidades'];
 
@@ -52,16 +51,16 @@ export default function App() {
 
   /* En capacidades manda la opción elegida; en el resto, la
      escena del panel. Derivarlo en vez de guardarlo evita que
-     volver a subir deje la flor en la pose de otra sección. */
-  const escena = useMemo(() => {
-    if (panel === 'capacidades') {
-      const c = CAPACIDADES[opcion] ?? CAPACIDADES[0];
-      return { pose: c.pose, video: c.video };
-    }
+     volver a subir deje la flor en la pose de otra sección.
+
+     Lo que cambia es el encuadre, nunca el archivo: el video es
+     una sola pieza en loop continuo y cortarlo para intercambiar
+     clips rompería lo único que el brief marca como regla
+     principal. */
+  const pose = useMemo(() => {
+    if (panel === 'capacidades') return (CAPACIDADES[opcion] ?? CAPACIDADES[0]).pose;
     return ESCENAS[panel] ?? ESCENAS.inicio;
   }, [panel, opcion]);
-
-  const source = VIDEOS[escena.video] ?? VIDEOS[0];
 
   return (
     <>
@@ -73,7 +72,7 @@ export default function App() {
           <div className="rail" ref={rail}>
             <div className="rail-visual">
               <div className="rail-sticky">
-                <Stage progress={scrollYProgress} pose={escena.pose} source={source} />
+                <Stage progress={scrollYProgress} pose={pose} video={VIDEO} />
               </div>
             </div>
 
@@ -90,7 +89,6 @@ export default function App() {
         <Contacto />
       </main>
 
-      <Grain />
     </>
   );
 }

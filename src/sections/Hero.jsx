@@ -9,14 +9,18 @@ export default function Hero() {
         {ESTUDIO.nombre} — {new Date().getFullYear()}
       </Reveal>
 
-      <Reveal as="h1" className="display" i={1} display>
-        La forma<br />tiene un<br /><span className="accent">porqué</span>.
+      {/* h-lg y no display: la columna es media pantalla y a 113px
+          una frase real no entra sin partirse mal. La jerarquía la
+          sigue dando la escala — 78px sobre medio ancho pesa lo
+          mismo que 113px sobre el ancho completo. */}
+      <Reveal as="h1" className="h-lg" i={1} display>
+        Naturaleza<br />reconstruida<br />por una <span className="accent">IA</span>.
       </Reveal>
 
       <Reveal as="p" className="body" i={2}>
-        Somos un estudio de diseño y dirección creativa. Trabajamos sobre el
-        criterio antes que sobre la pieza: cuando el principio está claro, la
-        forma se vuelve una consecuencia y no una opinión.
+        Construimos sitios y experiencias digitales con inteligencia artificial.
+        No como argumento de venta: como material de trabajo, del mismo modo en
+        que alguien elige el papel con el que va a construir una flor.
       </Reveal>
 
       <Reveal className="row" i={3}>
