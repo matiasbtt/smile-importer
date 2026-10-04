@@ -191,7 +191,7 @@ export const PRODUCTOS = [
     categoria: 'Endodoncia',
     precio: 1450,
     stock: true,
-    imagen: 'productos/e-14-nicident.webp',
+    imagen: 'productos/e-14-nicident-blanco.webp',
     detalle:
       'Endomotor inalámbrico con pantalla y controles P, + y −. El localizador de ápice se ofrece por separado o en combo.',
   },
