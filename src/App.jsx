@@ -70,11 +70,11 @@ function Bienvenida() {
   });
 
   return (
-    <section className="welcome" id="inicio" aria-labelledby="welcome-title">
+    <section className="welcome" id="bienvenida" aria-labelledby="welcome-title">
       <div className="shell welcome-content">
         <div className="welcome-copy">
           <motion.h1 id="welcome-title" className="welcome-title" {...enter(0.08)}>
-            Bienvenido al catálogo de <strong>SMILE IMPORTER</strong>.
+            Bienvenidos al catálogo de <strong>SMILE IMPORTER</strong>.
           </motion.h1>
           <motion.p className="welcome-lead" {...enter(0.18)}>
             Desliza para conocer nuestros productos. Consulta stock, precio por volumen
@@ -330,11 +330,10 @@ export default function App() {
   return (
     <>
       <header className="nav" data-solid={solid}>
-        <a href="#inicio" aria-label="SMILE IMPORTER — inicio">
+        <a href="#bienvenida" aria-label="SMILE IMPORTER — bienvenida al catálogo">
           <Logo height={68} />
         </a>
         <nav className="nav-links">
-          <a className="mono" href="#inicio">Inicio</a>
           <a className="mono" href="#catalogo">Catálogo</a>
           <a className="mono" href="#combos">Combos</a>
           <a className="mono" href="#certificaciones">Certificaciones</a>
