@@ -37,33 +37,17 @@ rendimiento en móvil sin mejorar el resultado.
 
 ## Qué falta cargar
 
-1. **Fotos opcionales del hero** — `public/media/smile.jpg` y `public/media/clinician.jpg`
-   aún no están subidas; el sitio cae automáticamente al vector (fallback en `HeroLayer`).
-   Subirlas mejora visual + performance — ver plan de performance en
-   `docs/superpowers/plans/2026-08-18-fixes-criticos-y-rendimiento.md`.
-
-2. **Fotos de producto** — van en `public/productos/` y se referencian en
+1. **Fotos de producto** — van en `public/productos/` y se referencian en
    `src/data/site.js`. E-05 y E-02 tienen texto agregado por IA grabado sobre
    el instrumento (viola regla de marca), requieren refotografiar. E-08 sin foto.
    Formato: vertical 4:5, fondo `#F5F5F7`, instrumento 55-65% del encuadre.
 
-3. **Logo icon oficial** — `public/logo/logo-icon.png` hoy es placeholder
+2. **Logo icon oficial** — `public/logo/logo-icon.png` hoy es placeholder
    (copia de smile_logo_white.png). Reemplazar cuando llegue ícono S solo,
    máximo 2 colores, sin rasgos faciales.
 
-4. **Imagen de preview** — `public/media/og-cover.jpg` (1200×630) para Open Graph.
+3. **Imagen de preview** — `public/media/og-cover.jpg` (1200×630) para Open Graph.
    Hoy es placeholder (logo copiado). Reemplazar con foto real del hero o producto.
-
-## Imágenes opcionales que mejoran el resultado
-
-Ambas son opcionales: si el archivo no existe, la web cae automáticamente a la
-versión vectorial y no se rompe nada.
-
-- `public/media/smile.jpg` — primer plano de sonrisa, apaisado, fondo negro,
-  luz de estudio. Si existe, el plano secuencia del inicio recorre la foto en
-  vez del vector. Es la mejora de mayor impacto visual del sitio.
-- `public/media/clinician.jpg` — retrato de la odontóloga trabajando (barbijo,
-  gafas, lupas de magnificación), vertical 4:5.
 
 ## Paleta
 
@@ -85,19 +69,16 @@ precios y referencias).
 
 ```
 src/
-  App.jsx                  secciones y rig de scroll
+  App.jsx                  bienvenida, catálogo y contacto
   styles.css               sistema visual completo (tokens, grilla, componentes)
   data/site.js             contacto + catálogo  ← el único archivo a editar
   components/
-    Smile.jsx              sonrisa vectorial del plano secuencia
-    Clinician.jsx          retrato clínico vectorial (fallback)
     icons.jsx              iconos SVG propios
 ```
 
 ## Adaptar el sitio a otro rubro
 
 La estructura no tiene nada específico de odontología salvo el contenido:
-`data/site.js` (productos y categorías) y las dos ilustraciones de
-`components/`. Para equipo de rescate, relojería o cualquier otro catálogo se
-cambian esos archivos y los textos de `App.jsx`; la grilla de estantería, el rig
-de scroll y el flujo a WhatsApp quedan igual.
+`data/site.js` (productos y categorías). Para equipo de rescate, relojería o
+cualquier otro catálogo se cambian ese archivo y los textos de `App.jsx`; la
+grilla de estantería y el flujo a WhatsApp quedan igual.

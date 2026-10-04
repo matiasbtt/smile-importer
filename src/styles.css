@@ -39,6 +39,8 @@
 
 html {
   background: var(--ink);
+  scroll-behavior: smooth;
+  scroll-padding-top: 92px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -69,6 +71,11 @@ button {
   cursor: pointer;
 }
 
+:focus-visible {
+  outline: 2px solid #7bd3a6;
+  outline-offset: 4px;
+}
+
 /* ── Tipografía ───────────────────────────────────────────── */
 
 .mono {
@@ -78,13 +85,6 @@ button {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-dim);
-}
-
-.display {
-  font-weight: 200;
-  font-size: clamp(2.5rem, 7.5vw, 6.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.035em;
 }
 
 .h2 {
@@ -170,6 +170,11 @@ section {
   align-items: center;
   gap: 28px;
 }
+.nav-links a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
 .nav-links a.mono:hover {
   color: var(--text);
 }
@@ -188,6 +193,7 @@ section {
   transition: transform 180ms var(--ease), background 220ms var(--ease),
     border-color 220ms var(--ease), color 220ms var(--ease);
   will-change: transform;
+  min-height: 44px;
 }
 .btn:active {
   transform: scale(0.98);
@@ -211,116 +217,83 @@ section {
   flex: none;
 }
 
-/* ── Escena cinemática (dientes → sonrisa) ────────────────── */
+/* ── Bienvenida ───────────────────────────────────────────── */
 
-.scene {
-  height: 280vh; /* recorrido de scroll del plano secuencia */
-  position: relative;
-}
-.scene-stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-  background: var(--ink);
-}
-.scene-layer {
-  position: absolute;
-  inset: 0;
+.welcome {
+  min-height: 82svh;
   display: grid;
-  place-items: center;
-  transform-origin: 41% 69%;
-}
-.scene-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.scene-layer svg {
-  width: min(1100px, 128vw);
-  height: auto;
-  display: block;
-}
-.scene-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at 50% 46%,
-    transparent 34%,
-    rgba(10, 10, 10, 0.55) 72%,
-    var(--ink) 100%
-  );
-}
-/* Scrim inferior: garantiza contraste del texto sobre el esmalte blanco */
-.scene-scrim {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 58vh;
-  z-index: 3;
-  pointer-events: none;
-  background: linear-gradient(
-    to top,
-    rgba(10, 10, 10, 0.94) 0%,
-    rgba(10, 10, 10, 0.74) 34%,
-    rgba(10, 10, 10, 0.32) 68%,
-    transparent 100%
-  );
+  align-items: end;
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(150px, 22vh, 220px) clamp(72px, 11vh, 120px);
+  background:
+    radial-gradient(circle at 78% 22%, rgba(39, 96, 79, 0.22), transparent 34%),
+    linear-gradient(180deg, var(--surface-2) 0%, var(--ink) 100%);
 }
 
-.scene-copy {
+.welcome::before {
+  content: '';
   position: absolute;
-  inset: auto var(--gutter) clamp(56px, 9vh, 104px) var(--gutter);
-  z-index: 4;
-  display: flex;
-  align-items: flex-end;
+  width: min(42vw, 560px);
+  aspect-ratio: 1;
+  right: -14%;
+  bottom: -52%;
+  border: 1px solid rgba(196, 199, 197, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-copy {
+  max-width: 1040px;
+}
+
+.welcome-title {
+  max-width: 15ch;
+  color: var(--text);
+  font-size: clamp(3rem, 7.6vw, 6rem);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.welcome-title strong {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.welcome-lead {
+  max-width: 64ch;
+  margin-top: clamp(28px, 4vw, 44px);
+  color: #aeb6b2;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.7;
+}
+
+.welcome-actions {
+  margin-top: 32px;
+}
+
+.welcome-cta {
+  min-width: 172px;
   justify-content: space-between;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-.scene-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%);
-  z-index: 5;
-}
-.scene-hint-line {
-  width: 1px;
-  height: 46px;
-  margin: 10px auto 0;
-  background: linear-gradient(to bottom, var(--line-strong), transparent);
 }
 
-/* ── Clínica / retrato ────────────────────────────────────── */
-
-.portrait {
-  position: relative;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: linear-gradient(155deg, #0f1413 0%, var(--forest) 100%);
-  aspect-ratio: 4 / 5;
-}
-.portrait img,
-.portrait svg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.portrait-caption {
+.welcome-rule {
   position: absolute;
-  inset: auto 0 0 0;
-  padding: 16px 18px;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.82), transparent);
+  inset: auto var(--gutter) 0;
+  height: 1px;
+  background: var(--line-strong);
+  transform-origin: left;
 }
-.split {
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: clamp(32px, 6vw, 96px);
-  align-items: center;
+
+.catalog {
+  padding-top: clamp(72px, 10vh, 120px);
 }
 
 /* ── Estantería de catálogo ───────────────────────────────── */
@@ -332,6 +305,7 @@ section {
 }
 .chip {
   padding: 8px 15px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 999px;
   font-family: var(--mono);
@@ -407,9 +381,6 @@ section {
 }
 .combo-grid .item-frame {
   aspect-ratio: 3 / 2;
-}
-.item:hover .item-frame img {
-  transform: scale(1.03);
 }
 .item-frame::after {
   /* sombra de contacto suave, según manual de fotografía */
@@ -499,6 +470,7 @@ section {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-dim);
+  min-height: 44px;
   opacity: 0;
   transform: translateY(4px);
   transition: opacity 260ms var(--ease), transform 260ms var(--ease),
@@ -526,6 +498,37 @@ section {
 
 /* ── Cierre / CTA ─────────────────────────────────────────── */
 
+.certifications {
+  border-top: 1px solid var(--line);
+}
+.certifications-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 8vw, 120px);
+  align-items: start;
+}
+.certifications-lead {
+  line-height: 1.7;
+}
+.certification-specs {
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+.certification-spec {
+  padding-block: 28px;
+  border-bottom: 1px solid var(--line);
+}
+.certification-spec dt {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+.certification-spec dd {
+  margin: 12px 0 0;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
 .close {
   background: linear-gradient(180deg, var(--ink) 0%, var(--forest) 100%);
   border-top: 1px solid var(--line);
@@ -571,6 +574,8 @@ section {
   font-size: 0.8125rem;
   font-weight: 500;
   border: 1px solid rgba(255, 255, 255, 0.14);
+  min-width: 48px;
+  min-height: 48px;
 }
 .float:hover {
   background: #1ebe5b;
@@ -600,44 +605,42 @@ section {
   gap: 28px;
   flex-wrap: wrap;
 }
-.specs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  border-top: 1px solid var(--line);
-}
-.spec {
-  padding: 24px 0 24px 0;
-  border-bottom: 1px solid var(--line);
-  padding-right: 24px;
-}
-.spec-value {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: 200;
-  letter-spacing: -0.03em;
-  color: var(--white);
-  line-height: 1;
-  margin-bottom: 10px;
+@media (hover: hover) and (pointer: fine) {
+  .item:hover .item-frame img {
+    transform: scale(1.03);
+  }
 }
 
 /* ── Responsive ───────────────────────────────────────────── */
 
 @media (max-width: 860px) {
-  .split {
+  .certifications-layout {
     grid-template-columns: 1fr;
   }
   .nav-links a.mono {
     display: none;
   }
-  .scene {
-    height: 320vh;
+  .welcome {
+    min-height: 76svh;
+    padding-block: 126px 72px;
+    background:
+      radial-gradient(circle at 92% 12%, rgba(39, 96, 79, 0.2), transparent 38%),
+      linear-gradient(180deg, var(--surface-2) 0%, var(--ink) 100%);
   }
-  .scene-copy {
-    flex-direction: column;
-    align-items: flex-start;
+  .welcome::before {
+    width: 78vw;
+    right: -40%;
+    bottom: -28%;
   }
-  /* en móvil el indicador de scroll choca con el titular */
-  .scene-hint {
-    display: none;
+  .welcome-title {
+    max-width: 12ch;
+    font-size: clamp(2.75rem, 13vw, 4.5rem);
+  }
+  .welcome-lead {
+    line-height: 1.6;
+  }
+  .welcome-cta {
+    width: 100%;
   }
   .shelf-grid {
     border-left: none;
@@ -667,8 +670,5 @@ section {
   *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
-  }
-  .scene {
-    height: 100vh;
   }
 }

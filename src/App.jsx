@@ -1,17 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  useMotionValueEvent,
-  useReducedMotion,
-} from 'motion/react';
+import { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import Lenis from 'lenis';
 
 import Logo from './components/Logo.jsx';
-import Smile from './components/Smile.jsx';
-import Clinician from './components/Clinician.jsx';
 import { WhatsAppMark, GmailMark, Arrow, FrameMark } from './components/icons.jsx';
 import {
   CONTACTO,
@@ -67,229 +58,42 @@ function Reveal({ children, i = 0, as = 'div', ...rest }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════
-   PLANO SECUENCIA: macro de esmalte → sonrisa completa
-   Un solo valor de scroll gobierna escala, piel, viñeta y texto.
-   ═══════════════════════════════════════════════════════════ */
-function Sequence() {
-  const ref = useRef(null);
+/* ── Bienvenida directa al catálogo ─────────────────────── */
+function Bienvenida() {
   const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start start', 'end end'],
+  const enter = (delay) => ({
+    initial: reduced
+      ? false
+      : { opacity: 0, transform: 'translateY(18px)', filter: 'blur(5px)' },
+    animate: { opacity: 1, transform: 'translateY(0)', filter: 'blur(0px)' },
+    transition: { duration: 0.68, delay, ease: [0.23, 1, 0.32, 1] },
   });
 
-  const p = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.4 });
-
-  // El retroceso de cámara: de 3 dientes en cuadro a la sonrisa entera.
-  // El origen está descentrado a propósito (41% 69% en .scene-layer): el
-  // encuadre de apertura cae sobre el cuerpo/borde incisal del diente, sin
-  // encía en cuadro. Centrado en la línea media solo se vería la ranura del medio.
-  const scale = useTransform(p, [0, 0.62, 1], [3.2, 1.2, 0.94]);
-  const y = useTransform(p, [0, 0.62, 1], ['5%', '1%', '0%']);
-  const skin = useTransform(p, [0.34, 0.78], [0, 1]);
-  const vignette = useTransform(p, [0, 0.5], [0.25, 1]);
-  const hint = useTransform(p, [0, 0.08], [1, 0]);
-
-  const c1 = useTransform(p, [0, 0.1, 0.26, 0.34], [1, 1, 1, 0]);
-  const c2 = useTransform(p, [0.34, 0.44, 0.62, 0.7], [0, 1, 1, 0]);
-  const c3 = useTransform(p, [0.7, 0.8, 1, 1], [0, 1, 1, 1]);
-
-  if (reduced) {
-    return (
-      <section className="scene" ref={ref}>
-        <div className="scene-stage">
-          <div className="scene-layer" style={{ transform: 'scale(0.94)' }}>
-            <Smile />
-          </div>
-          <div className="scene-vignette" />
-          <div className="scene-scrim" />
-          <div className="scene-copy">
-            <div className="stack-sm">
-              <p className="mono">SMILE IMPORTER · Importación directa</p>
-              <h1 className="display">
-                Titanio que no<br />discute.
-              </h1>
-              <div className="row" style={{ paddingTop: 8 }}>
-                <a className="btn btn-ghost" href="#catalogo">
-                  Ver catálogo <Arrow />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section className="scene" ref={ref} id="inicio">
-      <div className="scene-stage">
-        <motion.div className="scene-layer" style={{ scale, y }}>
-          <HeroLayer skinOpacity={skin} />
-        </motion.div>
-
-        <motion.div className="scene-vignette" style={{ opacity: vignette }} />
-        <div className="scene-scrim" />
-
-        <div className="scene-copy">
-          <div style={{ position: 'relative', minHeight: '30vh', width: '100%' }}>
-            <motion.div className="stack-sm" style={{ opacity: c1, position: 'absolute', bottom: 0 }}>
-              <p className="mono">Esmalte · 20x</p>
-              <h1 className="display">
-                Usted trabaja a<br />esta escala.
-              </h1>
-            </motion.div>
-
-            <motion.div className="stack-sm" style={{ opacity: c2, position: 'absolute', bottom: 0 }}>
-              <p className="mono">Tolerancia · 0,02 mm</p>
-              <h2 className="display">
-                El instrumento<br />tiene que estar<br />a la altura.
-              </h2>
-            </motion.div>
-
-            <motion.div
-              className="between"
-              style={{ opacity: c3, position: 'absolute', bottom: 0, width: '100%' }}
-            >
-              <div className="stack-sm">
-                <p className="mono">SMILE IMPORTER · Importación directa</p>
-                <h2 className="display">
-                  Titanio que no<br />discute.
-                </h2>
-              </div>
-              <div className="row">
-                <a className="btn btn-ghost" href="#catalogo">
-                  Ver catálogo <Arrow />
-                </a>
-              </div>
-            </motion.div>
-          </div>
+    <section className="welcome" id="inicio" aria-labelledby="welcome-title">
+      <div className="shell welcome-content">
+        <div className="welcome-copy">
+          <motion.h1 id="welcome-title" className="welcome-title" {...enter(0.08)}>
+            Bienvenido al catálogo de <strong>SMILE IMPORTER</strong>.
+          </motion.h1>
+          <motion.p className="welcome-lead" {...enter(0.18)}>
+            Desliza para conocer nuestros productos. Consulta stock, precio por volumen
+            y entrega directamente por WhatsApp.
+          </motion.p>
+          <motion.div className="welcome-actions" {...enter(0.28)}>
+            <a className="btn btn-primary welcome-cta" href="#catalogo">
+              Ver productos <Arrow />
+            </a>
+          </motion.div>
         </div>
-
-        <motion.div className="scene-hint" style={{ opacity: hint }}>
-          <p className="mono" style={{ textAlign: 'center' }}>Desplazar</p>
-          <div className="scene-hint-line" />
-        </motion.div>
       </div>
-    </section>
-  );
-}
-
-/* Capa del plano secuencia.
-   Si existe /public/media/smile.jpg (primer plano de sonrisa, apaisado,
-   fondo negro), se usa esa foto y el mismo retroceso de cámara la recorre.
-   Si no existe, cae al vector — no hay que tocar nada más. */
-function HeroLayer({ skinOpacity }) {
-  const [photo, setPhoto] = useState(true);
-  if (photo) {
-    return (
-      <img
-        className="scene-photo"
-        src="/media/smile.jpg"
-        alt=""
-        onError={() => setPhoto(false)}
+      <motion.div
+        className="welcome-rule"
+        aria-hidden="true"
+        initial={reduced ? false : { clipPath: 'inset(0 100% 0 0)' }}
+        animate={{ clipPath: 'inset(0 0 0 0)' }}
+        transition={{ duration: 0.9, delay: 0.18, ease: [0.23, 1, 0.32, 1] }}
       />
-    );
-  }
-  return <SmileWithSkin skinOpacity={skinOpacity} />;
-}
-
-/* La piel se revela sobre el final del retroceso: primero es solo esmalte
-   sobre negro, después se entiende que era el rostro de una persona. */
-function SmileWithSkin({ skinOpacity }) {
-  const ref = useRef(null);
-  useMotionValueEvent(skinOpacity, 'change', (v) => {
-    const g = ref.current?.querySelector('#smile-skin');
-    if (g) g.style.opacity = v;
-  });
-  useEffect(() => {
-    const g = ref.current?.querySelector('#smile-skin');
-    if (g) g.style.opacity = 0;
-  }, []);
-  return (
-    <div ref={ref} style={{ display: 'grid', placeItems: 'center', width: '100%' }}>
-      <Smile />
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Retrato clínico — foto real si existe, vector como fallback
-   ═══════════════════════════════════════════════════════════ */
-function Portrait() {
-  const [hasPhoto, setHasPhoto] = useState(true);
-  return (
-    <div className="portrait">
-      {hasPhoto ? (
-        <img
-          src="/media/clinician.jpg"
-          alt="Odontóloga trabajando con lupas de magnificación"
-          onError={() => setHasPhoto(false)}
-        />
-      ) : (
-        <Clinician />
-      )}
-      <div className="portrait-caption">
-        <p className="mono">Campo operatorio · magnificación 4,5x</p>
-      </div>
-    </div>
-  );
-}
-
-function ClinicSection() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ['6%', '-6%']);
-
-  return (
-    <section className="pad" id="criterio" ref={ref}>
-      <div className="shell split">
-        <motion.div style={{ y }}>
-          <Reveal>
-            <Portrait />
-          </Reveal>
-        </motion.div>
-
-        <div className="stack">
-          <Reveal i={0}>
-            <p className="mono">Criterio de selección</p>
-          </Reveal>
-          <Reveal i={1}>
-            <h2 className="h2">
-              A 4,5 aumentos,
-              <br />
-              un borde mal terminado
-              <br />
-              se ve.
-            </h2>
-          </Reveal>
-          <Reveal i={2}>
-            <p className="lead">
-              Importamos directo de fábrica y revisamos pieza por pieza antes de que
-              entre a stock: alineación de bocado, holgura de bisagra, templado del
-              filo y acabado del acero. Lo que no pasa, no se vende.
-            </p>
-          </Reveal>
-          <Reveal i={3}>
-            <div className="specs">
-              {[
-                ['AISI 304 / 420', 'Acero quirúrgico certificado por lote'],
-                ['Clase B', 'Compatible con ciclo de autoclave'],
-                ['Sin intermediarios', 'Importación directa de fábrica'],
-              ].map(([v, d]) => (
-                <div className="spec" key={v}>
-                  <div className="spec-value">{v}</div>
-                  <p className="mono" style={{ letterSpacing: '0.08em' }}>{d}</p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </div>
     </section>
   );
 }
@@ -353,7 +157,13 @@ function Item({ p, i }) {
         </div>
       )}
 
-      <a className="item-ask" href={linkWhatsApp(p)} target="_blank" rel="noreferrer" aria-label={`Consultar por ${p.nombre}`}>
+      <a
+        className="item-ask"
+        href={linkWhatsApp(p)}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`Consultar por ${p.nombre} en WhatsApp`}
+      >
         <WhatsAppMark size={26} white /> Consultar
       </a>
     </motion.article>
@@ -366,7 +176,7 @@ function Catalogo() {
     filtro === 'Todo' ? PRODUCTOS : PRODUCTOS.filter((p) => p.categoria === filtro);
 
   return (
-    <section className="pad" id="catalogo" style={{ paddingTop: 0 }}>
+    <section className="pad catalog" id="catalogo">
       <div className="shell stack-lg">
         <div className="between">
           <div className="stack-sm">
@@ -390,6 +200,7 @@ function Catalogo() {
             {['Todo', ...CATEGORIAS].map((c) => (
               <button
                 key={c}
+                type="button"
                 className="chip"
                 data-on={filtro === c}
                 aria-pressed={filtro === c}
@@ -432,6 +243,35 @@ function Combos() {
 }
 
 /* ═══════════════════════════════════════════════════════════ */
+function Certificaciones() {
+  return (
+    <section className="pad certifications" id="certificaciones" aria-labelledby="certifications-title">
+      <div className="shell certifications-layout">
+        <div className="stack">
+          <p className="mono">Conformidad y control de calidad</p>
+          <h2 className="h2" id="certifications-title">Certificaciones</h2>
+          <p className="lead certifications-lead">
+            Todos nuestros productos cuentan con certificación de conformidad
+            europea y rigurosos tests realizados por la importadora.
+          </p>
+        </div>
+        <dl className="certification-specs">
+          {[
+            ['AISI 304 / 420', 'Acero quirúrgico certificado por lote'],
+            ['Clase B', 'Compatible con ciclo de autoclave'],
+            ['Sin intermediarios', 'Importación directa de fábrica'],
+          ].map(([value, description]) => (
+            <div className="certification-spec" key={value}>
+              <dt>{value}</dt>
+              <dd className="mono">{description}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 function Cierre() {
   return (
     <section className="pad close" id="contacto">
@@ -481,27 +321,23 @@ export default function App() {
   const [solid, setSolid] = useState(false);
 
   useEffect(() => {
-    const io = new IntersectionObserver(
-      ([e]) => setSolid(!e.isIntersecting),
-      { rootMargin: '-72px 0px 0px 0px' }
-    );
-    const sentinel = document.getElementById('top-sentinel');
-    if (sentinel) io.observe(sentinel);
-    return () => io.disconnect();
+    const onScroll = () => setSolid(window.scrollY > 64);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
     <>
-      <div id="top-sentinel" style={{ position: 'absolute', top: 0, height: 1, width: 1 }} />
-
       <header className="nav" data-solid={solid}>
         <a href="#inicio" aria-label="SMILE IMPORTER — inicio">
           <Logo height={68} />
         </a>
         <nav className="nav-links">
-          <a className="mono" href="#criterio">Criterio</a>
+          <a className="mono" href="#inicio">Inicio</a>
           <a className="mono" href="#catalogo">Catálogo</a>
           <a className="mono" href="#combos">Combos</a>
+          <a className="mono" href="#certificaciones">Certificaciones</a>
           <a
             className="btn btn-ghost"
             style={{ padding: '9px 16px', fontSize: '0.75rem' }}
@@ -515,10 +351,10 @@ export default function App() {
       </header>
 
       <main>
-        <Sequence />
-        <ClinicSection />
+        <Bienvenida />
         <Catalogo />
         <Combos />
+        <Certificaciones />
         <Cierre />
       </main>
 
@@ -545,10 +381,16 @@ export default function App() {
         href={linkWhatsApp()}
         target="_blank"
         rel="noreferrer"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        whileTap={{ scale: 0.97 }}
+        aria-hidden={!solid}
+        tabIndex={solid ? 0 : -1}
+        initial={false}
+        animate={
+          solid
+            ? { opacity: 1, transform: 'translateY(0)', pointerEvents: 'auto' }
+            : { opacity: 0, transform: 'translateY(16px)', pointerEvents: 'none' }
+        }
+        transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+        whileTap={{ transform: 'scale(0.97)' }}
       >
         <WhatsAppMark size={36} />
         <span>Consultar por WhatsApp</span>
