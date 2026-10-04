@@ -1,7 +1,7 @@
 /* ────────────────────────────────────────────────────────────────
    ÚNICO ARCHIVO QUE NECESITÁS EDITAR PARA CAMBIAR EL CATÁLOGO
-   Los 13 productos salen del Excel de referencias (COD / DESCRIPCIÓN /
-   PRECIO/U) y las fotos de la carpeta de Drive «Fotografías de producto».
+   Catálogo actualizado desde el inventario y las indicaciones del usuario.
+   Fotografías de producto conservadas; combos con referencias propias.
 
    NUNCA publicar acá: el precio de mercado de referencia, los links de
    compra del proveedor, ni el cálculo de costos del Excel.
@@ -44,6 +44,7 @@ export function linkWhatsApp(producto, numero = CONTACTO.whatsapp) {
 export const MONEDA = 'Bs';
 
 export const CATEGORIAS = [
+  'Endodoncia',
   'Rotatorios',
   'Diagnóstico',
   'Operatoria',
@@ -55,9 +56,9 @@ export const PRODUCTOS = [
   {
     ref: 'E-01',
     nombre: 'Motor de endodoncia inalámbrico Y-SMART',
-    categoria: 'Rotatorios',
-    precio: 1650,
-    stock: true,
+    categoria: 'Endodoncia',
+    precio: 1750,
+    stock: null,
     imagen: 'productos/e-01.webp',
     detalle:
       'Mango recto con contraángulo reductor, pantalla de torque y velocidad, base de carga y estuche. Incluye cargador, cable y llaves.',
@@ -98,7 +99,7 @@ export const PRODUCTOS = [
     ref: 'E-05',
     nombre: 'Calentador de resina compuesta',
     categoria: 'Operatoria',
-    precio: 1500,
+    precio: 1350,
     stock: true,
     imagen: 'productos/e-05.webp',
     detalle:
@@ -108,7 +109,7 @@ export const PRODUCTOS = [
     ref: 'E-06',
     nombre: 'Turbina de alta velocidad angulada',
     categoria: 'Rotatorios',
-    precio: 650,
+    precio: 590,
     stock: true,
     imagen: 'productos/e-06.webp',
     detalle:
@@ -186,13 +187,13 @@ export const PRODUCTOS = [
   },
   {
     ref: 'E-14',
-    nombre: 'Endomotor inalámbrico RUITODENTAL',
-    categoria: 'Rotatorios',
+    nombre: 'Endomotor inalámbrico NICIDENT',
+    categoria: 'Endodoncia',
     precio: 1450,
     stock: true,
-    imagen: 'productos/e-14.jpeg',
+    imagen: 'productos/e-14.webp',
     detalle:
-      'Endomotor inalámbrico con localizador de ápice integrado, pantalla táctil, contraángulo reductor y estuche de carga.',
+      'Endomotor inalámbrico con pantalla y controles P, + y −. El localizador de ápice se ofrece por separado o en combo.',
   },
   {
     ref: 'E-15',
@@ -201,7 +202,55 @@ export const PRODUCTOS = [
     precio: 550,
     stock: true,
     imagen: 'productos/e-15.jpeg',
-    detalle:
-      'Set de espátulas delgadas para trabajo de resina y prótesis, mango ergonómico y hoja de precisión.',
+    detalle: 'Set de espátulas delgadas para trabajo de resina y prótesis, mango ergonómico y hoja de precisión.',
+  },
+  {
+    ref: 'E-16',
+    nombre: 'Lámpara de fotopolimerización Pro',
+    categoria: 'Operatoria',
+    precio: 2250,
+    stock: null,
+    imagen: 'productos/e-16.webp',
+    detalle: 'Mango rosado y negro, con base negra. 1400 ciclos de polimerizado.',
+  },
+  {
+    ref: 'E-17',
+    nombre: 'Lámpara de fotopolimerización Normal',
+    categoria: 'Operatoria',
+    precio: 2550,
+    stock: null,
+    imagen: 'productos/e-17.webp',
+    detalle: 'Mango gris plateado, con base gris. 1200 ciclos de polimerizado.',
+  },
+  {
+    ref: 'E-18',
+    nombre: 'Localizador de ápice',
+    categoria: 'Endodoncia',
+    precio: 1650,
+    stock: null,
+    imagen: 'productos/c-02.webp',
+    imagenEnfoque: 'localizador',
+    detalle: 'Localizador independiente con pantalla y soporte azul. El mismo equipo se incluye en los dos combos de endodoncia.',
+  },
+];
+
+export const COMBOS = [
+  {
+    ref: 'C-01',
+    nombre: 'Endomotor NICIDENT + localizador',
+    precio: 2650,
+    stock: null,
+    imagen: 'productos/c-01.webp',
+    componentes: ['E-14', 'E-18'],
+    detalle: 'Incluye 1 endomotor inalámbrico NICIDENT y 1 localizador de ápice independiente.',
+  },
+  {
+    ref: 'C-02',
+    nombre: 'Endomotor Y-SMART + localizador',
+    precio: 2850,
+    stock: null,
+    imagen: 'productos/c-02.webp',
+    componentes: ['E-01', 'E-18'],
+    detalle: 'Incluye 1 endomotor inalámbrico Y-SMART y 1 localizador de ápice independiente.',
   },
 ];

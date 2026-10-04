@@ -18,6 +18,7 @@ import {
   linkWhatsApp,
   mostrarNumero,
   PRODUCTOS,
+  COMBOS,
   CATEGORIAS,
   MONEDA,
 } from './data/site.js';
@@ -302,6 +303,7 @@ function precio(n) {
 }
 
 function Item({ p, i }) {
+  const [imagenFallida, setImagenFallida] = useState(false);
   return (
     <motion.article
       className="item"
@@ -312,8 +314,15 @@ function Item({ p, i }) {
       viewport={{ once: true, margin: '-8% 0px' }}
     >
       <div className="item-frame">
-        {p.imagen ? (
-          <img src={p.imagen} alt={p.nombre} loading="lazy" />
+        {p.imagen && !imagenFallida ? (
+          <img
+            src={`${import.meta.env.BASE_URL}${p.imagen}`}
+            className={p.imagenEnfoque === 'localizador' ? 'item-photo-focus' : undefined}
+            alt={p.nombre}
+            loading="lazy"
+            decoding="async"
+            onError={() => setImagenFallida(true)}
+          />
         ) : (
           <div style={{ textAlign: 'center' }}>
             <FrameMark />
@@ -333,7 +342,8 @@ function Item({ p, i }) {
           </div>
           <div className="item-ref">REF {p.ref}</div>
         </div>
-        {!p.stock && <span className="tag-out">A pedido</span>}
+        {p.stock === null && <span className="tag-out">Consultar stock</span>}
+        {p.stock === false && <span className="tag-out">A pedido</span>}
       </div>
 
       {p.caja && (
@@ -343,7 +353,7 @@ function Item({ p, i }) {
         </div>
       )}
 
-      <a className="item-ask" href={linkWhatsApp(p)} target="_blank" rel="noreferrer">
+      <a className="item-ask" href={linkWhatsApp(p)} target="_blank" rel="noreferrer" aria-label={`Consultar por ${p.nombre}`}>
         <WhatsAppMark size={26} white /> Consultar
       </a>
     </motion.article>
@@ -382,11 +392,13 @@ function Catalogo() {
                 key={c}
                 className="chip"
                 data-on={filtro === c}
+                aria-pressed={filtro === c}
                 onClick={() => setFiltro(c)}
               >
                 {c}
               </button>
             ))}
+            <a className="chip" href="#combos">Ver combos</a>
           </div>
         </Reveal>
 
@@ -394,6 +406,25 @@ function Catalogo() {
           {lista.map((p, i) => (
             <Item key={p.ref} p={p} i={i} />
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Combos() {
+  return (
+    <section className="pad" id="combos" aria-labelledby="combos-title">
+      <div className="shell stack-lg">
+        <div className="between">
+          <h2 className="h2" id="combos-title">Combos de endodoncia</h2>
+          <p className="lead" style={{ maxWidth: '38ch', fontSize: '0.875rem' }}>
+            Cada combo incluye un endomotor y un localizador de ápice independiente.
+            El localizador es el mismo en ambas opciones.
+          </p>
+        </div>
+        <div className="shelf-grid combo-grid">
+          {COMBOS.map((p, i) => <Item key={p.ref} p={p} i={i} />)}
         </div>
       </div>
     </section>
@@ -470,6 +501,7 @@ export default function App() {
         <nav className="nav-links">
           <a className="mono" href="#criterio">Criterio</a>
           <a className="mono" href="#catalogo">Catálogo</a>
+          <a className="mono" href="#combos">Combos</a>
           <a
             className="btn btn-ghost"
             style={{ padding: '9px 16px', fontSize: '0.75rem' }}
@@ -486,6 +518,7 @@ export default function App() {
         <Sequence />
         <ClinicSection />
         <Catalogo />
+        <Combos />
         <Cierre />
       </main>
 

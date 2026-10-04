@@ -391,6 +391,23 @@ section {
   display: block;
   transition: transform 600ms var(--ease);
 }
+.item-frame img.item-photo-focus {
+  position: absolute;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  right: -4%;
+  object-fit: initial;
+}
+.combo-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+}
+#catalogo, #combos {
+  scroll-margin-top: 112px;
+}
+.combo-grid .item-frame {
+  aspect-ratio: 3 / 2;
+}
 .item:hover .item-frame img {
   transform: scale(1.03);
 }
