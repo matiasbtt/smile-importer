@@ -7,7 +7,7 @@ const styles = await readFile(new URL('../src/styles.css', import.meta.url), 'ut
 
 test('la portada presenta una bienvenida directa antes del catálogo', () => {
   assert.match(app, /function Bienvenida\(\)/);
-  assert.match(app, /Bienvenido al catálogo de\s*<strong>SMILE IMPORTER<\/strong>/);
+  assert.match(app, /Bienvenidos al catálogo de\s*<strong>SMILE IMPORTER<\/strong>/);
   assert.match(app, /Desliza para conocer nuestros productos/);
   assert.match(app, /<Bienvenida\s*\/>[\s\S]*<Catalogo\s*\/>[\s\S]*<Cierre\s*\/>/);
 });
